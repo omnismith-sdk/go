@@ -1,0 +1,6945 @@
+openapi: 3.0.0
+info:
+  description: API Documentation for Omnismith
+  title: Omnismith API
+  version: 1.0.0
+servers:
+- description: Production Server
+  url: https://api.omnismith.io/v1
+- description: Local Development Server
+  url: http://localhost:8100
+tags:
+- description: AccessTokens
+  name: AccessTokens
+- description: Attributes
+  name: Attributes
+- description: Auth
+  name: Auth
+- description: Automation - Automations
+  name: Automation - Automations
+- description: Automation - Notification Channels
+  name: Automation - Notification Channels
+- description: Automation - Push Devices
+  name: Automation - Push Devices
+- description: Billing
+  name: Billing
+- description: Dashboards
+  name: Dashboards
+- description: Dashboard Blocks
+  name: Dashboard Blocks
+- description: Templates
+  name: Templates
+- description: Entity
+  name: Entity
+- description: Feedback
+  name: Feedback
+- description: FileAttachment
+  name: FileAttachment
+- description: Marketplace
+  name: Marketplace
+- description: Projects
+  name: Projects
+- description: Roles
+  name: Roles
+- description: SavedQueries
+  name: SavedQueries
+- description: User
+  name: User
+paths:
+  /access-tokens:
+    get:
+      description: Returns all access tokens for the current user and project.
+      operationId: listAccessTokens
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listAccessTokens_200_response"
+          description: Access tokens
+        "401":
+          description: Unauthorized
+      security:
+      - bearerAuth: []
+      summary: List API access tokens
+      tags:
+      - AccessTokens
+    post:
+      description: Creates a new API access token for the current user and project.
+        The raw API key is returned once in the response and cannot be retrieved again.
+      operationId: createAccessToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAccessTokenRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createAccessToken_201_response"
+          description: Access token created
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Create an API access token
+      tags:
+      - AccessTokens
+  /access-tokens/{id}:
+    delete:
+      operationId: deleteAccessToken
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Deleted
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+      security:
+      - bearerAuth: []
+      summary: Delete an API access token
+      tags:
+      - AccessTokens
+  /attributes/{id}/items:
+    get:
+      operationId: listAttributeItems
+      parameters:
+      - description: Attribute ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listAttributeItems_200_response"
+          description: List of items
+      security:
+      - bearerAuth: []
+      summary: List items of an attribute
+      tags:
+      - Attributes
+    post:
+      operationId: createAttributeItem
+      parameters:
+      - description: Attribute ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddListItemRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createAttributeItem_201_response"
+          description: Item created
+        "404":
+          description: Attribute not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Add a list item to an attribute
+      tags:
+      - Attributes
+    put:
+      operationId: setAttributeItems
+      parameters:
+      - description: Attribute ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SetListItemsRequest"
+        required: true
+      responses:
+        "204":
+          description: Items updated
+        "400":
+          description: Attribute is not a List type
+        "404":
+          description: Attribute not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Set list items for an attribute (replaces all existing items)
+      tags:
+      - Attributes
+  /attributes:
+    get:
+      operationId: listAttributes
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listAttributes_200_response"
+          description: List of attributes
+        "401":
+          description: Unauthorized
+      security:
+      - bearerAuth: []
+      summary: List attributes
+      tags:
+      - Attributes
+    post:
+      operationId: createAttribute
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAttributeRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createAttributeItem_201_response"
+          description: Attribute created
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Tier quota exceeded
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Create a new attribute
+      tags:
+      - Attributes
+  /attributes/{id}:
+    delete:
+      operationId: deleteAttribute
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Attribute deleted
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+      security:
+      - bearerAuth: []
+      summary: Delete an attribute
+      tags:
+      - Attributes
+    get:
+      operationId: getAttribute
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AttributeResponse"
+          description: Attribute details
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+      security:
+      - bearerAuth: []
+      summary: Get an attribute
+      tags:
+      - Attributes
+    put:
+      operationId: updateAttribute
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAttributeRequest"
+        required: true
+      responses:
+        "204":
+          description: Attribute updated
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Update an attribute
+      tags:
+      - Attributes
+  /attributes/{id}/reference:
+    delete:
+      operationId: deleteAttributeReferenceConfig
+      parameters:
+      - description: Attribute ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Reference config deleted
+      security:
+      - bearerAuth: []
+      summary: Delete reference configuration for an attribute
+      tags:
+      - Attributes
+    get:
+      operationId: getAttributeReferenceConfig
+      parameters:
+      - description: Attribute ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReferenceConfigResponse"
+          description: Reference config
+        "404":
+          description: Reference config not found
+      security:
+      - bearerAuth: []
+      summary: Get reference configuration for an attribute
+      tags:
+      - Attributes
+    put:
+      operationId: setAttributeReferenceConfig
+      parameters:
+      - description: Attribute ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SetReferenceConfigRequest"
+        required: true
+      responses:
+        "204":
+          description: Reference config updated
+        "400":
+          description: Attribute is not a Reference type
+        "404":
+          description: Attribute not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Set or update reference configuration for an attribute
+      tags:
+      - Attributes
+  /attributes/{id}/items/{itemId}:
+    delete:
+      operationId: deleteAttributeItem
+      parameters:
+      - description: Attribute ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: List Item ID
+        explode: false
+        in: path
+        name: itemId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Item removed
+        "404":
+          description: Item or Attribute not found
+      security:
+      - bearerAuth: []
+      summary: Remove a list item from an attribute
+      tags:
+      - Attributes
+    put:
+      operationId: updateAttributeItem
+      parameters:
+      - description: Attribute ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: List Item ID
+        explode: false
+        in: path
+        name: itemId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateListItemRequest"
+        required: true
+      responses:
+        "204":
+          description: Item updated
+        "404":
+          description: Item or Attribute not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Update a list item of an attribute
+      tags:
+      - Attributes
+  /auth/me/permissions:
+    get:
+      description: "Returns the permissions for the authenticated user's current role.\
+        \ Returns [\"*\"] for project owners (full access) or an empty array if no\
+        \ role is assigned."
+      operationId: getMyPermissions
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getMyPermissions_200_response"
+          description: List of permission strings
+        "401":
+          description: Unauthorized
+      security:
+      - bearerAuth: []
+      summary: Get current user's role permissions
+      tags:
+      - Auth
+  /auth/google-login:
+    post:
+      description: "Authenticates a user using a Google ID token. If the user does\
+        \ not exist, a new account is automatically created."
+      operationId: googleLogin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GoogleLoginRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/googleLogin_200_response"
+          description: Login successful
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Failed
+        "401":
+          description: Invalid Google token
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Login or register via Google Sign-In
+      tags:
+      - Auth
+  /auth/sessions:
+    get:
+      operationId: listSessions
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listSessions_200_response"
+          description: List of sessions
+        "401":
+          description: Unauthorized
+      security:
+      - bearerAuth: []
+      summary: List recent login sessions
+      tags:
+      - Auth
+  /auth/login:
+    post:
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/googleLogin_200_response"
+          description: Login successful
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Failed
+        "401":
+          description: Invalid credentials
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Login user
+      tags:
+      - Auth
+  /auth/refresh:
+    post:
+      description: Exchange a valid refresh token for a new access token and refresh
+        token. The old refresh token is invalidated (rotation).
+      operationId: refreshToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefreshTokenRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/refreshToken_200_response"
+          description: Token refresh successful
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/refreshToken_401_response"
+          description: "Invalid, expired, or revoked refresh token"
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Failed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      summary: Refresh access token
+      tags:
+      - Auth
+  /auth/sessions/{id}:
+    delete:
+      operationId: revokeSession
+      parameters:
+      - description: Session ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Session revoked
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Session not found
+      security:
+      - bearerAuth: []
+      summary: Revoke a login session
+      tags:
+      - Auth
+  /auth/switch-project:
+    post:
+      operationId: switchProject
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SwitchProjectRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/googleLogin_200_response"
+          description: Project switched successfully
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Failed
+        "401":
+          description: Unauthorized
+        "403":
+          description: Access Denied to Project
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Switch active project context
+      tags:
+      - Auth
+  /automation/automations:
+    get:
+      operationId: listAutomations
+      parameters:
+      - description: Filter by template ID
+        explode: true
+        in: query
+        name: templateId
+        required: false
+        schema:
+          format: uuid
+          type: string
+        style: form
+      - description: Filter by enabled status
+        explode: true
+        in: query
+        name: isEnabled
+        required: false
+        schema:
+          type: boolean
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/AutomationResponse"
+                type: array
+          description: List of automations
+        "401":
+          description: Unauthorized
+      security:
+      - bearerAuth: []
+      summary: List automations
+      tags:
+      - Automation - Automations
+    post:
+      operationId: createAutomation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAutomationRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createAttributeItem_201_response"
+          description: Automation created
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Tier quota exceeded
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Create a new automation
+      tags:
+      - Automation - Automations
+  /automation/notification-channels:
+    get:
+      operationId: listNotificationChannels
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listNotificationChannels_200_response"
+          description: List of channels
+        "401":
+          description: Unauthorized
+      security:
+      - bearerAuth: []
+      summary: List all notification channels
+      tags:
+      - Automation - Notification Channels
+    post:
+      operationId: createNotificationChannel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateNotificationChannelRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createAttributeItem_201_response"
+          description: Channel created
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Tier quota exceeded
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Create a new notification channel
+      tags:
+      - Automation - Notification Channels
+  /automation/automations/{id}:
+    delete:
+      operationId: deleteAutomation
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Automation deleted
+        "401":
+          description: Unauthorized
+        "404":
+          description: Automation not found
+      security:
+      - bearerAuth: []
+      summary: Delete an automation
+      tags:
+      - Automation - Automations
+    get:
+      operationId: getAutomation
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AutomationResponse"
+          description: Automation details
+        "401":
+          description: Unauthorized
+        "404":
+          description: Automation not found
+      security:
+      - bearerAuth: []
+      summary: Get an automation by ID
+      tags:
+      - Automation - Automations
+    put:
+      operationId: updateAutomation
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAutomationRequest"
+        required: true
+      responses:
+        "204":
+          description: Automation updated
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Automation not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Update an automation
+      tags:
+      - Automation - Automations
+  /automation/notification-channels/{id}:
+    delete:
+      operationId: deleteNotificationChannel
+      parameters:
+      - description: Channel UUID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Channel deleted
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+      security:
+      - bearerAuth: []
+      summary: Delete a notification channel
+      tags:
+      - Automation - Notification Channels
+    get:
+      operationId: getNotificationChannel
+      parameters:
+      - description: Channel UUID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotificationChannelResponse"
+          description: Channel details
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+      security:
+      - bearerAuth: []
+      summary: Get a notification channel
+      tags:
+      - Automation - Notification Channels
+    put:
+      operationId: updateNotificationChannel
+      parameters:
+      - description: Channel UUID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateNotificationChannelRequest"
+        required: true
+      responses:
+        "204":
+          description: Channel updated
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Update a notification channel
+      tags:
+      - Automation - Notification Channels
+  /automation/automations/{id}/executions:
+    get:
+      operationId: listAutomationExecutions
+      parameters:
+      - description: Automation ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: Number of results
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 20
+          maximum: 100
+          type: integer
+        style: form
+      - description: Pagination offset
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          type: integer
+        style: form
+      - description: Filter by status
+        explode: true
+        in: query
+        name: status
+        required: false
+        schema:
+          enum:
+          - pending
+          - success
+          - partial_failure
+          - failed
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listAutomationExecutions_200_response"
+          description: List of executions
+        "401":
+          description: Unauthorized
+        "404":
+          description: Automation not found
+      security:
+      - bearerAuth: []
+      summary: List automation executions
+      tags:
+      - Automation - Automations
+  /automation/push-devices:
+    delete:
+      operationId: unregisterPushDevice
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UnregisterPushDeviceRequest"
+        required: true
+      responses:
+        "204":
+          description: Device unregistered
+        "401":
+          description: Unauthorized
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Unregister a push notification device token
+      tags:
+      - Automation - Push Devices
+    get:
+      operationId: listPushDevices
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listPushDevices_200_response"
+          description: List of push devices
+        "401":
+          description: Unauthorized
+      security:
+      - bearerAuth: []
+      summary: List the current user's registered push devices
+      tags:
+      - Automation - Push Devices
+    post:
+      operationId: registerPushDevice
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterPushDeviceRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createAttributeItem_201_response"
+          description: Device registered
+        "401":
+          description: Unauthorized
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Register a push notification device token
+      tags:
+      - Automation - Push Devices
+  /automation/notification-channels/{id}/test:
+    post:
+      operationId: testNotificationChannel
+      parameters:
+      - description: Channel UUID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TestNotificationChannelRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/testNotificationChannel_200_response"
+          description: Test message sent successfully
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/testNotificationChannel_422_response"
+          description: Test failed
+      security:
+      - bearerAuth: []
+      summary: Send a test message via the notification channel
+      tags:
+      - Automation - Notification Channels
+  /automation/automations/{id}/toggle:
+    patch:
+      operationId: toggleAutomation
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ToggleAutomationRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AutomationResponse"
+          description: Automation toggled
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Automation not found
+      security:
+      - bearerAuth: []
+      summary: Toggle automation enabled status
+      tags:
+      - Automation - Automations
+  /billing/checkout:
+    post:
+      description: Creates a LemonSqueezy checkout session to subscribe to a paid
+        tier. Returns a URL to redirect the user to complete payment.
+      operationId: createCheckout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCheckoutRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckoutResponse"
+          description: Checkout session created successfully
+        "400":
+          description: "Invalid tier level (e.g., Free tier)"
+        "401":
+          description: Unauthorized
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Create a checkout session for subscription
+      tags:
+      - Billing
+  /billing/tiers:
+    get:
+      operationId: getAllTiers
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getAllTiers_200_response"
+          description: List of all tiers
+      summary: List all available tiers
+      tags:
+      - Billing
+  /billing/portal:
+    get:
+      description: "Returns a LemonSqueezy customer portal URL where users can manage\
+        \ their subscription (cancel, update payment method, view invoices)."
+      operationId: getPortalUrl
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PortalUrlResponse"
+          description: Portal URL retrieved successfully
+        "401":
+          description: Unauthorized
+        "404":
+          description: No active subscription found
+      security:
+      - bearerAuth: []
+      summary: Get customer portal URL
+      tags:
+      - Billing
+  /billing/usage/insights:
+    get:
+      operationId: getUsageInsights
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsageInsightsResponse"
+          description: Tier usage insights with limits and percentages
+        "401":
+          description: Unauthorized
+      security:
+      - bearerAuth: []
+      summary: Get current tier usage insights
+      tags:
+      - Billing
+  /billing/tier:
+    get:
+      operationId: getUserTier
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TierResponse"
+          description: User tier details
+        "401":
+          description: Unauthorized
+      security:
+      - bearerAuth: []
+      summary: Get current user tier
+      tags:
+      - Billing
+  /billing/log-usage:
+    post:
+      operationId: logAiUsage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LogAiUsageRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/logAiUsage_200_response"
+          description: Usage logged successfully
+      security:
+      - bearerAuth: []
+      summary: Log AI usage credits
+      tags:
+      - Billing
+  /dashboards:
+    get:
+      operationId: listDashboards
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listDashboards_200_response"
+          description: List of dashboards
+      security:
+      - bearerAuth: []
+      summary: List all dashboards
+      tags:
+      - Dashboards
+    post:
+      operationId: createDashboard
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateDashboardRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createAttributeItem_201_response"
+          description: Dashboard created
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Tier quota exceeded
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Create a new dashboard
+      tags:
+      - Dashboards
+  /dashboards/{dashboardId}/blocks:
+    get:
+      operationId: listDashboardBlocks
+      parameters:
+      - description: Dashboard ID
+        explode: false
+        in: path
+        name: dashboardId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listDashboardBlocks_200_response"
+          description: List of blocks
+      security:
+      - bearerAuth: []
+      summary: List all blocks in a dashboard
+      tags:
+      - Dashboard Blocks
+    post:
+      operationId: createDashboardBlock
+      parameters:
+      - description: Dashboard ID
+        explode: false
+        in: path
+        name: dashboardId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateDashboardBlockRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createAttributeItem_201_response"
+          description: Block created
+        "404":
+          description: Dashboard not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Create a new block in a dashboard
+      tags:
+      - Dashboard Blocks
+  /dashboards/{id}:
+    delete:
+      operationId: deleteDashboard
+      parameters:
+      - description: Dashboard ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Dashboard deleted
+        "404":
+          description: Dashboard not found
+      security:
+      - bearerAuth: []
+      summary: Delete a dashboard
+      tags:
+      - Dashboards
+    get:
+      operationId: getDashboard
+      parameters:
+      - description: Dashboard ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardResponse"
+          description: Dashboard details
+        "404":
+          description: Dashboard not found
+      security:
+      - bearerAuth: []
+      summary: Get a dashboard by ID
+      tags:
+      - Dashboards
+    put:
+      operationId: updateDashboard
+      parameters:
+      - description: Dashboard ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateDashboardRequest"
+        required: true
+      responses:
+        "200":
+          description: Dashboard updated
+        "404":
+          description: Dashboard not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Update a dashboard
+      tags:
+      - Dashboards
+  /dashboards/{dashboardId}/blocks/{blockId}:
+    delete:
+      operationId: deleteDashboardBlock
+      parameters:
+      - description: Dashboard ID
+        explode: false
+        in: path
+        name: dashboardId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: Block ID
+        explode: false
+        in: path
+        name: blockId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Block deleted
+        "404":
+          description: Block not found
+      security:
+      - bearerAuth: []
+      summary: Delete a dashboard block
+      tags:
+      - Dashboard Blocks
+    get:
+      operationId: getDashboardBlock
+      parameters:
+      - description: Dashboard ID
+        explode: false
+        in: path
+        name: dashboardId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: Block ID
+        explode: false
+        in: path
+        name: blockId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardBlockResponse"
+          description: Block details
+        "404":
+          description: Block not found
+      security:
+      - bearerAuth: []
+      summary: Get a dashboard block by ID
+      tags:
+      - Dashboard Blocks
+    put:
+      operationId: updateDashboardBlock
+      parameters:
+      - description: Dashboard ID
+        explode: false
+        in: path
+        name: dashboardId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: Block ID
+        explode: false
+        in: path
+        name: blockId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateDashboardBlockRequest"
+        required: true
+      responses:
+        "200":
+          description: Block updated
+        "404":
+          description: Block not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Update a dashboard block
+      tags:
+      - Dashboard Blocks
+  /dashboards/{dashboardId}/blocks/{blockId}/resolve:
+    get:
+      description: "Executes the block configuration and returns computed values based\
+        \ on block type (stat count, gauge value, chart series, or list items)"
+      operationId: resolveDashboardBlock
+      parameters:
+      - description: Dashboard ID
+        explode: false
+        in: path
+        name: dashboardId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: Block ID
+        explode: false
+        in: path
+        name: blockId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResolvedBlockResponse"
+          description: Resolved block data
+        "404":
+          description: Block not found
+      security:
+      - bearerAuth: []
+      summary: Resolve a dashboard block to its computed data
+      tags:
+      - Dashboard Blocks
+  /discovery/project-schema:
+    get:
+      description: "Returns all attributes, templates, list items, and reference configs\
+        \ in a single response"
+      operationId: getProjectSchema
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectSchemaResponse"
+          description: Project schema
+        "401":
+          description: Unauthorized
+      security:
+      - bearerAuth: []
+      summary: Get complete project schema
+      tags:
+      - Attributes
+      - Templates
+  /entities:
+    post:
+      operationId: createEntity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEntityRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createAttributeItem_201_response"
+          description: Entity created
+        "401":
+          description: Unauthorized
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Tier quota exceeded
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Create a new entity
+      tags:
+      - Entity
+  /entities/{id}:
+    delete:
+      operationId: deleteEntity
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Entity deleted
+        "404":
+          description: Entity not found
+      security:
+      - bearerAuth: []
+      summary: Delete an entity
+      tags:
+      - Entity
+    get:
+      operationId: getEntity
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EntityResponse"
+          description: Entity details
+        "404":
+          description: Entity not found
+      security:
+      - bearerAuth: []
+      summary: Get an entity
+      tags:
+      - Entity
+    put:
+      operationId: updateEntity
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateEntityRequest"
+        required: true
+      responses:
+        "204":
+          description: Entity updated
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Tier quota exceeded
+        "404":
+          description: Entity not found
+      security:
+      - bearerAuth: []
+      summary: Update an entity
+      tags:
+      - Entity
+  /entities/export/{template_id}:
+    post:
+      description: Export entities matching the given filters to a CSV file. Uses
+        the same filters as the search endpoint.
+      operationId: exportEntities
+      parameters:
+      - description: Template ID
+        explode: false
+        in: path
+        name: template_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: "Attribute ID to sort by (UUID) OR one of: id, created_at, updated_at,\
+          \ deleted_at"
+        explode: true
+        in: query
+        name: sort_field
+        required: false
+        schema:
+          nullable: true
+          type: string
+        style: form
+      - description: Sort direction (only used when sort_field is provided)
+        explode: true
+        in: query
+        name: sort_direction
+        required: false
+        schema:
+          default: asc
+          enum:
+          - asc
+          - desc
+          type: string
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExportEntitiesRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            text/csv:
+              schema:
+                format: binary
+                type: string
+          description: CSV file download
+          headers:
+            Content-Disposition:
+              description: Attachment filename
+              explode: false
+              schema:
+                example: attachment; filename="export_Template_2026-01-18_14-30-00.csv"
+                type: string
+              style: simple
+        "401":
+          description: Unauthorized
+        "403":
+          description: Access denied
+        "404":
+          description: Template not found
+      security:
+      - bearerAuth: []
+      summary: Export entities to CSV
+      tags:
+      - Entity
+  /entities/{id}/chart:
+    get:
+      operationId: getEntityChart
+      parameters:
+      - description: Entity ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Comma-separated attribute IDs
+        explode: true
+        in: query
+        name: attribute_ids
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: Aggregate function
+        explode: true
+        in: query
+        name: aggregate_func
+        required: false
+        schema:
+          default: avg
+          enum:
+          - sum
+          - avg
+          - min
+          - max
+          - count
+          - first
+          - last
+          type: string
+        style: form
+      - description: Time bucket width (PostgreSQL interval)
+        explode: true
+        in: query
+        name: bucket_width
+        required: false
+        schema:
+          default: 1 hour
+          enum:
+          - 1 second
+          - 5 seconds
+          - 10 seconds
+          - 1 minute
+          - 5 minutes
+          - 10 minutes
+          - 15 minutes
+          - 30 minutes
+          - 1 hour
+          - 6 hours
+          - 12 hours
+          - 1 day
+          - 1 week
+          - 1 month
+          type: string
+        style: form
+      - description: Start timestamp (Unix seconds)
+        explode: true
+        in: query
+        name: start
+        required: true
+        schema:
+          type: integer
+        style: form
+      - description: End timestamp (Unix seconds)
+        explode: true
+        in: query
+        name: end
+        required: true
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getEntityChart_200_response"
+          description: Chart time-series data grouped by attribute
+      summary: Get entity chart time-series data
+      tags:
+      - Entity
+  /entities/{id}/history:
+    get:
+      operationId: getEntityHistory
+      parameters:
+      - description: Entity ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 1
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 20
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: created_at
+          enum:
+          - created_at
+          - attribute_id
+          - value
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: sort_direction
+        required: false
+        schema:
+          default: desc
+          enum:
+          - asc
+          - desc
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: search
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: attribute_ids
+        required: false
+        schema:
+          description: Comma separated attribute IDs
+          type: string
+        style: form
+      - description: Filter logs created after this timestamp
+        explode: true
+        in: query
+        name: start
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: Filter logs created before this timestamp
+        explode: true
+        in: query
+        name: end
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: Filter logs by author email
+        explode: true
+        in: query
+        name: author_email
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getEntityHistory_200_response"
+          description: Entity history
+      summary: Get entity history
+      tags:
+      - Entity
+  /entities/import/{template_id}:
+    post:
+      description: "Import entities from a CSV file. Supports upsert: creates new\
+        \ entities or updates existing ones based on the ID column. The CSV must include\
+        \ a metadata row (row 2) with attribute IDs prefixed by #."
+      operationId: importEntities
+      parameters:
+      - description: Template ID
+        explode: false
+        in: path
+        name: template_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/importEntities_request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/importEntities_200_response"
+          description: Import completed
+        "400":
+          description: Bad request (invalid CSV format)
+        "401":
+          description: Unauthorized
+        "403":
+          description: Access denied
+        "404":
+          description: Template not found
+      security:
+      - bearerAuth: []
+      summary: Import entities from CSV
+      tags:
+      - Entity
+  /entities/search/{template_id}:
+    post:
+      operationId: searchEntities
+      parameters:
+      - description: Template ID
+        explode: false
+        in: path
+        name: template_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: Number of results
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 50
+          maximum: 100
+          type: integer
+        style: form
+      - description: Pagination offset
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          type: integer
+        style: form
+      - description: "Attribute ID to sort by (UUID) OR one of: id, created_at, updated_at,\
+          \ deleted_at"
+        explode: true
+        in: query
+        name: sort_field
+        required: false
+        schema:
+          nullable: true
+          type: string
+        style: form
+      - description: Sort direction (only used when sort_field is provided)
+        explode: true
+        in: query
+        name: sort_direction
+        required: false
+        schema:
+          default: asc
+          enum:
+          - asc
+          - desc
+          type: string
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchEntitiesRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/searchEntities_200_response"
+          description: Search results
+      security:
+      - bearerAuth: []
+      summary: Search entities
+      tags:
+      - Entity
+  /feedback:
+    post:
+      description: Sends a feedback email to the Omnismith support team on behalf
+        of the authenticated user.
+      operationId: sendFeedback
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendFeedbackRequest"
+        required: true
+      responses:
+        "204":
+          description: Feedback submitted successfully
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Failed
+      security:
+      - bearerAuth: []
+      summary: Submit user feedback
+      tags:
+      - Feedback
+  /file-attachments/{id}:
+    delete:
+      operationId: deleteFileAttachment
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: File deleted
+        "404":
+          description: File not found
+      security:
+      - bearerAuth: []
+      summary: Delete a file attachment
+      tags:
+      - FileAttachment
+    get:
+      operationId: downloadFileAttachment
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/octet-stream: {}
+          description: File content
+        "404":
+          description: File not found
+      security:
+      - bearerAuth: []
+      summary: Download a file attachment
+      tags:
+      - FileAttachment
+  /file-attachments/{id}/metadata:
+    get:
+      operationId: getFileAttachmentMetadata
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FileAttachmentResponse"
+          description: File metadata
+        "404":
+          description: File not found
+      security:
+      - bearerAuth: []
+      summary: Get file metadata without downloading content
+      tags:
+      - FileAttachment
+  /file-attachments/{id}/thumbnail:
+    get:
+      operationId: getFileAttachmentThumbnail
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - explode: true
+        in: query
+        name: width
+        required: false
+        schema:
+          default: 200
+          maximum: 1000
+          minimum: 50
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: height
+        required: false
+        schema:
+          default: 200
+          maximum: 1000
+          minimum: 50
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            image/jpeg: {}
+          description: Thumbnail image
+        "400":
+          description: Not an image or invalid dimensions
+        "404":
+          description: File not found
+      security:
+      - bearerAuth: []
+      summary: Get image thumbnail
+      tags:
+      - FileAttachment
+  /file-attachments:
+    post:
+      operationId: uploadFileAttachment
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/uploadFileAttachment_request"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FileAttachmentResponse"
+          description: File uploaded
+        "400":
+          description: Bad request
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Upload a file attachment
+      tags:
+      - FileAttachment
+  /marketplace/blueprints/{id}:
+    delete:
+      operationId: deleteMarketplaceBlueprint
+      parameters:
+      - description: Blueprint ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Blueprint deleted
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+      security:
+      - bearerAuth: []
+      summary: Delete a marketplace blueprint
+      tags:
+      - Marketplace
+    get:
+      operationId: getMarketplaceBlueprint
+      parameters:
+      - description: Blueprint ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getMarketplaceBlueprint_200_response"
+          description: Blueprint detail
+        "404":
+          description: Not Found
+      summary: Get marketplace blueprint details
+      tags:
+      - Marketplace
+  /marketplace/blueprints/{id}/install:
+    post:
+      operationId: installMarketplaceBlueprint
+      parameters:
+      - description: Blueprint ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InstallMarketplaceBlueprintRequest"
+        required: true
+      responses:
+        "204":
+          description: Blueprint installed successfully
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Blueprint not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Install a marketplace blueprint into a project
+      tags:
+      - Marketplace
+  /marketplace/keywords:
+    get:
+      operationId: listMarketplaceKeywords
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listMarketplaceKeywords_200_response"
+          description: Distinct keywords sorted by popularity
+      summary: List all marketplace keywords with blueprint counts
+      tags:
+      - Marketplace
+  /marketplace/blueprints:
+    get:
+      operationId: searchMarketplaceBlueprints
+      parameters:
+      - description: Free-text search on title and description
+        explode: true
+        in: query
+        name: search
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Comma-separated keywords to filter by
+        explode: true
+        in: query
+        name: keywords
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of results per page
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 20
+          maximum: 100
+          type: integer
+        style: form
+      - description: Pagination offset
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          type: integer
+        style: form
+      - description: Sort field
+        explode: true
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          default: created_at
+          enum:
+          - created_at
+          - installs
+          - title
+          type: string
+        style: form
+      - description: Sort direction
+        explode: true
+        in: query
+        name: sort_direction
+        required: false
+        schema:
+          default: desc
+          enum:
+          - asc
+          - desc
+          type: string
+        style: form
+      - description: Filter by featured status
+        explode: true
+        in: query
+        name: featured
+        required: false
+        schema:
+          type: boolean
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/searchMarketplaceBlueprints_200_response"
+          description: Marketplace blueprints list
+      summary: Search marketplace blueprints
+      tags:
+      - Marketplace
+    post:
+      operationId: publishMarketplaceBlueprint
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PublishMarketplaceBlueprintRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getMarketplaceBlueprint_200_response"
+          description: Blueprint created
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getMarketplaceBlueprint_200_response"
+          description: Blueprint updated
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Publish or update a marketplace blueprint
+      tags:
+      - Marketplace
+  /projects/{id}/users:
+    get:
+      operationId: listProjectUsers
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listProjectUsers_200_response"
+          description: List of users in project
+      security:
+      - bearerAuth: []
+      summary: List users in project
+      tags:
+      - Projects
+    post:
+      operationId: assignUserToProject
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssignUserToProjectRequest"
+        required: true
+      responses:
+        "200":
+          description: User assigned
+        "404":
+          description: Project not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Assign user to project
+      tags:
+      - Projects
+  /projects:
+    get:
+      operationId: listProjects
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listProjects_200_response"
+          description: List of projects
+      security:
+      - bearerAuth: []
+      summary: List all projects
+      tags:
+      - Projects
+    post:
+      operationId: createProject
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProjectRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createAttributeItem_201_response"
+          description: Project created
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal Server Error
+      security:
+      - bearerAuth: []
+      summary: Create a new project
+      tags:
+      - Projects
+  /projects/{id}:
+    delete:
+      operationId: deleteProject
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Project deleted
+        "404":
+          description: Project not found
+      security:
+      - bearerAuth: []
+      summary: Delete a project
+      tags:
+      - Projects
+    get:
+      operationId: getProject
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectResponse"
+          description: Project details
+        "404":
+          description: Project not found
+      security:
+      - bearerAuth: []
+      summary: Get a project by ID
+      tags:
+      - Projects
+    put:
+      operationId: updateProject
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProjectRequest"
+        required: true
+      responses:
+        "200":
+          description: Project updated
+        "404":
+          description: Project not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Update a project
+      tags:
+      - Projects
+  /projects/{id}/dismiss-tour:
+    post:
+      description: "Marks the interactive tour as dismissed for the given project,\
+        \ so it will not auto-trigger again."
+      operationId: dismissProjectTour
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Tour dismissed
+        "404":
+          description: Project not found
+      security:
+      - bearerAuth: []
+      summary: Dismiss the interactive tour for a project
+      tags:
+      - Projects
+  /projects/{id}/users/invite:
+    post:
+      description: "Invites a user to join a project using their email address. If\
+        \ the user exists, they are immediately assigned to the project with the specified\
+        \ role. If the user does not exist, a pending invitation will be created (future\
+        \ functionality)."
+      operationId: inviteUserToProject
+      parameters:
+      - description: Project ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InviteUserToProjectRequest"
+        required: true
+      responses:
+        "200":
+          description: User invited/assigned successfully
+        "404":
+          description: Project not found or user with email not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Invite user to project by email
+      tags:
+      - Projects
+  /projects/{id}/users/{userId}:
+    delete:
+      operationId: removeUserFromProject
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: User removed
+        "404":
+          description: User not assigned to project
+      security:
+      - bearerAuth: []
+      summary: Remove user from project
+      tags:
+      - Projects
+  /roles:
+    get:
+      operationId: listRoles
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listRoles_200_response"
+          description: List of roles
+        "401":
+          description: Unauthorized
+      security:
+      - bearerAuth: []
+      summary: List roles
+      tags:
+      - Roles
+    post:
+      operationId: createRole
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRoleRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createAttributeItem_201_response"
+          description: Role created
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Create a new role
+      tags:
+      - Roles
+  /roles/{id}:
+    delete:
+      operationId: deleteRole
+      parameters:
+      - description: Role ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Role deleted
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+      security:
+      - bearerAuth: []
+      summary: Delete a role
+      tags:
+      - Roles
+    get:
+      operationId: getRole
+      parameters:
+      - description: Role ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoleResponse"
+          description: Role details
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+      security:
+      - bearerAuth: []
+      summary: Get a role
+      tags:
+      - Roles
+    put:
+      operationId: updateRole
+      parameters:
+      - description: Role ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateRoleRequest"
+        required: true
+      responses:
+        "204":
+          description: Role updated
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Update a role
+      tags:
+      - Roles
+  /roles/{id}/permissions:
+    get:
+      operationId: getRolePermissions
+      parameters:
+      - description: Role ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getRolePermissions_200_response"
+          description: Role permissions
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+      security:
+      - bearerAuth: []
+      summary: Get role permissions
+      tags:
+      - Roles
+    put:
+      operationId: setRolePermissions
+      parameters:
+      - description: Role ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SetRolePermissionsRequest"
+        required: true
+      responses:
+        "204":
+          description: Permissions updated
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Set role permissions
+      tags:
+      - Roles
+  /roles/{id}/resources:
+    get:
+      operationId: getRoleResources
+      parameters:
+      - description: Role ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getRoleResources_200_response"
+          description: Role resource restrictions
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+      security:
+      - bearerAuth: []
+      summary: Get role resource restrictions
+      tags:
+      - Roles
+    put:
+      operationId: setRoleResources
+      parameters:
+      - description: Role ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SetRoleResourcesRequest"
+        required: true
+      responses:
+        "204":
+          description: Resource restrictions updated
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Set role resource restrictions
+      tags:
+      - Roles
+  /roles/permissions/available:
+    get:
+      description: Returns all user-assignable permissions grouped by module. Excludes
+        internal-only permissions.
+      operationId: listAvailablePermissions
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listAvailablePermissions_200_response"
+          description: Available permissions grouped by module
+        "401":
+          description: Unauthorized
+      security:
+      - bearerAuth: []
+      summary: List available permissions for role assignment
+      tags:
+      - Roles
+  /saved-queries:
+    get:
+      operationId: listSavedQueries
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listSavedQueries_200_response"
+          description: Saved queries
+        "401":
+          description: Unauthorized
+      security:
+      - bearerAuth: []
+      summary: List saved queries
+      tags:
+      - SavedQueries
+    post:
+      operationId: createSavedQuery
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSavedQueryRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createAttributeItem_201_response"
+          description: Saved query created
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Create a saved query
+      tags:
+      - SavedQueries
+  /saved-queries/{id}:
+    delete:
+      operationId: deleteSavedQuery
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Deleted
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+      security:
+      - bearerAuth: []
+      summary: Delete a saved query
+      tags:
+      - SavedQueries
+    get:
+      operationId: getSavedQuery
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SavedQueryResponse"
+          description: Saved query
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+      security:
+      - bearerAuth: []
+      summary: Get a saved query
+      tags:
+      - SavedQueries
+  /saved-queries/{id}/execute:
+    post:
+      operationId: executeSavedQuery
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/executeSavedQuery_200_response"
+          description: Count results
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+      security:
+      - bearerAuth: []
+      summary: Execute a saved query (count matches)
+      tags:
+      - SavedQueries
+  /templates:
+    get:
+      operationId: listTemplates
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listTemplates_200_response"
+          description: List of templates
+        "401":
+          description: Unauthorized
+      security:
+      - bearerAuth: []
+      summary: List templates
+      tags:
+      - Templates
+    post:
+      operationId: createTemplate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTemplateRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createAttributeItem_201_response"
+          description: Template created
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Tier quota exceeded
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Create a new template
+      tags:
+      - Templates
+  /templates/{id}:
+    delete:
+      operationId: deleteTemplate
+      parameters:
+      - description: Template ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Template deleted
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+      security:
+      - bearerAuth: []
+      summary: Delete a template
+      tags:
+      - Templates
+    get:
+      operationId: getTemplate
+      parameters:
+      - description: Template ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TemplateResponse"
+          description: Template details
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+      security:
+      - bearerAuth: []
+      summary: Get a template
+      tags:
+      - Templates
+    put:
+      operationId: updateTemplate
+      parameters:
+      - description: Template ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTemplateRequest"
+        required: true
+      responses:
+        "204":
+          description: Template updated
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Update a template
+      tags:
+      - Templates
+  /templates/entity-counts:
+    get:
+      operationId: listTemplateEntityCounts
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listTemplateEntityCounts_200_response"
+          description: Counts per template
+        "401":
+          description: Unauthorized
+      security:
+      - bearerAuth: []
+      summary: List entity counts per template
+      tags:
+      - Templates
+  /users/confirm-email:
+    get:
+      operationId: confirmUserEmail
+      parameters:
+      - description: The email confirmation token
+        explode: true
+        in: query
+        name: token
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/confirmUserEmail_200_response"
+          description: Email confirmed successfully
+        "400":
+          description: Invalid confirmation token
+        "410":
+          description: Confirmation token expired
+      summary: Confirm a user's email address using a confirmation token
+      tags:
+      - User
+  /users/register:
+    post:
+      operationId: registerUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterUserRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createAttributeItem_201_response"
+          description: User registered successfully
+        "400":
+          description: Invalid input
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Failed
+        "409":
+          description: User already exists
+      summary: Register a new user
+      tags:
+      - User
+  /users/resend-confirmation:
+    post:
+      operationId: resendConfirmationEmail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResendConfirmationEmailRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resendConfirmationEmail_200_response"
+          description: Confirmation email sent (or silently ignored if user not found)
+        "429":
+          description: Confirmation email already sent recently
+      summary: Resend the email confirmation link
+      tags:
+      - User
+components:
+  responses:
+    UnprocessableEntity:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ValidationErrorResponse"
+      description: Validation Error
+    QuotaExceeded:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+      description: Tier quota exceeded
+  schemas:
+    AccessTokenResponse:
+      example:
+        last_used_at: 2000-01-23T04:56:07.000+00:00
+        expires_at: 2000-01-23T04:56:07.000+00:00
+        name: name
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          type: string
+        expires_at:
+          format: date-time
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        last_used_at:
+          format: date-time
+          nullable: true
+          type: string
+      type: object
+    CreateAccessTokenRequest:
+      example:
+        expires_at: 2000-01-23T04:56:07.000+00:00
+        name: name
+      properties:
+        name:
+          description: A label for the access token
+          type: string
+        expires_at:
+          description: Expiration date in ISO 8601 format
+          format: date-time
+          type: string
+      required:
+      - expires_at
+      - name
+      type: object
+    AddListItemRequest:
+      example:
+        id: 019a6b2c-8c3a-7c2e-8b3f-6c8a1a2b3c4d
+        value: red
+        sort_order: 0
+      properties:
+        value:
+          example: red
+          type: string
+        sort_order:
+          example: 0
+          type: integer
+        id:
+          example: 019a6b2c-8c3a-7c2e-8b3f-6c8a1a2b3c4d
+          format: uuid
+          nullable: true
+          type: string
+      required:
+      - value
+      type: object
+    AttributeResponse:
+      description: Attribute details
+      example:
+        reference_config:
+          target_attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          target_template_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        name: name
+        data_type: 6
+        description: description
+        created_at: 2000-01-23T04:56:07.000+00:00
+        attribute_type: 0
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        template_ids:
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        deleted_at: 2000-01-23T04:56:07.000+00:00
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          type: string
+        description:
+          nullable: true
+          type: string
+        attribute_type:
+          description: "0: Dimension, 1: Metric, 2: List, 3: Reference"
+          type: integer
+        data_type:
+          description: "0: String, 1: Number, 2: Boolean, 3: Datetime, 4: Date, 5:\
+            \ File, 6: Image"
+          type: integer
+        template_ids:
+          items:
+            format: uuid
+            type: string
+          type: array
+        reference_config:
+          $ref: "#/components/schemas/AttributeResponse_reference_config"
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+        deleted_at:
+          format: date-time
+          nullable: true
+          type: string
+      title: Attribute Response
+      type: object
+    CreateAttributeRequest:
+      example:
+        reference_config:
+          target_attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          target_template_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        name: Color
+        data_type: 0
+        description: Product color
+        attribute_type: 0
+        template_ids:
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        id: 018b2f1b-8c1a-75b3-8000-7f0000010000
+      properties:
+        name:
+          example: Color
+          type: string
+        attribute_type:
+          description: "0: Dimension, 1: Metric, 2: List, 3: Reference"
+          example: 0
+          type: integer
+        data_type:
+          description: "0: String, 1: Number, 2: Boolean, 3: Datetime, 4: Date, 5:\
+            \ File, 6: Image"
+          example: 0
+          type: integer
+        template_ids:
+          items:
+            format: uuid
+            type: string
+          type: array
+        description:
+          example: Product color
+          nullable: true
+          type: string
+        reference_config:
+          $ref: "#/components/schemas/CreateAttributeRequest_reference_config"
+        id:
+          example: 018b2f1b-8c1a-75b3-8000-7f0000010000
+          format: uuid
+          type: string
+      required:
+      - attribute_type
+      - data_type
+      - name
+      type: object
+    ListItemResponse:
+      example:
+        attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        value: value
+        sort_order: 0
+      properties:
+        id:
+          format: uuid
+          type: string
+        attribute_id:
+          format: uuid
+          type: string
+        value:
+          type: string
+        sort_order:
+          type: integer
+      type: object
+    ReferenceConfigResponse:
+      description: Reference configuration for a Reference-type attribute
+      example:
+        target_attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        target_template_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        attribute_id:
+          format: uuid
+          type: string
+        target_template_id:
+          format: uuid
+          type: string
+        target_attribute_id:
+          format: uuid
+          type: string
+      title: Reference Config Response
+      type: object
+    ListItemInput:
+      example:
+        id: 019a6b2c-8c3a-7c2e-8b3f-6c8a1a2b3c4d
+        value: red
+        sort_order: 0
+      properties:
+        value:
+          example: red
+          type: string
+        sort_order:
+          example: 0
+          type: integer
+        id:
+          example: 019a6b2c-8c3a-7c2e-8b3f-6c8a1a2b3c4d
+          format: uuid
+          nullable: true
+          type: string
+      required:
+      - value
+      type: object
+    SetListItemsRequest:
+      example:
+        items:
+        - id: 019a6b2c-8c3a-7c2e-8b3f-6c8a1a2b3c4d
+          value: red
+          sort_order: 0
+        - id: 019a6b2c-8c3a-7c2e-8b3f-6c8a1a2b3c4d
+          value: red
+          sort_order: 0
+      properties:
+        items:
+          items:
+            $ref: "#/components/schemas/ListItemInput"
+          type: array
+      required:
+      - items
+      type: object
+    SetReferenceConfigRequest:
+      example:
+        target_attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        target_template_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        target_template_id:
+          description: Target template UUID
+          format: uuid
+          type: string
+        target_attribute_id:
+          description: Target attribute UUID (display attribute)
+          format: uuid
+          type: string
+      required:
+      - target_attribute_id
+      - target_template_id
+      type: object
+    UpdateAttributeRequest:
+      example:
+        reference_config:
+          target_attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          target_template_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        name: Color
+        template_ids:
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        name:
+          example: Color
+          type: string
+        template_ids:
+          items:
+            format: uuid
+            type: string
+          type: array
+        reference_config:
+          $ref: "#/components/schemas/UpdateAttributeRequest_reference_config"
+      required:
+      - name
+      type: object
+    UpdateListItemRequest:
+      example:
+        value: blue
+        sort_order: 1
+      properties:
+        value:
+          example: blue
+          type: string
+        sort_order:
+          example: 1
+          type: integer
+      required:
+      - value
+      type: object
+    GoogleLoginRequest:
+      description: Payload for Google Sign-In authentication
+      example:
+        credential: eyJhbGciOiJSUzI1NiIs...
+      properties:
+        credential:
+          description: Google ID token credential from Google Sign-In
+          example: eyJhbGciOiJSUzI1NiIs...
+          type: string
+      required:
+      - credential
+      title: Google Login Request
+      type: object
+    LoginRequest:
+      description: Payload for user login
+      example:
+        password: securePassword123
+        email: user@example.com
+      properties:
+        email:
+          description: User email address
+          example: user@example.com
+          format: email
+          type: string
+        password:
+          description: User password
+          example: securePassword123
+          format: password
+          type: string
+      required:
+      - email
+      - password
+      title: Login Request
+      type: object
+    RefreshTokenRequest:
+      description: Payload for refreshing an access token
+      example:
+        refresh_token: dGhpcyBpcyBhIHNhbXBsZSByZWZyZXNoIHRva2VuIGJhc2U2NA
+      properties:
+        refresh_token:
+          description: The refresh token obtained from login or previous refresh
+          example: dGhpcyBpcyBhIHNhbXBsZSByZWZyZXNoIHRva2VuIGJhc2U2NA
+          type: string
+      required:
+      - refresh_token
+      title: Refresh Token Request
+      type: object
+    SessionResponse:
+      description: Login session details
+      example:
+        expires_at: 2000-01-23T04:56:07.000+00:00
+        revoked_at: 2000-01-23T04:56:07.000+00:00
+        user_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        role_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        ip_address: 192.168.1.1
+        revoked_reason: revoked_reason
+        email: email
+        user_agent: user_agent
+        revoked_by: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        status: active
+      properties:
+        id:
+          format: uuid
+          type: string
+        user_id:
+          format: uuid
+          type: string
+        email:
+          format: email
+          type: string
+        role_id:
+          format: uuid
+          type: string
+        ip_address:
+          example: 192.168.1.1
+          nullable: true
+          type: string
+        user_agent:
+          nullable: true
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        expires_at:
+          format: date-time
+          type: string
+        revoked_at:
+          format: date-time
+          nullable: true
+          type: string
+        revoked_by:
+          format: uuid
+          nullable: true
+          type: string
+        revoked_reason:
+          nullable: true
+          type: string
+        status:
+          enum:
+          - active
+          - expired
+          - revoked
+          type: string
+      title: Session Response
+      type: object
+    SwitchProjectRequest:
+      description: Payload for switching the active project context
+      example:
+        project_id: 018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7a
+      properties:
+        project_id:
+          description: The ID of the project to switch to
+          example: 018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7a
+          format: uuid
+          type: string
+      required:
+      - project_id
+      title: Switch Project Request
+      type: object
+    AutomationExecutionResponse:
+      example:
+        automation_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        error_message: error_message
+        completed_at: 2000-01-23T04:56:07.000+00:00
+        action_results:
+        - error_message: error_message
+          success: true
+          executed_at: 2000-01-23T04:56:07.000+00:00
+          action_index: 0
+        - error_message: error_message
+          success: true
+          executed_at: 2000-01-23T04:56:07.000+00:00
+          action_index: 0
+        triggered_at: 2000-01-23T04:56:07.000+00:00
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        entity_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        status: success
+      properties:
+        id:
+          format: uuid
+          type: string
+        automation_id:
+          format: uuid
+          type: string
+        entity_id:
+          format: uuid
+          type: string
+        triggered_at:
+          format: date-time
+          type: string
+        completed_at:
+          format: date-time
+          nullable: true
+          type: string
+        status:
+          example: success
+          type: string
+        action_results:
+          items:
+            $ref: "#/components/schemas/AutomationExecutionResponse_action_results_inner"
+          type: array
+        error_message:
+          nullable: true
+          type: string
+      type: object
+    AutomationResponse:
+      example:
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        isEnabled: true
+        name: Notify on status change
+        description: Sends alert when status attribute changes
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        trigger:
+          attributeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          type: on_attribute_changed
+          templateId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        lastTriggeredAt: 2000-01-23T04:56:07.000+00:00
+        conditions:
+        - attributeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          mode: current
+          value: ""
+          operator: eq
+        - attributeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          mode: current
+          value: ""
+          operator: eq
+        actions:
+        - type: telegram
+          config: "{}"
+        - type: telegram
+          config: "{}"
+        cooldownSeconds: 60
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          example: Notify on status change
+          type: string
+        description:
+          example: Sends alert when status attribute changes
+          nullable: true
+          type: string
+        isEnabled:
+          example: true
+          type: boolean
+        trigger:
+          $ref: "#/components/schemas/AutomationResponse_trigger"
+        conditions:
+          items:
+            $ref: "#/components/schemas/AutomationResponse_conditions_inner"
+          type: array
+        actions:
+          items:
+            $ref: "#/components/schemas/AutomationResponse_actions_inner"
+          type: array
+        cooldownSeconds:
+          example: 60
+          nullable: true
+          type: integer
+        lastTriggeredAt:
+          format: date-time
+          nullable: true
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      type: object
+    CreateAutomationRequest:
+      example:
+        name: Notify on status change
+        description: Sends alert when status changes
+        trigger:
+          attributeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          type: on_attribute_changed
+          templateId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        conditions:
+        - attributeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          mode: current
+          value: ""
+          operator: eq
+        - attributeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          mode: current
+          value: ""
+          operator: eq
+        actions:
+        - type: telegram
+          config: "{}"
+        - type: telegram
+          config: "{}"
+        cooldownSeconds: 60
+      properties:
+        name:
+          example: Notify on status change
+          type: string
+        description:
+          example: Sends alert when status changes
+          nullable: true
+          type: string
+        trigger:
+          $ref: "#/components/schemas/CreateAutomationRequest_trigger"
+        conditions:
+          items:
+            $ref: "#/components/schemas/CreateAutomationRequest_conditions_inner"
+          type: array
+        actions:
+          items:
+            $ref: "#/components/schemas/CreateAutomationRequest_actions_inner"
+          type: array
+        cooldownSeconds:
+          example: 60
+          nullable: true
+          type: integer
+      required:
+      - actions
+      - conditions
+      - name
+      - trigger
+      type: object
+    CreateNotificationChannelRequest:
+      example:
+        credentials:
+          bot_token: 123456:ABC-DEF...
+        name: Alerts Bot
+        type: telegram
+      properties:
+        type:
+          description: "Channel type: telegram, webhook or push"
+          example: telegram
+          type: string
+        name:
+          example: Alerts Bot
+          type: string
+        credentials:
+          $ref: "#/components/schemas/CreateNotificationChannelRequest_credentials"
+      required:
+      - credentials
+      - name
+      - type
+      type: object
+    NotificationChannelResponse:
+      example:
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        credentials:
+          key: credentials
+        name: name
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        type: telegram
+      properties:
+        id:
+          format: uuid
+          type: string
+        type:
+          enum:
+          - telegram
+          - webhook
+          - push
+          type: string
+        name:
+          type: string
+        credentials:
+          additionalProperties:
+            type: string
+          nullable: true
+          type: object
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      type: object
+    PushDeviceResponse:
+      example:
+        device_name: device_name
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        token: token
+      properties:
+        id:
+          format: uuid
+          type: string
+        token:
+          description: FCM device token (masked)
+          type: string
+        device_name:
+          nullable: true
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      type: object
+    RegisterPushDeviceRequest:
+      example:
+        device_name: Pixel 9 Pro
+        token: token
+      properties:
+        token:
+          description: FCM device registration token
+          type: string
+        device_name:
+          description: Optional device name for identification
+          example: Pixel 9 Pro
+          nullable: true
+          type: string
+      required:
+      - token
+      type: object
+    TestNotificationChannelRequest:
+      example:
+        message: Test message from Omnismith
+        title: title
+        chat_id: "123456789"
+      properties:
+        chat_id:
+          description: Telegram chat ID (required for Telegram channels)
+          example: "123456789"
+          type: string
+        message:
+          example: Test message from Omnismith
+          type: string
+        title:
+          description: Notification title (used for push notifications)
+          type: string
+      type: object
+    ToggleAutomationRequest:
+      example:
+        isEnabled: true
+      properties:
+        isEnabled:
+          example: true
+          type: boolean
+      required:
+      - isEnabled
+      type: object
+    UnregisterPushDeviceRequest:
+      example:
+        token: token
+      properties:
+        token:
+          description: FCM device registration token to remove
+          type: string
+      required:
+      - token
+      type: object
+    UpdateAutomationRequest:
+      example:
+        name: Updated automation name
+        description: Updated description
+        trigger:
+          attributeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          type: on_attribute_changed
+          templateId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        conditions:
+        - attributeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          mode: current
+          value: ""
+          operator: eq
+        - attributeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          mode: current
+          value: ""
+          operator: eq
+        actions:
+        - type: telegram
+          config: "{}"
+        - type: telegram
+          config: "{}"
+        cooldownSeconds: 120
+      properties:
+        name:
+          example: Updated automation name
+          nullable: true
+          type: string
+        description:
+          example: Updated description
+          nullable: true
+          type: string
+        trigger:
+          $ref: "#/components/schemas/UpdateAutomationRequest_trigger"
+        conditions:
+          items:
+            $ref: "#/components/schemas/AutomationResponse_conditions_inner"
+          nullable: true
+          type: array
+        actions:
+          items:
+            $ref: "#/components/schemas/AutomationResponse_actions_inner"
+          nullable: true
+          type: array
+        cooldownSeconds:
+          example: 120
+          nullable: true
+          type: integer
+      type: object
+    UpdateNotificationChannelRequest:
+      example:
+        credentials:
+          bot_token: 654321:NEW-TOKEN...
+        name: Updated Bot Name
+      properties:
+        name:
+          example: Updated Bot Name
+          nullable: true
+          type: string
+        credentials:
+          $ref: "#/components/schemas/UpdateNotificationChannelRequest_credentials"
+      type: object
+    CreateCheckoutRequest:
+      example:
+        tier_id: 019b8f10-65a0-735e-810a-faae0cb8a200
+      properties:
+        tier_id:
+          description: The tier ID to subscribe to (use the id value from GET /billing/tiers)
+          example: 019b8f10-65a0-735e-810a-faae0cb8a200
+          format: uuid
+          type: string
+      required:
+      - tier_id
+      type: object
+    CheckoutResponse:
+      description: Checkout session details
+      example:
+        checkout_url: https://openapi-generator.tech
+        checkout_id: checkout_id
+      properties:
+        checkout_url:
+          description: URL to redirect user to complete checkout
+          format: uri
+          type: string
+        checkout_id:
+          description: LemonSqueezy checkout session ID
+          type: string
+      title: Checkout Response
+      type: object
+    PortalUrlResponse:
+      description: Customer portal URL for subscription management
+      example:
+        portal_url: https://openapi-generator.tech
+      properties:
+        portal_url:
+          description: URL to redirect user to manage their subscription
+          format: uri
+          type: string
+      title: Portal URL Response
+      type: object
+    LogAiUsageRequest:
+      example:
+        credits_deducted: 10
+        model: gpt-4
+        output_tokens: 50
+        input_tokens: 100
+      properties:
+        credits_deducted:
+          description: Amount of credits to deduct
+          example: 10
+          type: integer
+        model:
+          description: Model used
+          example: gpt-4
+          type: string
+        input_tokens:
+          description: Input tokens
+          example: 100
+          type: integer
+        output_tokens:
+          description: Output tokens
+          example: 50
+          type: integer
+      required:
+      - credits_deducted
+      type: object
+    SetUserTierRequest:
+      properties:
+        tier_id:
+          example: 00000000-0000-0000-0000-000000000002
+          format: uuid
+          type: string
+        reason:
+          example: manual
+          type: string
+      required:
+      - tier_id
+      type: object
+    TierResponse:
+      description: Subscription tier details
+      example:
+        features:
+          sso_enabled: true
+          export_to_csv: true
+          history_retention_days: 0
+          audit_logs: true
+          api_access: true
+        description: description
+        price_cents: 2900
+        currency: USD
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        title: Pro
+        limits:
+          automations: 10
+          projects: 5
+          dimension_updates_per_month: 5000
+          channels: 5
+          entities: 5000
+          templates: 25
+          ai_credits: 500
+          attributes: 100
+          dashboards: 2
+          metric_ingestions_per_month: 1000000
+          disk_space_gb: 10
+      properties:
+        id:
+          format: uuid
+          type: string
+        title:
+          example: Pro
+          type: string
+        description:
+          type: string
+        price_cents:
+          example: 2900
+          type: integer
+        currency:
+          example: USD
+          type: string
+        limits:
+          $ref: "#/components/schemas/TierResponse_limits"
+        features:
+          $ref: "#/components/schemas/TierResponse_features"
+      title: Tier Response
+      type: object
+    UsageInsightsResponse:
+      description: Detailed usage insights with limits and percentages
+      example:
+        usage:
+          automations: 2
+          projects: 5
+          channels: 7
+          entities: 1
+          templates: 6
+          ai_credits: 2
+          dimension_updates: 3
+          disk_space_mb: 4.145608
+          attributes: 0
+          metric_ingestions: 9
+          dashboards: 5
+        percentages:
+          automations: 7.4577446
+          projects: 1.4894159
+          channels: 1.1730742
+          entities: 1.0246457
+          templates: 1.2315135
+          ai_credits: 9.965781
+          dimension_updates: 5.025005
+          disk_space_mb: 9.36931
+          attributes: 7.386282
+          metric_ingestions: 4.9652185
+          dashboards: 6.846853
+        tier_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        limits:
+          automations: 2
+          projects: 5
+          channels: 7
+          entities: 1
+          templates: 6
+          ai_credits: 2
+          dimension_updates: 3
+          disk_space_mb: 4.145608
+          attributes: 0
+          metric_ingestions: 9
+          dashboards: 5
+      properties:
+        tier_id:
+          description: The ID of the current tier
+          format: uuid
+          type: string
+        usage:
+          $ref: "#/components/schemas/UsageInsightsResponse_usage"
+        limits:
+          $ref: "#/components/schemas/UsageInsightsResponse_usage"
+        percentages:
+          $ref: "#/components/schemas/UsageInsightsResponse_percentages"
+      title: Usage Insights Response
+      type: object
+    UsageResponse:
+      description: User resource usage statistics
+      properties:
+        attribute_count:
+          example: 42
+          type: integer
+        template_count:
+          example: 5
+          type: integer
+        entity_count:
+          example: 1523
+          type: integer
+        project_count:
+          example: 3
+          type: integer
+        dashboard_count:
+          example: 2
+          type: integer
+        disk_usage_bytes:
+          example: 52428800
+          type: integer
+        monthly_metric_ingestions:
+          example: 15000
+          type: integer
+        monthly_dimension_updates:
+          example: 100
+          type: integer
+        ai_credits_used:
+          example: 125
+          type: integer
+        updated_at:
+          format: date-time
+          type: string
+      title: Usage Response
+      type: object
+    CreateDashboardRequest:
+      example:
+        name: My Dashboard
+        description: Dashboard description
+        config: "{}"
+      properties:
+        name:
+          example: My Dashboard
+          type: string
+        description:
+          example: Dashboard description
+          type: string
+        config:
+          example: "{}"
+          type: object
+      required:
+      - name
+      type: object
+    CreateDashboardBlockRequest:
+      example:
+        type: stat
+        title: My Block
+        config: "{\"template_id\": \"uuid\", \"filters\": []}"
+      properties:
+        type:
+          enum:
+          - stat
+          - chart
+          - gauge
+          - list
+          type: string
+        title:
+          example: My Block
+          type: string
+        config:
+          description: Block-specific configuration
+          example: "{\"template_id\": \"uuid\", \"filters\": []}"
+          type: object
+      required:
+      - title
+      - type
+      type: object
+    DashboardBlockResponse:
+      description: Dashboard block details
+      example:
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        type: stat
+        title: title
+        config: "{}"
+        dashboard_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        id:
+          format: uuid
+          type: string
+        dashboard_id:
+          format: uuid
+          type: string
+        type:
+          enum:
+          - stat
+          - chart
+          - gauge
+          - list
+          type: string
+        title:
+          type: string
+        config:
+          type: object
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          nullable: true
+          type: string
+      title: Dashboard Block Response
+      type: object
+    DashboardResponse:
+      description: Dashboard details
+      example:
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        name: name
+        description: description
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        config: "{}"
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        config:
+          type: object
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          nullable: true
+          type: string
+      title: Dashboard Response
+      type: object
+    ResolvedBlockResponse:
+      description: Resolved block data with computed values
+      oneOf:
+      - $ref: "#/components/schemas/ResolvedStatBlockResponse"
+      - $ref: "#/components/schemas/ResolvedGaugeBlockResponse"
+      - $ref: "#/components/schemas/ResolvedChartBlockResponse"
+      - $ref: "#/components/schemas/ResolvedListBlockResponse"
+      title: Resolved Block Response
+    ResolvedStatBlockResponse:
+      example:
+        count: 0
+        title: title
+        type: stat
+        block_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        block_id:
+          format: uuid
+          type: string
+        title:
+          type: string
+        type:
+          enum:
+          - stat
+          type: string
+        count:
+          type: integer
+      type: object
+    ResolvedGaugeBlockResponse:
+      properties:
+        block_id:
+          format: uuid
+          type: string
+        title:
+          type: string
+        type:
+          enum:
+          - gauge
+          type: string
+        value:
+          format: float
+          type: number
+        min:
+          format: float
+          type: number
+        max:
+          format: float
+          type: number
+        percentage:
+          format: float
+          type: number
+      type: object
+    ResolvedChartBlockResponse:
+      properties:
+        block_id:
+          format: uuid
+          type: string
+        title:
+          type: string
+        type:
+          enum:
+          - chart
+          type: string
+        bucket_width:
+          type: string
+        series:
+          items:
+            $ref: "#/components/schemas/ResolvedChartBlockResponse_series_inner"
+          type: array
+      type: object
+    ResolvedListBlockResponse:
+      properties:
+        block_id:
+          format: uuid
+          type: string
+        title:
+          type: string
+        type:
+          enum:
+          - list
+          type: string
+        items:
+          items:
+            $ref: "#/components/schemas/ResolvedListBlockResponse_items_inner"
+          type: array
+        total_count:
+          type: integer
+      type: object
+    UpdateDashboardRequest:
+      example:
+        name: My Dashboard
+        description: Dashboard description
+        config: "{}"
+      properties:
+        name:
+          example: My Dashboard
+          type: string
+        description:
+          example: Dashboard description
+          type: string
+        config:
+          type: object
+      type: object
+    UpdateDashboardBlockRequest:
+      example:
+        title: My Block
+        config: "{}"
+      properties:
+        title:
+          example: My Block
+          type: string
+        config:
+          description: Block-specific configuration
+          type: object
+      type: object
+    ProjectSchemaResponse:
+      description: "Complete project schema including attributes, templates, list\
+        \ items, and reference configs"
+      example:
+        reference_configs:
+        - target_attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          target_template_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - target_attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          target_template_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        templates:
+        - attribute_ids:
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          name: name
+          description: description
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          category: category
+          deleted_at: 2000-01-23T04:56:07.000+00:00
+        - attribute_ids:
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          name: name
+          description: description
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          category: category
+          deleted_at: 2000-01-23T04:56:07.000+00:00
+        attributes:
+        - reference_config:
+            target_attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            target_template_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          name: name
+          data_type: 6
+          description: description
+          created_at: 2000-01-23T04:56:07.000+00:00
+          attribute_type: 0
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          template_ids:
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          deleted_at: 2000-01-23T04:56:07.000+00:00
+        - reference_config:
+            target_attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            target_template_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          name: name
+          data_type: 6
+          description: description
+          created_at: 2000-01-23T04:56:07.000+00:00
+          attribute_type: 0
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          template_ids:
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          deleted_at: 2000-01-23T04:56:07.000+00:00
+        list_items:
+        - attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          value: value
+          sort_order: 0
+        - attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          value: value
+          sort_order: 0
+      properties:
+        attributes:
+          items:
+            $ref: "#/components/schemas/AttributeResponse"
+          type: array
+        templates:
+          items:
+            $ref: "#/components/schemas/TemplateResponse"
+          type: array
+        list_items:
+          items:
+            $ref: "#/components/schemas/ListItemResponse"
+          type: array
+        reference_configs:
+          items:
+            $ref: "#/components/schemas/ReferenceConfigResponse"
+          type: array
+      title: Project Schema Response
+      type: object
+    CreateEntityRequest:
+      example:
+        attribute_values:
+        - updated_at: 2000-01-23T04:56:07.000+00:00
+          attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          value: value
+        - updated_at: 2000-01-23T04:56:07.000+00:00
+          attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          value: value
+        template_id: template_id
+        id: 018b2f1b-8c1a-75b3-8000-7f0000010000
+      properties:
+        template_id:
+          type: string
+        attribute_values:
+          items:
+            $ref: "#/components/schemas/CreateEntityRequest_attribute_values_inner"
+          type: array
+        id:
+          example: 018b2f1b-8c1a-75b3-8000-7f0000010000
+          format: uuid
+          type: string
+      type: object
+    EntityAttributeValue:
+      description: Structured attribute value including display/custom value for references
+      example:
+        reference_entity_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        custom_value: custom_value
+        value: value
+      properties:
+        value:
+          type: string
+        custom_value:
+          nullable: true
+          type: string
+        reference_entity_id:
+          format: uuid
+          nullable: true
+          type: string
+      title: Entity Attribute Value
+      type: object
+    EntityResponse:
+      example:
+        updated_at: updated_at
+        attribute_values:
+          key:
+            reference_entity_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            custom_value: custom_value
+            value: value
+        created_at: created_at
+        template_id: template_id
+        id: id
+      properties:
+        id:
+          type: string
+        template_id:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+        attribute_values:
+          additionalProperties:
+            $ref: "#/components/schemas/EntityAttributeValue"
+          type: object
+      type: object
+    ExportEntitiesRequest:
+      example:
+        global_search: global_search
+        filters:
+        - field: field
+          value: value
+          operator: eq
+        - field: field
+          value: value
+          operator: eq
+      properties:
+        global_search:
+          nullable: true
+          type: string
+        filters:
+          items:
+            $ref: "#/components/schemas/ExportEntitiesRequest_filters_inner"
+          type: array
+      type: object
+    SearchEntitiesRequest:
+      example:
+        global_search: global_search
+        filters:
+        - field: field
+          value: value
+          operator: eq
+        - field: field
+          value: value
+          operator: eq
+      properties:
+        global_search:
+          nullable: true
+          type: string
+        filters:
+          items:
+            $ref: "#/components/schemas/ExportEntitiesRequest_filters_inner"
+          type: array
+      type: object
+    UpdateEntityRequest:
+      example:
+        attribute_values:
+        - updated_at: 2000-01-23T04:56:07.000+00:00
+          attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          value: value
+        - updated_at: 2000-01-23T04:56:07.000+00:00
+          attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          value: value
+      properties:
+        attribute_values:
+          items:
+            $ref: "#/components/schemas/CreateEntityRequest_attribute_values_inner"
+          type: array
+      type: object
+    SendFeedbackRequest:
+      description: Payload for submitting user feedback
+      example:
+        title: Dashboard chart is not rendering correctly
+        category: Bug Report
+        message: "When I open the dashboard page, the chart widget shows a blank area\
+          \ instead of data."
+      properties:
+        title:
+          description: Feedback subject line
+          example: Dashboard chart is not rendering correctly
+          type: string
+        category:
+          description: Feedback category
+          enum:
+          - Bug Report
+          - Feature Request
+          - General Feedback
+          - Billing & Account
+          - Usability
+          example: Bug Report
+          type: string
+        message:
+          description: Detailed feedback message
+          example: "When I open the dashboard page, the chart widget shows a blank\
+            \ area instead of data."
+          type: string
+      required:
+      - category
+      - message
+      - title
+      title: Send Feedback Request
+      type: object
+    FileAttachmentResponse:
+      description: File attachment details after upload
+      example:
+        size: 0
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        mimeType: mimeType
+        originalFilename: originalFilename
+      properties:
+        id:
+          format: uuid
+          type: string
+        originalFilename:
+          type: string
+        mimeType:
+          type: string
+        size:
+          type: integer
+      title: File Attachment Response
+      type: object
+    MarketplaceBlueprintDetailResponse:
+      description: Full detail response including the blueprint JSONB structure.
+    MarketplaceBlueprintSummaryResponse:
+      description: Summary response for list views (excludes full blueprint JSONB).
+    InstallMarketplaceBlueprintRequest:
+      example:
+        project_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        include_demo_data: false
+      properties:
+        project_id:
+          description: Target project ID
+          format: uuid
+          type: string
+        include_demo_data:
+          default: false
+          description: Whether to install sample entities included in the blueprint
+          type: boolean
+      required:
+      - project_id
+      type: object
+    PublishMarketplaceBlueprintRequest:
+      example:
+        keywords:
+        - keywords
+        - keywords
+        description: A complete CRM pipeline template
+        template_ids:
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        title: CRM Pipeline
+      properties:
+        title:
+          description: Blueprint title
+          example: CRM Pipeline
+          type: string
+        description:
+          description: Blueprint description
+          example: A complete CRM pipeline template
+          type: string
+        keywords:
+          description: Keywords for search/filtering
+          items:
+            type: string
+          type: array
+        template_ids:
+          description: Selected template IDs to snapshot into the marketplace blueprint
+          items:
+            format: uuid
+            type: string
+          type: array
+        id:
+          description: Existing blueprint ID for updates
+          format: uuid
+          nullable: true
+          type: string
+      required:
+      - template_ids
+      - title
+      type: object
+    AssignUserToProjectRequest:
+      example:
+        user_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        role_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        user_id:
+          format: uuid
+          type: string
+        role_id:
+          description: The Role ID to assign
+          format: uuid
+          type: string
+      required:
+      - role_id
+      - user_id
+      type: object
+    CreateProjectRequest:
+      example:
+        name: My Project
+        description: A description of the project
+        id: 018b2f1b-8c1a-75b3-8000-7f0000010000
+      properties:
+        name:
+          example: My Project
+          type: string
+        description:
+          example: A description of the project
+          nullable: true
+          type: string
+        id:
+          example: 018b2f1b-8c1a-75b3-8000-7f0000010000
+          format: uuid
+          type: string
+      required:
+      - name
+      type: object
+    InviteUserToProjectRequest:
+      example:
+        role_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        email: email
+      properties:
+        email:
+          description: Email address of the user to invite
+          format: email
+          type: string
+        role_id:
+          description: The Role ID to assign
+          format: uuid
+          type: string
+      required:
+      - email
+      - role_id
+      type: object
+    ProjectResponse:
+      description: Project details
+      example:
+        owner_email: owner_email
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        show_tour: true
+        name: name
+        description: description
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        deleted_at: 2000-01-23T04:56:07.000+00:00
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          type: string
+        description:
+          nullable: true
+          type: string
+        show_tour:
+          description: Whether the interactive tour should be shown for this project
+          type: boolean
+        owner_email:
+          description: Email of the project owner
+          format: email
+          nullable: true
+          readOnly: true
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+        deleted_at:
+          format: date-time
+          nullable: true
+          type: string
+      title: Project Response
+      type: object
+    ProjectUserResponse:
+      description: User in Project details
+      example:
+        role_name: role_name
+        joined_at: 2000-01-23T04:56:07.000+00:00
+        user_email: user_email
+        user_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        project_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        role_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        user_name: user_name
+        left_at: 2000-01-23T04:56:07.000+00:00
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        id:
+          format: uuid
+          type: string
+        user_id:
+          format: uuid
+          type: string
+        project_id:
+          format: uuid
+          type: string
+        role_id:
+          format: uuid
+          type: string
+        role_name:
+          description: Human-readable role name
+          readOnly: true
+          type: string
+        user_email:
+          description: User's email address
+          format: email
+          readOnly: true
+          type: string
+        user_name:
+          description: User's display name
+          nullable: true
+          readOnly: true
+          type: string
+        joined_at:
+          format: date-time
+          type: string
+        left_at:
+          format: date-time
+          nullable: true
+          type: string
+      title: Project User Response
+      type: object
+    UpdateProjectRequest:
+      example:
+        name: My Project
+        description: A description of the project
+      properties:
+        name:
+          example: My Project
+          type: string
+        description:
+          example: A description of the project
+          nullable: true
+          type: string
+      required:
+      - name
+      type: object
+    CreateRoleRequest:
+      example:
+        name: Custom Editor
+      properties:
+        name:
+          example: Custom Editor
+          type: string
+      required:
+      - name
+      type: object
+    RoleResourceAccessResponse:
+      description: Resource access entry for a role
+      example:
+        access_level: deny
+        resource_type: template
+        resource_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        resource_type:
+          enum:
+          - template
+          - attribute
+          type: string
+        resource_id:
+          format: uuid
+          type: string
+        access_level:
+          enum:
+          - deny
+          - view
+          - edit
+          - full
+          type: string
+      title: Role Resource Access Response
+      type: object
+    RoleResponse:
+      description: Role details
+      example:
+        is_owner: true
+        name: name
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          type: string
+        is_owner:
+          type: boolean
+        created_at:
+          format: date-time
+          type: string
+      title: Role Response
+      type: object
+    SetRolePermissionsRequest:
+      example:
+        permissions:
+        - template.view
+        - template.view
+      properties:
+        permissions:
+          items:
+            example: template.view
+            type: string
+          type: array
+      required:
+      - permissions
+      type: object
+    SetRoleResourcesRequest:
+      example:
+        resources:
+        - access_level: deny
+          resource_type: template
+          resource_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - access_level: deny
+          resource_type: template
+          resource_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        resources:
+          items:
+            $ref: "#/components/schemas/ResourceAccessInput"
+          type: array
+      required:
+      - resources
+      type: object
+    ResourceAccessInput:
+      example:
+        access_level: deny
+        resource_type: template
+        resource_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        resource_type:
+          enum:
+          - template
+          - attribute
+          type: string
+        resource_id:
+          format: uuid
+          type: string
+        access_level:
+          enum:
+          - deny
+          - view
+          - edit
+          - full
+          type: string
+      required:
+      - access_level
+      - resource_id
+      - resource_type
+      type: object
+    UpdateRoleRequest:
+      example:
+        name: Updated Role Name
+      properties:
+        name:
+          example: Updated Role Name
+          type: string
+      required:
+      - name
+      type: object
+    CreateSavedQueryRequest:
+      example:
+        global_search: global_search
+        name: name
+        template_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        filters:
+        - field: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          value: value
+          operator: eq
+        - field: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          value: value
+          operator: eq
+      properties:
+        template_id:
+          format: uuid
+          type: string
+        name:
+          type: string
+        global_search:
+          nullable: true
+          type: string
+        filters:
+          items:
+            $ref: "#/components/schemas/CreateSavedQueryRequest_filters_inner"
+          type: array
+      required:
+      - filters
+      - name
+      - template_id
+      type: object
+    SavedQueryResponse: {}
+    ErrorResponse:
+      description: Generic error response (RFC 7807)
+      example:
+        detail: An unexpected error occurred.
+        type: error/server
+        title: Internal Server Error
+        status: 500
+      properties:
+        type:
+          example: error/server
+          type: string
+        title:
+          example: Internal Server Error
+          type: string
+        status:
+          example: 500
+          type: integer
+        detail:
+          example: An unexpected error occurred.
+          nullable: true
+          type: string
+      title: Error Response
+      type: object
+    ValidationErrorResponse:
+      description: RFC 7807 Validation Error Structure
+      example:
+        type: error/validation
+        title: Validation Failed
+        errors:
+          email:
+          - This value is not a valid email address.
+        status: 422
+      properties:
+        type:
+          example: error/validation
+          type: string
+        title:
+          example: Validation Failed
+          type: string
+        status:
+          example: 422
+          type: integer
+        errors:
+          additionalProperties:
+            items:
+              type: string
+            type: array
+          description: Map of field names to array of error messages
+          example:
+            email:
+            - This value is not a valid email address.
+          type: object
+      required:
+      - errors
+      - status
+      - title
+      - type
+      title: Validation Error Response
+      type: object
+    CreateTemplateRequest:
+      example:
+        attribute_ids:
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        name: Product Template
+        description: Template for products
+        id: 018b2f1b-8c1a-75b3-8000-7f0000010000
+        category: E-commerce
+      properties:
+        name:
+          example: Product Template
+          type: string
+        description:
+          example: Template for products
+          nullable: true
+          type: string
+        category:
+          example: E-commerce
+          nullable: true
+          type: string
+        attribute_ids:
+          items:
+            format: uuid
+            type: string
+          type: array
+        id:
+          example: 018b2f1b-8c1a-75b3-8000-7f0000010000
+          format: uuid
+          type: string
+      required:
+      - name
+      type: object
+    TemplateEntityCountResponse:
+      description: Entity count for a template
+      example:
+        entity_count: 42
+        template_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        template_id:
+          format: uuid
+          type: string
+        entity_count:
+          example: 42
+          type: integer
+      title: Template Entity Count Response
+      type: object
+    TemplateResponse:
+      description: Template details
+      example:
+        attribute_ids:
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        name: name
+        description: description
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        category: category
+        deleted_at: 2000-01-23T04:56:07.000+00:00
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          type: string
+        description:
+          nullable: true
+          type: string
+        category:
+          nullable: true
+          type: string
+        attribute_ids:
+          items:
+            format: uuid
+            type: string
+          type: array
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+        deleted_at:
+          format: date-time
+          nullable: true
+          type: string
+      title: Template Response
+      type: object
+    UpdateTemplateRequest:
+      example:
+        attribute_ids:
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        name: Product Template
+        description: Template for products
+        category: E-commerce
+      properties:
+        name:
+          example: Product Template
+          type: string
+        description:
+          example: Template for products
+          nullable: true
+          type: string
+        category:
+          example: E-commerce
+          nullable: true
+          type: string
+        attribute_ids:
+          items:
+            format: uuid
+            type: string
+          type: array
+      required:
+      - name
+      type: object
+    RegisterUserRequest:
+      description: Payload for registering a new user
+      example:
+        password: securePassword123
+        email: user@example.com
+      properties:
+        email:
+          description: User email address
+          example: user@example.com
+          format: email
+          type: string
+        password:
+          description: User password (min 8 chars)
+          example: securePassword123
+          format: password
+          type: string
+      required:
+      - email
+      - password
+      title: Register User Request
+      type: object
+    ResendConfirmationEmailRequest:
+      description: Payload for resending the email confirmation
+      example:
+        email: user@example.com
+      properties:
+        email:
+          description: User email address
+          example: user@example.com
+          format: email
+          type: string
+      required:
+      - email
+      title: Resend Confirmation Email Request
+      type: object
+    listAccessTokens_200_response:
+      example:
+        data:
+        - last_used_at: 2000-01-23T04:56:07.000+00:00
+          expires_at: 2000-01-23T04:56:07.000+00:00
+          name: name
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - last_used_at: 2000-01-23T04:56:07.000+00:00
+          expires_at: 2000-01-23T04:56:07.000+00:00
+          name: name
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        meta: "{}"
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/AccessTokenResponse"
+          type: array
+        meta:
+          type: object
+      type: object
+    createAccessToken_201_response:
+      example:
+        expires_at: 2000-01-23T04:56:07.000+00:00
+        api_key: api_key
+        name: name
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          type: string
+        api_key:
+          description: The raw API key. Shown once only.
+          type: string
+        expires_at:
+          format: date-time
+          type: string
+        created_at:
+          format: date-time
+          type: string
+      type: object
+    listAttributeItems_200_response:
+      example:
+        data:
+        - attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          value: value
+          sort_order: 0
+        - attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          value: value
+          sort_order: 0
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/ListItemResponse"
+          type: array
+      type: object
+    createAttributeItem_201_response:
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        id:
+          format: uuid
+          type: string
+      type: object
+    listAttributes_200_response:
+      example:
+        data:
+        - reference_config:
+            target_attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            target_template_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          name: name
+          data_type: 6
+          description: description
+          created_at: 2000-01-23T04:56:07.000+00:00
+          attribute_type: 0
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          template_ids:
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          deleted_at: 2000-01-23T04:56:07.000+00:00
+        - reference_config:
+            target_attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            target_template_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          name: name
+          data_type: 6
+          description: description
+          created_at: 2000-01-23T04:56:07.000+00:00
+          attribute_type: 0
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          template_ids:
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          deleted_at: 2000-01-23T04:56:07.000+00:00
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/AttributeResponse"
+          type: array
+      type: object
+    getMyPermissions_200_response:
+      example:
+        data:
+        - entity.view
+        - entity.create
+        - dashboard.view
+      properties:
+        data:
+          example:
+          - entity.view
+          - entity.create
+          - dashboard.view
+          items:
+            type: string
+          type: array
+      type: object
+    googleLogin_200_response:
+      example:
+        access_token: access_token
+        refresh_expires_at: 6
+        refresh_token: refresh_token
+        expires_at: 0
+      properties:
+        access_token:
+          description: JWT access token
+          type: string
+        expires_at:
+          description: Access token expiration timestamp
+          type: integer
+        refresh_token:
+          description: Refresh token for obtaining new access tokens
+          type: string
+        refresh_expires_at:
+          description: Refresh token expiration timestamp
+          type: integer
+      type: object
+    listSessions_200_response:
+      example:
+        data:
+        - expires_at: 2000-01-23T04:56:07.000+00:00
+          revoked_at: 2000-01-23T04:56:07.000+00:00
+          user_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          role_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          ip_address: 192.168.1.1
+          revoked_reason: revoked_reason
+          email: email
+          user_agent: user_agent
+          revoked_by: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          status: active
+        - expires_at: 2000-01-23T04:56:07.000+00:00
+          revoked_at: 2000-01-23T04:56:07.000+00:00
+          user_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          role_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          ip_address: 192.168.1.1
+          revoked_reason: revoked_reason
+          email: email
+          user_agent: user_agent
+          revoked_by: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          status: active
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/SessionResponse"
+          type: array
+      type: object
+    refreshToken_200_response:
+      example:
+        access_token: access_token
+        refresh_expires_at: 6
+        refresh_token: refresh_token
+        expires_at: 0
+      properties:
+        access_token:
+          description: New JWT access token
+          type: string
+        expires_at:
+          description: Access token expiration timestamp
+          type: integer
+        refresh_token:
+          description: New refresh token (rotation)
+          type: string
+        refresh_expires_at:
+          description: Refresh token expiration timestamp
+          type: integer
+      type: object
+    refreshToken_401_response:
+      example:
+        code: REFRESH_TOKEN_NOT_FOUND
+        detail: detail
+        type: error/unauthorized
+        title: Unauthorized
+        status: 401
+      properties:
+        type:
+          example: error/unauthorized
+          type: string
+        title:
+          example: Unauthorized
+          type: string
+        status:
+          example: 401
+          type: integer
+        detail:
+          type: string
+        code:
+          enum:
+          - REFRESH_TOKEN_NOT_FOUND
+          - REFRESH_TOKEN_EXPIRED
+          - REFRESH_TOKEN_REVOKED
+          type: string
+      type: object
+    listNotificationChannels_200_response:
+      example:
+        data:
+        - updated_at: 2000-01-23T04:56:07.000+00:00
+          credentials:
+            key: credentials
+          name: name
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          type: telegram
+        - updated_at: 2000-01-23T04:56:07.000+00:00
+          credentials:
+            key: credentials
+          name: name
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          type: telegram
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/NotificationChannelResponse"
+          type: array
+      type: object
+    listAutomationExecutions_200_response:
+      example:
+        total: 0
+        data:
+        - automation_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          error_message: error_message
+          completed_at: 2000-01-23T04:56:07.000+00:00
+          action_results:
+          - error_message: error_message
+            success: true
+            executed_at: 2000-01-23T04:56:07.000+00:00
+            action_index: 0
+          - error_message: error_message
+            success: true
+            executed_at: 2000-01-23T04:56:07.000+00:00
+            action_index: 0
+          triggered_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          entity_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          status: success
+        - automation_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          error_message: error_message
+          completed_at: 2000-01-23T04:56:07.000+00:00
+          action_results:
+          - error_message: error_message
+            success: true
+            executed_at: 2000-01-23T04:56:07.000+00:00
+            action_index: 0
+          - error_message: error_message
+            success: true
+            executed_at: 2000-01-23T04:56:07.000+00:00
+            action_index: 0
+          triggered_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          entity_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          status: success
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/AutomationExecutionResponse"
+          type: array
+        total:
+          type: integer
+      type: object
+    listPushDevices_200_response:
+      example:
+        data:
+        - device_name: device_name
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          token: token
+        - device_name: device_name
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          token: token
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/PushDeviceResponse"
+          type: array
+      type: object
+    testNotificationChannel_200_response:
+      example:
+        success: true
+        message: Test message sent successfully
+      properties:
+        success:
+          example: true
+          type: boolean
+        message:
+          example: Test message sent successfully
+          type: string
+      type: object
+    testNotificationChannel_422_response:
+      example:
+        success: false
+        error: "Telegram API error: chat not found"
+      properties:
+        success:
+          example: false
+          type: boolean
+        error:
+          example: "Telegram API error: chat not found"
+          type: string
+      type: object
+    getAllTiers_200_response:
+      example:
+        data:
+        - features:
+            sso_enabled: true
+            export_to_csv: true
+            history_retention_days: 0
+            audit_logs: true
+            api_access: true
+          description: description
+          price_cents: 2900
+          currency: USD
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          title: Pro
+          limits:
+            automations: 10
+            projects: 5
+            dimension_updates_per_month: 5000
+            channels: 5
+            entities: 5000
+            templates: 25
+            ai_credits: 500
+            attributes: 100
+            dashboards: 2
+            metric_ingestions_per_month: 1000000
+            disk_space_gb: 10
+        - features:
+            sso_enabled: true
+            export_to_csv: true
+            history_retention_days: 0
+            audit_logs: true
+            api_access: true
+          description: description
+          price_cents: 2900
+          currency: USD
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          title: Pro
+          limits:
+            automations: 10
+            projects: 5
+            dimension_updates_per_month: 5000
+            channels: 5
+            entities: 5000
+            templates: 25
+            ai_credits: 500
+            attributes: 100
+            dashboards: 2
+            metric_ingestions_per_month: 1000000
+            disk_space_gb: 10
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/TierResponse"
+          type: array
+      type: object
+    logAiUsage_200_response:
+      example:
+        status: ok
+      properties:
+        status:
+          example: ok
+          type: string
+      type: object
+    listDashboards_200_response:
+      example:
+        data:
+        - updated_at: 2000-01-23T04:56:07.000+00:00
+          name: name
+          description: description
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          config: "{}"
+        - updated_at: 2000-01-23T04:56:07.000+00:00
+          name: name
+          description: description
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          config: "{}"
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/DashboardResponse"
+          type: array
+      type: object
+    listDashboardBlocks_200_response:
+      example:
+        data:
+        - updated_at: 2000-01-23T04:56:07.000+00:00
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          type: stat
+          title: title
+          config: "{}"
+          dashboard_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - updated_at: 2000-01-23T04:56:07.000+00:00
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          type: stat
+          title: title
+          config: "{}"
+          dashboard_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/DashboardBlockResponse"
+          type: array
+      type: object
+    getEntityChart_200_response_series_inner_data_inner:
+      example:
+        time: 2000-01-23T04:56:07.000+00:00
+        value: 0.8008282
+      properties:
+        time:
+          format: date-time
+          type: string
+        value:
+          format: float
+          type: number
+      type: object
+    getEntityChart_200_response_series_inner:
+      example:
+        data:
+        - time: 2000-01-23T04:56:07.000+00:00
+          value: 0.8008282
+        - time: 2000-01-23T04:56:07.000+00:00
+          value: 0.8008282
+        attribute_id: attribute_id
+      properties:
+        attribute_id:
+          type: string
+        data:
+          items:
+            $ref: "#/components/schemas/getEntityChart_200_response_series_inner_data_inner"
+          type: array
+      type: object
+    getEntityChart_200_response:
+      example:
+        series:
+        - data:
+          - time: 2000-01-23T04:56:07.000+00:00
+            value: 0.8008282
+          - time: 2000-01-23T04:56:07.000+00:00
+            value: 0.8008282
+          attribute_id: attribute_id
+        - data:
+          - time: 2000-01-23T04:56:07.000+00:00
+            value: 0.8008282
+          - time: 2000-01-23T04:56:07.000+00:00
+            value: 0.8008282
+          attribute_id: attribute_id
+      properties:
+        series:
+          items:
+            $ref: "#/components/schemas/getEntityChart_200_response_series_inner"
+          type: array
+      type: object
+    getEntityHistory_200_response_items_inner:
+      example:
+        attribute_id: attribute_id
+        created_at: 2000-01-23T04:56:07.000+00:00
+        author_email: author_email
+        entity_id: entity_id
+        value: value
+      properties:
+        created_at:
+          format: date-time
+          type: string
+        attribute_id:
+          type: string
+        value:
+          type: string
+        entity_id:
+          type: string
+        author_email:
+          type: string
+      type: object
+    getEntityHistory_200_response:
+      example:
+        total: 0
+        items:
+        - attribute_id: attribute_id
+          created_at: 2000-01-23T04:56:07.000+00:00
+          author_email: author_email
+          entity_id: entity_id
+          value: value
+        - attribute_id: attribute_id
+          created_at: 2000-01-23T04:56:07.000+00:00
+          author_email: author_email
+          entity_id: entity_id
+          value: value
+      properties:
+        items:
+          items:
+            $ref: "#/components/schemas/getEntityHistory_200_response_items_inner"
+          type: array
+        total:
+          type: integer
+      type: object
+    importEntities_request:
+      properties:
+        file:
+          description: CSV file exported from the export endpoint or matching its
+            format
+          format: binary
+          type: string
+      required:
+      - file
+      type: object
+    importEntities_200_response_errors_inner:
+      example:
+        column: column
+        row: 2
+        message: message
+      properties:
+        row:
+          type: integer
+        column:
+          nullable: true
+          type: string
+        message:
+          type: string
+      type: object
+    importEntities_200_response:
+      example:
+        total: 0
+        created: 6
+        failed: 5
+        updated: 1
+        errors:
+        - column: column
+          row: 2
+          message: message
+        - column: column
+          row: 2
+          message: message
+        skipped: 5
+      properties:
+        total:
+          description: Total rows processed
+          type: integer
+        created:
+          description: Number of entities created
+          type: integer
+        updated:
+          description: Number of entities updated
+          type: integer
+        skipped:
+          description: Number of rows skipped (no changes)
+          type: integer
+        failed:
+          description: Number of rows that failed
+          type: integer
+        errors:
+          items:
+            $ref: "#/components/schemas/importEntities_200_response_errors_inner"
+          type: array
+      type: object
+    searchEntities_200_response:
+      example:
+        total: 0
+        data:
+        - updated_at: updated_at
+          attribute_values:
+            key:
+              reference_entity_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+              custom_value: custom_value
+              value: value
+          created_at: created_at
+          template_id: template_id
+          id: id
+        - updated_at: updated_at
+          attribute_values:
+            key:
+              reference_entity_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+              custom_value: custom_value
+              value: value
+          created_at: created_at
+          template_id: template_id
+          id: id
+        offset: 1
+        limit: 6
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/EntityResponse"
+          type: array
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+      type: object
+    uploadFileAttachment_request:
+      properties:
+        file:
+          format: binary
+          type: string
+        id:
+          format: uuid
+          nullable: true
+          type: string
+      required:
+      - file
+      type: object
+    getMarketplaceBlueprint_200_response:
+      example:
+        data: ""
+      properties:
+        data:
+          description: Full detail response including the blueprint JSONB structure.
+      type: object
+    listMarketplaceKeywords_200_response_data_inner:
+      example:
+        count: 5
+        keyword: crm
+      properties:
+        keyword:
+          example: crm
+          type: string
+        count:
+          example: 5
+          type: integer
+      type: object
+    listMarketplaceKeywords_200_response:
+      example:
+        data:
+        - count: 5
+          keyword: crm
+        - count: 5
+          keyword: crm
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/listMarketplaceKeywords_200_response_data_inner"
+          type: array
+      type: object
+    searchMarketplaceBlueprints_200_response_meta:
+      example:
+        total: 0
+      properties:
+        total:
+          type: integer
+      type: object
+    searchMarketplaceBlueprints_200_response:
+      example:
+        data:
+        - null
+        - null
+        meta:
+          total: 0
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/MarketplaceBlueprintSummaryResponse"
+          type: array
+        meta:
+          $ref: "#/components/schemas/searchMarketplaceBlueprints_200_response_meta"
+      type: object
+    listProjectUsers_200_response:
+      example:
+        data:
+        - role_name: role_name
+          joined_at: 2000-01-23T04:56:07.000+00:00
+          user_email: user_email
+          user_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          project_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          role_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          user_name: user_name
+          left_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - role_name: role_name
+          joined_at: 2000-01-23T04:56:07.000+00:00
+          user_email: user_email
+          user_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          project_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          role_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          user_name: user_name
+          left_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/ProjectUserResponse"
+          type: array
+      type: object
+    listProjects_200_response:
+      example:
+        data:
+        - owner_email: owner_email
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          show_tour: true
+          name: name
+          description: description
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          deleted_at: 2000-01-23T04:56:07.000+00:00
+        - owner_email: owner_email
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          show_tour: true
+          name: name
+          description: description
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          deleted_at: 2000-01-23T04:56:07.000+00:00
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/ProjectResponse"
+          type: array
+      type: object
+    listRoles_200_response:
+      example:
+        data:
+        - is_owner: true
+          name: name
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - is_owner: true
+          name: name
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/RoleResponse"
+          type: array
+      type: object
+    getRolePermissions_200_response:
+      example:
+        data:
+        - template.view
+        - template.view
+      properties:
+        data:
+          items:
+            example: template.view
+            type: string
+          type: array
+      type: object
+    getRoleResources_200_response:
+      example:
+        data:
+        - access_level: deny
+          resource_type: template
+          resource_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - access_level: deny
+          resource_type: template
+          resource_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/RoleResourceAccessResponse"
+          type: array
+      type: object
+    listAvailablePermissions_200_response:
+      example:
+        data:
+          Billing:
+            permissions:
+            - permission: billing.view_usage
+              label: View Usage
+              description: View usage statistics
+              assignable: true
+      properties:
+        data:
+          example:
+            Billing:
+              permissions:
+              - permission: billing.view_usage
+                label: View Usage
+                description: View usage statistics
+                assignable: true
+          type: object
+      type: object
+    listSavedQueries_200_response:
+      example:
+        data:
+        - null
+        - null
+        meta: "{}"
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/SavedQueryResponse"
+          type: array
+        meta:
+          type: object
+      type: object
+    executeSavedQuery_200_response:
+      example:
+        saved_query_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        count: 123
+      properties:
+        saved_query_id:
+          format: uuid
+          type: string
+        count:
+          example: 123
+          type: integer
+      type: object
+    listTemplates_200_response:
+      example:
+        data:
+        - attribute_ids:
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          name: name
+          description: description
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          category: category
+          deleted_at: 2000-01-23T04:56:07.000+00:00
+        - attribute_ids:
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          name: name
+          description: description
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          category: category
+          deleted_at: 2000-01-23T04:56:07.000+00:00
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/TemplateResponse"
+          type: array
+      type: object
+    listTemplateEntityCounts_200_response:
+      example:
+        data:
+        - entity_count: 42
+          template_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - entity_count: 42
+          template_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/TemplateEntityCountResponse"
+          type: array
+      type: object
+    confirmUserEmail_200_response:
+      example:
+        message: Email confirmed successfully.
+      properties:
+        message:
+          example: Email confirmed successfully.
+          type: string
+      type: object
+    resendConfirmationEmail_200_response:
+      example:
+        message: "If the email is registered, a confirmation link has been sent."
+      properties:
+        message:
+          example: "If the email is registered, a confirmation link has been sent."
+          type: string
+      type: object
+    AttributeResponse_reference_config:
+      description: Configuration for Reference attributes
+      example:
+        target_attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        target_template_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      nullable: true
+      properties:
+        target_template_id:
+          format: uuid
+          type: string
+        target_attribute_id:
+          format: uuid
+          type: string
+      type: object
+    CreateAttributeRequest_reference_config:
+      description: Optional reference configuration
+      example:
+        target_attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        target_template_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      nullable: true
+      properties:
+        target_template_id:
+          format: uuid
+          type: string
+        target_attribute_id:
+          format: uuid
+          type: string
+      type: object
+    UpdateAttributeRequest_reference_config:
+      description: "string, target_attribute_id: string}|null"
+      example:
+        target_attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        target_template_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      nullable: true
+      properties:
+        target_template_id:
+          format: uuid
+          type: string
+        target_attribute_id:
+          format: uuid
+          type: string
+      type: object
+    AutomationExecutionResponse_action_results_inner:
+      example:
+        error_message: error_message
+        success: true
+        executed_at: 2000-01-23T04:56:07.000+00:00
+        action_index: 0
+      properties:
+        action_index:
+          example: 0
+          type: integer
+        success:
+          example: true
+          type: boolean
+        error_message:
+          nullable: true
+          type: string
+        executed_at:
+          format: date-time
+          type: string
+      type: object
+    AutomationResponse_trigger:
+      example:
+        attributeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        type: on_attribute_changed
+        templateId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        type:
+          example: on_attribute_changed
+          type: string
+        templateId:
+          format: uuid
+          nullable: true
+          type: string
+        attributeId:
+          format: uuid
+          nullable: true
+          type: string
+      type: object
+    AutomationResponse_conditions_inner:
+      example:
+        attributeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        mode: current
+        value: ""
+        operator: eq
+      properties:
+        attributeId:
+          format: uuid
+          type: string
+        operator:
+          example: eq
+          type: string
+        value:
+          nullable: true
+        mode:
+          example: current
+          type: string
+      type: object
+    AutomationResponse_actions_inner:
+      example:
+        type: telegram
+        config: "{}"
+      properties:
+        type:
+          example: telegram
+          type: string
+        config:
+          type: object
+      type: object
+    CreateAutomationRequest_trigger:
+      example:
+        attributeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        type: on_attribute_changed
+        templateId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        type:
+          example: on_attribute_changed
+          type: string
+        templateId:
+          format: uuid
+          nullable: true
+          type: string
+        attributeId:
+          format: uuid
+          nullable: true
+          type: string
+      required:
+      - type
+      type: object
+    CreateAutomationRequest_conditions_inner:
+      example:
+        attributeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        mode: current
+        value: ""
+        operator: eq
+      properties:
+        attributeId:
+          format: uuid
+          type: string
+        operator:
+          example: eq
+          type: string
+        value:
+          nullable: true
+        mode:
+          example: current
+          type: string
+      required:
+      - attributeId
+      - mode
+      - operator
+      type: object
+    CreateAutomationRequest_actions_inner:
+      example:
+        type: telegram
+        config: "{}"
+      properties:
+        type:
+          example: telegram
+          type: string
+        config:
+          type: object
+      required:
+      - config
+      - type
+      type: object
+    CreateNotificationChannelRequest_credentials:
+      description: Type-specific credentials
+      example:
+        bot_token: 123456:ABC-DEF...
+      properties:
+        bot_token:
+          example: 123456:ABC-DEF...
+          type: string
+      type: object
+    UpdateAutomationRequest_trigger:
+      example:
+        attributeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        type: on_attribute_changed
+        templateId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      nullable: true
+      properties:
+        type:
+          example: on_attribute_changed
+          type: string
+        templateId:
+          format: uuid
+          nullable: true
+          type: string
+        attributeId:
+          format: uuid
+          nullable: true
+          type: string
+      type: object
+    UpdateNotificationChannelRequest_credentials:
+      description: Type-specific credentials
+      example:
+        bot_token: 654321:NEW-TOKEN...
+      nullable: true
+      properties:
+        bot_token:
+          example: 654321:NEW-TOKEN...
+          type: string
+      type: object
+    TierResponse_limits:
+      example:
+        automations: 10
+        projects: 5
+        dimension_updates_per_month: 5000
+        channels: 5
+        entities: 5000
+        templates: 25
+        ai_credits: 500
+        attributes: 100
+        dashboards: 2
+        metric_ingestions_per_month: 1000000
+        disk_space_gb: 10
+      properties:
+        attributes:
+          example: 100
+          type: integer
+        templates:
+          example: 25
+          type: integer
+        entities:
+          example: 5000
+          type: integer
+        disk_space_gb:
+          example: 10
+          type: integer
+        projects:
+          example: 5
+          type: integer
+        dashboards:
+          example: 2
+          type: integer
+        automations:
+          example: 10
+          type: integer
+        channels:
+          example: 5
+          type: integer
+        metric_ingestions_per_month:
+          example: 1000000
+          type: integer
+        dimension_updates_per_month:
+          example: 5000
+          type: integer
+        ai_credits:
+          example: 500
+          type: integer
+      type: object
+    TierResponse_features:
+      example:
+        sso_enabled: true
+        export_to_csv: true
+        history_retention_days: 0
+        audit_logs: true
+        api_access: true
+      properties:
+        api_access:
+          type: boolean
+        export_to_csv:
+          type: boolean
+        sso_enabled:
+          type: boolean
+        audit_logs:
+          type: boolean
+        history_retention_days:
+          type: integer
+      type: object
+    UsageInsightsResponse_usage:
+      example:
+        automations: 2
+        projects: 5
+        channels: 7
+        entities: 1
+        templates: 6
+        ai_credits: 2
+        dimension_updates: 3
+        disk_space_mb: 4.145608
+        attributes: 0
+        metric_ingestions: 9
+        dashboards: 5
+      properties:
+        attributes:
+          type: integer
+        templates:
+          type: integer
+        entities:
+          type: integer
+        projects:
+          type: integer
+        dashboards:
+          type: integer
+        automations:
+          type: integer
+        channels:
+          type: integer
+        metric_ingestions:
+          type: integer
+        dimension_updates:
+          type: integer
+        ai_credits:
+          type: integer
+        disk_space_mb:
+          format: float
+          type: number
+      type: object
+    UsageInsightsResponse_percentages:
+      example:
+        automations: 7.4577446
+        projects: 1.4894159
+        channels: 1.1730742
+        entities: 1.0246457
+        templates: 1.2315135
+        ai_credits: 9.965781
+        dimension_updates: 5.025005
+        disk_space_mb: 9.36931
+        attributes: 7.386282
+        metric_ingestions: 4.9652185
+        dashboards: 6.846853
+      properties:
+        attributes:
+          format: float
+          type: number
+        templates:
+          format: float
+          type: number
+        entities:
+          format: float
+          type: number
+        projects:
+          format: float
+          type: number
+        dashboards:
+          format: float
+          type: number
+        automations:
+          format: float
+          type: number
+        channels:
+          format: float
+          type: number
+        metric_ingestions:
+          format: float
+          type: number
+        dimension_updates:
+          format: float
+          type: number
+        ai_credits:
+          format: float
+          type: number
+        disk_space_mb:
+          format: float
+          type: number
+      type: object
+    ResolvedChartBlockResponse_series_inner:
+      properties:
+        entity_id:
+          format: uuid
+          type: string
+        entity_name:
+          nullable: true
+          type: string
+        data_points:
+          items:
+            $ref: "#/components/schemas/getEntityChart_200_response_series_inner_data_inner"
+          type: array
+      type: object
+    ResolvedListBlockResponse_items_inner:
+      properties:
+        entity_id:
+          format: uuid
+          type: string
+        attributes:
+          type: object
+      type: object
+    CreateEntityRequest_attribute_values_inner:
+      example:
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        attribute_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        value: value
+      properties:
+        attribute_id:
+          format: uuid
+          type: string
+        value:
+          type: string
+        updated_at:
+          format: date-time
+          nullable: true
+          type: string
+      type: object
+    ExportEntitiesRequest_filters_inner:
+      example:
+        field: field
+        value: value
+        operator: eq
+      properties:
+        field:
+          type: string
+        operator:
+          enum:
+          - eq
+          - neq
+          - gt
+          - lt
+          - like
+          - not-like
+          - empty
+          - not-empty
+          type: string
+        value:
+          type: string
+      type: object
+    CreateSavedQueryRequest_filters_inner:
+      example:
+        field: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        value: value
+        operator: eq
+      properties:
+        field:
+          format: uuid
+          type: string
+        operator:
+          enum:
+          - eq
+          - gt
+          - lt
+          - like
+          - empty
+          - not-empty
+          type: string
+        value:
+          nullable: true
+          type: string
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
