@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   description: API Documentation for Omnismith
   title: Omnismith API
-  version: 1.0.3
+  version: 1.0.4
 servers:
 - description: Production Server
   url: https://api.omnismith.io/v1
