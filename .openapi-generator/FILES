@@ -19,6 +19,7 @@ api_marketplace.go
 api_projects.go
 api_roles.go
 api_saved_queries.go
+api_schema.go
 api_templates.go
 api_user.go
 client.go
@@ -146,6 +147,7 @@ docs/RoleResourceAccessResponse.md
 docs/RoleResponse.md
 docs/RolesAPI.md
 docs/SavedQueriesAPI.md
+docs/SchemaAPI.md
 docs/SearchEntities200Response.md
 docs/SearchEntitiesRequest.md
 docs/SearchMarketplaceBlueprints200Response.md
@@ -355,6 +357,7 @@ test/api_marketplace_test.go
 test/api_projects_test.go
 test/api_roles_test.go
 test/api_saved_queries_test.go
+test/api_schema_test.go
 test/api_templates_test.go
 test/api_user_test.go
 utils.go

@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   description: API Documentation for Omnismith
   title: Omnismith API
-  version: 1.0.6
+  version: 1.0.7
 servers:
 - description: Production Server
   url: https://api.omnismith.io/v1
@@ -27,8 +27,8 @@ tags:
   name: Dashboards
 - description: Dashboard Blocks
   name: Dashboard Blocks
-- description: Templates
-  name: Templates
+- description: Schema
+  name: Schema
 - description: Entity
   name: Entity
 - description: Feedback
@@ -43,6 +43,8 @@ tags:
   name: Roles
 - description: SavedQueries
   name: SavedQueries
+- description: Templates
+  name: Templates
 - description: User
   name: User
 paths:
@@ -1731,8 +1733,7 @@ paths:
       - bearerAuth: []
       summary: Get complete project schema
       tags:
-      - Attributes
-      - Templates
+      - Schema
   /entities:
     post:
       operationId: createEntity

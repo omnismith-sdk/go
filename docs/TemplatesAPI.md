@@ -6,7 +6,6 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**CreateTemplate**](TemplatesAPI.md#CreateTemplate) | **Post** /templates | Create a new template
 [**DeleteTemplate**](TemplatesAPI.md#DeleteTemplate) | **Delete** /templates/{id} | Delete a template
-[**GetProjectSchema**](TemplatesAPI.md#GetProjectSchema) | **Get** /discovery/project-schema | Get complete project schema
 [**GetTemplate**](TemplatesAPI.md#GetTemplate) | **Get** /templates/{id} | Get a template
 [**ListTemplateEntityCounts**](TemplatesAPI.md#ListTemplateEntityCounts) | **Get** /templates/entity-counts | List entity counts per template
 [**ListTemplates**](TemplatesAPI.md#ListTemplates) | **Get** /templates | List templates
@@ -138,67 +137,6 @@ Name | Type | Description  | Notes
 
 - **Content-Type**: Not defined
 - **Accept**: Not defined
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## GetProjectSchema
-
-> ProjectSchemaResponse GetProjectSchema(ctx).Execute()
-
-Get complete project schema
-
-
-
-### Example
-
-```go
-package main
-
-import (
-	"context"
-	"fmt"
-	"os"
-	openapiclient "github.com/omnismith-sdk/go"
-)
-
-func main() {
-
-	configuration := openapiclient.NewConfiguration()
-	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TemplatesAPI.GetProjectSchema(context.Background()).Execute()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `TemplatesAPI.GetProjectSchema``: %v\n", err)
-		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-	}
-	// response from `GetProjectSchema`: ProjectSchemaResponse
-	fmt.Fprintf(os.Stdout, "Response from `TemplatesAPI.GetProjectSchema`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-This endpoint does not need any parameter.
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiGetProjectSchemaRequest struct via the builder pattern
-
-
-### Return type
-
-[**ProjectSchemaResponse**](ProjectSchemaResponse.md)
-
-### Authorization
-
-[bearerAuth](../README.md#bearerAuth)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
