@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   description: API Documentation for Omnismith
   title: Omnismith API
-  version: 1.0.7
+  version: 1.0.8
 servers:
 - description: Production Server
   url: https://api.omnismith.io/v1
@@ -563,7 +563,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ValidationErrorResponse"
-          description: Validation Failed
+          description: Validation Error
         "401":
           description: Invalid Google token
         "500":
@@ -613,7 +613,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ValidationErrorResponse"
-          description: Validation Failed
+          description: Validation Error
         "401":
           description: Invalid credentials
         "500":
@@ -654,7 +654,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ValidationErrorResponse"
-          description: Validation Failed
+          description: Validation Error
         "500":
           content:
             application/json:
@@ -712,7 +712,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ValidationErrorResponse"
-          description: Validation Failed
+          description: Validation Error
         "401":
           description: Unauthorized
         "403":
@@ -1233,6 +1233,12 @@ paths:
           description: Bad Request
         "401":
           description: Unauthorized
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
         "404":
           description: Automation not found
       security:
@@ -1357,6 +1363,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/logAiUsage_200_response"
           description: Usage logged successfully
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
       security:
       - bearerAuth: []
       summary: Log AI usage credits
@@ -1842,6 +1854,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
           description: Tier quota exceeded
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
         "404":
           description: Entity not found
       security:
@@ -1908,6 +1926,12 @@ paths:
                 example: attachment; filename="export_Template_2026-01-18_14-30-00.csv"
                 type: string
               style: simple
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
         "401":
           description: Unauthorized
         "403":
@@ -2139,6 +2163,12 @@ paths:
           description: Import completed
         "400":
           description: Bad request (invalid CSV format)
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
         "401":
           description: Unauthorized
         "403":
@@ -2217,6 +2247,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/searchEntities_200_response"
           description: Search results
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
       security:
       - bearerAuth: []
       summary: Search entities
@@ -2245,7 +2281,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ValidationErrorResponse"
-          description: Validation Failed
+          description: Validation Error
       security:
       - bearerAuth: []
       summary: Submit user feedback
@@ -3532,7 +3568,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ValidationErrorResponse"
-          description: Validation Failed
+          description: Validation Error
         "409":
           description: User already exists
       summary: Register a new user
@@ -3554,6 +3590,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/resendConfirmationEmail_200_response"
           description: Confirmation email sent (or silently ignored if user not found)
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
         "429":
           description: Confirmation email already sent recently
       summary: Resend the email confirmation link
