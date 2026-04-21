@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   description: API Documentation for Omnismith
   title: Omnismith API
-  version: 1.0.8
+  version: 1.0.10
 servers:
 - description: Production Server
   url: https://api.omnismith.io/v1
@@ -565,7 +565,11 @@ paths:
                 $ref: "#/components/schemas/ValidationErrorResponse"
           description: Validation Error
         "401":
-          description: Invalid Google token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Unauthorized
         "500":
           content:
             application/json:
@@ -615,7 +619,11 @@ paths:
                 $ref: "#/components/schemas/ValidationErrorResponse"
           description: Validation Error
         "401":
-          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Unauthorized
         "500":
           content:
             application/json:
@@ -714,9 +722,17 @@ paths:
                 $ref: "#/components/schemas/ValidationErrorResponse"
           description: Validation Error
         "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
           description: Unauthorized
         "403":
-          description: Access Denied to Project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Forbidden
         "500":
           content:
             application/json:
@@ -1230,8 +1246,16 @@ paths:
                 $ref: "#/components/schemas/AutomationResponse"
           description: Automation toggled
         "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
           description: Bad Request
         "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
           description: Unauthorized
         "422":
           content:
@@ -1240,7 +1264,11 @@ paths:
                 $ref: "#/components/schemas/ValidationErrorResponse"
           description: Validation Error
         "404":
-          description: Automation not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
       security:
       - bearerAuth: []
       summary: Toggle automation enabled status
@@ -1861,7 +1889,11 @@ paths:
                 $ref: "#/components/schemas/ValidationErrorResponse"
           description: Validation Error
         "404":
-          description: Entity not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
       security:
       - bearerAuth: []
       summary: Update an entity
@@ -1933,11 +1965,23 @@ paths:
                 $ref: "#/components/schemas/ValidationErrorResponse"
           description: Validation Error
         "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
           description: Unauthorized
         "403":
-          description: Access denied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Forbidden
         "404":
-          description: Template not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
       security:
       - bearerAuth: []
       summary: Export entities to CSV
@@ -2162,7 +2206,11 @@ paths:
                 $ref: "#/components/schemas/importEntities_200_response"
           description: Import completed
         "400":
-          description: Bad request (invalid CSV format)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
         "422":
           content:
             application/json:
@@ -2170,11 +2218,23 @@ paths:
                 $ref: "#/components/schemas/ValidationErrorResponse"
           description: Validation Error
         "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
           description: Unauthorized
         "403":
-          description: Access denied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Forbidden
         "404":
-          description: Template not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
       security:
       - bearerAuth: []
       summary: Import entities from CSV
@@ -2273,8 +2333,16 @@ paths:
         "204":
           description: Feedback submitted successfully
         "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
           description: Bad Request
         "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
           description: Unauthorized
         "422":
           content:
@@ -3562,7 +3630,11 @@ paths:
                 $ref: "#/components/schemas/createAttributeItem_201_response"
           description: User registered successfully
         "400":
-          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
         "422":
           content:
             application/json:
@@ -3570,7 +3642,11 @@ paths:
                 $ref: "#/components/schemas/ValidationErrorResponse"
           description: Validation Error
         "409":
-          description: User already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Conflict
       summary: Register a new user
       tags:
       - User
@@ -3597,12 +3673,58 @@ paths:
                 $ref: "#/components/schemas/ValidationErrorResponse"
           description: Validation Error
         "429":
-          description: Confirmation email already sent recently
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Too Many Requests
       summary: Resend the email confirmation link
       tags:
       - User
 components:
   responses:
+    BadRequest:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+      description: Bad Request
+    Unauthorized:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+      description: Unauthorized
+    Forbidden:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+      description: Forbidden
+    NotFound:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+      description: Not Found
+    Conflict:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+      description: Conflict
+    TooManyRequests:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+      description: Too Many Requests
+    InternalServerError:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+      description: Internal Server Error
     UnprocessableEntity:
       content:
         application/json:
@@ -5466,6 +5588,7 @@ components:
     ValidationErrorResponse:
       description: RFC 7807 Validation Error Structure
       example:
+        detail: "email: This value is not a valid email address. See errors for details."
         type: error/validation
         title: Validation Failed
         errors:
@@ -5492,6 +5615,11 @@ components:
             email:
             - This value is not a valid email address.
           type: object
+        detail:
+          example: "email: This value is not a valid email address. See errors for\
+            \ details."
+          nullable: true
+          type: string
       required:
       - errors
       - status
