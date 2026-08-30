@@ -18,7 +18,6 @@ api_entity.go
 api_feedback.go
 api_file_attachment.go
 api_marketplace.go
-api_mcp.go
 api_o_auth.go
 api_projects.go
 api_roles.go
@@ -162,7 +161,6 @@ docs/ListWorkspaces200Response.md
 docs/LogAiUsage200Response.md
 docs/LogAiUsageRequest.md
 docs/LoginRequest.md
-docs/MCPAPI.md
 docs/MarketplaceAPI.md
 docs/MarketplaceBlueprintDetailResponse.md
 docs/MarketplaceBlueprintDetailResponseMetadata.md
@@ -516,7 +514,6 @@ test/api_entity_test.go
 test/api_feedback_test.go
 test/api_file_attachment_test.go
 test/api_marketplace_test.go
-test/api_mcp_test.go
 test/api_o_auth_test.go
 test/api_projects_test.go
 test/api_roles_test.go

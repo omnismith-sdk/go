@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   description: API Documentation for Omnismith
   title: Omnismith API
-  version: 1.0.11
+  version: 1.0.12
   x-logo:
     url: https://omnismith.io/logo.png
     backgroundColor: transparent
@@ -17,8 +17,6 @@ tags:
   name: AccessTokens
 - description: Attributes
   name: Attributes
-- description: MCP
-  name: MCP
 - description: AuditLog
   name: AuditLog
 - description: Auth
@@ -225,7 +223,6 @@ paths:
       summary: List items of an attribute
       tags:
       - Attributes
-      - MCP
     post:
       description: Appends a single selectable choice option item to a List-type (attribute_type
         = 2) attribute. Returns the generated or assigned UUID of the newly created
@@ -284,7 +281,6 @@ paths:
       summary: Add a list item to an attribute
       tags:
       - Attributes
-      - MCP
     put:
       description: "Atomically replaces all selectable option items for a List-type\
         \ (attribute_type = 2) attribute. Existing list items for this attribute are\
@@ -341,7 +337,6 @@ paths:
       summary: Set list items for an attribute (replaces all existing items)
       tags:
       - Attributes
-      - MCP
   /attributes:
     get:
       description: "Retrieves all schema attributes defined in the active project.\
@@ -369,7 +364,6 @@ paths:
       summary: List all attributes
       tags:
       - Attributes
-      - MCP
     post:
       description: "Defines a new attribute in the project schema. Attributes can\
         \ be of kind Dimension (0), Metric (1), List (2), or Reference (3). Specify\
@@ -426,7 +420,6 @@ paths:
       summary: Create a new attribute
       tags:
       - Attributes
-      - MCP
   /attributes/{id}:
     delete:
       description: "Soft-deletes an attribute from the project schema. Soft-deleted\
@@ -465,7 +458,6 @@ paths:
       summary: Delete an attribute
       tags:
       - Attributes
-      - MCP
     get:
       description: "Retrieves complete attribute metadata by its UUID, including kind\
         \ (Dimension: 0, Metric: 1, List: 2, Reference: 3), storage data type, assigned\
@@ -506,7 +498,6 @@ paths:
       summary: Get an attribute by ID
       tags:
       - Attributes
-      - MCP
     patch:
       description: "Applies partial modifications to an existing attribute without\
         \ overwriting omitted fields. Allows independently changing name, description,\
@@ -571,7 +562,6 @@ paths:
       summary: Patch an attribute (granular partial update)
       tags:
       - Attributes
-      - MCP
     put:
       description: "Performs a full update of an existing attribute definition. Supports\
         \ updating name, description, slug, template associations, reference configuration,\
@@ -638,7 +628,6 @@ paths:
       summary: Update an attribute (full replacement)
       tags:
       - Attributes
-      - MCP
   /attributes/{id}/reference:
     delete:
       description: Removes the foreign entity reference configuration mapping from
@@ -675,7 +664,6 @@ paths:
       summary: Delete reference configuration for an attribute
       tags:
       - Attributes
-      - MCP
     get:
       description: Retrieves the relational reference target configuration for a Reference-type
         (attribute_type = 3) attribute. Returns the target template UUID and target
@@ -716,7 +704,6 @@ paths:
       summary: Get reference configuration for an attribute
       tags:
       - Attributes
-      - MCP
     put:
       description: Sets or updates the target template and display attribute for a
         Reference-type (attribute_type = 3) attribute. Enables relational linking
@@ -772,7 +759,6 @@ paths:
       summary: Set or update reference configuration for an attribute
       tags:
       - Attributes
-      - MCP
   /attributes/{id}/items/{itemId}:
     delete:
       description: Permanently deletes a specific selectable option item from a List-type
@@ -1051,7 +1037,6 @@ paths:
       summary: List project audit logs
       tags:
       - AuditLog
-      - MCP
   /auth/me/permissions:
     get:
       description: "Returns the complete list of permission strings granted to the\
@@ -1415,7 +1400,6 @@ paths:
       summary: List project automations
       tags:
       - Automation - Automations
-      - MCP
     post:
       description: "Creates a new event-driven automation rule within the current\
         \ project. Configures event trigger criteria (such as `on_entity_created`,\
@@ -1460,7 +1444,6 @@ paths:
       summary: Create an automation rule
       tags:
       - Automation - Automations
-      - MCP
   /automation/notification-channels:
     get:
       description: "Retrieves all notification delivery channels configured within\
@@ -1482,7 +1465,6 @@ paths:
       summary: List notification channels
       tags:
       - Automation - Notification Channels
-      - MCP
     post:
       description: "Registers a new external notification channel for the current\
         \ project. Channels can be of type `telegram` (configured with a Telegram\
@@ -1525,7 +1507,6 @@ paths:
       summary: Create a notification channel
       tags:
       - Automation - Notification Channels
-      - MCP
   /automation/automations/{id}:
     delete:
       description: "Permanently deletes an automation rule by UUID, unbinding event\
@@ -1555,7 +1536,6 @@ paths:
       summary: Delete an automation
       tags:
       - Automation - Automations
-      - MCP
     get:
       description: "Retrieves the complete configuration of a specific automation\
         \ rule by its UUID, including trigger event types, template/attribute references,\
@@ -1589,7 +1569,6 @@ paths:
       summary: Get an automation by ID
       tags:
       - Automation - Automations
-      - MCP
     put:
       description: "Updates an existing automation rule by UUID. Supports modifying\
         \ rule name, description, trigger event definitions, condition filter criteria,\
@@ -1632,7 +1611,6 @@ paths:
       summary: Update an automation
       tags:
       - Automation - Automations
-      - MCP
   /automation/notification-channels/{id}:
     delete:
       description: Permanently removes a notification channel from the project by
@@ -1662,7 +1640,6 @@ paths:
       summary: Delete a notification channel
       tags:
       - Automation - Notification Channels
-      - MCP
     get:
       description: "Retrieves configuration details and status of a specific notification\
         \ channel by its UUID, including channel type, name, creation timestamp, and\
@@ -1695,7 +1672,6 @@ paths:
       summary: Get a notification channel by ID
       tags:
       - Automation - Notification Channels
-      - MCP
     put:
       description: "Updates an existing notification channel configuration by UUID.\
         \ Allows updating the channel display name or updating integration credentials\
@@ -1738,7 +1714,6 @@ paths:
       summary: Update a notification channel
       tags:
       - Automation - Notification Channels
-      - MCP
   /automation/automations/{id}/executions:
     get:
       description: "Retrieves paginated execution logs and audit history for a specific\
@@ -1934,7 +1909,6 @@ paths:
       summary: Send a test notification message
       tags:
       - Automation - Notification Channels
-      - MCP
   /automation/automations/{id}/toggle:
     patch:
       description: "Enables or pauses an automation rule without altering its trigger\
@@ -1994,7 +1968,6 @@ paths:
       summary: Toggle automation enabled status
       tags:
       - Automation - Automations
-      - MCP
   /bi/schema:
     get:
       description: |-
@@ -2370,7 +2343,6 @@ paths:
       summary: Get current tier usage insights
       tags:
       - Billing
-      - MCP
   /billing/tier:
     get:
       description: "Returns the authenticated user's active subscription tier, including\
@@ -2452,7 +2424,6 @@ paths:
       summary: List all dashboards
       tags:
       - Dashboards
-      - MCP
     post:
       description: "Creates a new analytics and telemetry dashboard canvas for organizing\
         \ metric KPIs, charts, gauges, and entity tables within a customizable grid\
@@ -2501,7 +2472,6 @@ paths:
       summary: Create a new dashboard
       tags:
       - Dashboards
-      - MCP
   /dashboards/{dashboardId}/blocks:
     get:
       description: "Retrieves all visualization blocks mounted on a dashboard canvas,\
@@ -2551,7 +2521,6 @@ paths:
       summary: List all blocks in a dashboard
       tags:
       - Dashboard Blocks
-      - MCP
     post:
       description: "Creates a new visualization block widget on a dashboard canvas.\
         \ Supports four block types: stat (single KPI counter of matching entities),\
@@ -2615,7 +2584,6 @@ paths:
       summary: Create a new block in a dashboard
       tags:
       - Dashboard Blocks
-      - MCP
   /dashboards/{id}:
     delete:
       description: "Permanently removes a dashboard and all attached visualization\
@@ -2659,7 +2627,6 @@ paths:
       summary: Delete a dashboard
       tags:
       - Dashboards
-      - MCP
     get:
       description: Retrieves metadata and top-level configuration for a specific dashboard
         by its unique identifier.
@@ -2706,7 +2673,6 @@ paths:
       summary: Get a dashboard by ID
       tags:
       - Dashboards
-      - MCP
     put:
       description: "Updates dashboard metadata including its display name, description,\
         \ and canvas layout settings."
@@ -2762,7 +2728,6 @@ paths:
       summary: Update a dashboard
       tags:
       - Dashboards
-      - MCP
   /dashboards/{dashboardId}/blocks/{blockId}:
     delete:
       description: Permanently removes a visualization block widget from the specified
@@ -2817,7 +2782,6 @@ paths:
       summary: Delete a dashboard block
       tags:
       - Dashboard Blocks
-      - MCP
     get:
       description: "Retrieves the configuration details, grid coordinates, and data\
         \ query definitions for an individual visualization block."
@@ -2875,7 +2839,6 @@ paths:
       summary: Get a dashboard block by ID
       tags:
       - Dashboard Blocks
-      - MCP
     put:
       description: "Updates the display title, grid placement (x, y, cols, rows),\
         \ metric queries, time-series aggregation buckets, gauge bounds, or filtering\
@@ -2943,7 +2906,6 @@ paths:
       summary: Update a dashboard block
       tags:
       - Dashboard Blocks
-      - MCP
   /dashboards/{dashboardId}/blocks/{blockId}/resolve:
     get:
       description: "Executes the underlying data query for a dashboard block and returns\
@@ -3006,7 +2968,6 @@ paths:
       summary: Resolve a dashboard block to its computed data
       tags:
       - Dashboard Blocks
-      - MCP
   /discovery/project-schema:
     get:
       description: "Retrieves the complete consolidated schema graph for the active\
@@ -3033,7 +2994,6 @@ paths:
       summary: Get complete project schema graph
       tags:
       - Schema
-      - MCP
   /entities:
     post:
       description: |-
@@ -3101,7 +3061,6 @@ paths:
       summary: Create a new dynamic entity
       tags:
       - Entity
-      - MCP
   /entities/{id}:
     delete:
       description: |-
@@ -3140,7 +3099,6 @@ paths:
       summary: Soft-delete an entity record
       tags:
       - Entity
-      - MCP
     get:
       description: |-
         Retrieves the full hydrated record for a dynamic entity by its unique identifier (UUID).
@@ -3202,7 +3160,6 @@ paths:
       summary: Get an entity record by ID
       tags:
       - Entity
-      - MCP
     patch:
       description: |-
         Updates specific dynamic attribute values for an existing entity record.
@@ -3280,7 +3237,6 @@ paths:
       summary: Update entity attribute values
       tags:
       - Entity
-      - MCP
   /entities/export/{template_id}:
     post:
       description: |-
@@ -3530,7 +3486,6 @@ paths:
       summary: Get entity chart time-series data
       tags:
       - Entity
-      - MCP
   /entities/{id}/history:
     get:
       description: |-
@@ -3683,7 +3638,6 @@ paths:
       summary: Get entity dimension change history
       tags:
       - Entity
-      - MCP
   /entities/import/{template_id}:
     post:
       description: |-
@@ -3830,7 +3784,6 @@ paths:
       summary: Ingest high-frequency metric observations for an entity
       tags:
       - Entity
-      - MCP
   /entities/search/{template_id}:
     post:
       description: |-
@@ -3962,7 +3915,6 @@ paths:
       summary: "Search entities with filtering, sorting, and pagination"
       tags:
       - Entity
-      - MCP
   /entities/semantic-search:
     post:
       description: |-
@@ -4299,7 +4251,6 @@ paths:
       summary: Get marketplace blueprint details
       tags:
       - Marketplace
-      - MCP
   /marketplace/blueprints/{id}/install:
     post:
       description: "Installs a marketplace blueprint into the specified project context.\
@@ -4344,7 +4295,6 @@ paths:
       summary: Install a marketplace blueprint into a project
       tags:
       - Marketplace
-      - MCP
   /marketplace/keywords:
     get:
       description: "Retrieves all distinct categorization keywords and tags associated\
@@ -4457,7 +4407,6 @@ paths:
       summary: Search marketplace blueprints
       tags:
       - Marketplace
-      - MCP
     post:
       description: "Publishes a new blueprint to the public marketplace or updates\
         \ an existing blueprint owned by the authenticated user. Snapshots selected\
@@ -5462,7 +5411,6 @@ paths:
       summary: List all templates
       tags:
       - Templates
-      - MCP
     post:
       description: "Creates a new dynamic schema template (content type) in the project.\
         \ Accepts template name, optional description, category, unique slug, attribute\
@@ -5520,7 +5468,6 @@ paths:
       summary: Create a new template
       tags:
       - Templates
-      - MCP
   /templates/{id}:
     delete:
       description: "Soft-deletes a template definition by UUID or slug. Soft-deleted\
@@ -5557,7 +5504,6 @@ paths:
       summary: Delete a template
       tags:
       - Templates
-      - MCP
     get:
       description: "Retrieves complete template schema details by UUID or unique slug,\
         \ including ordered attribute bindings, default values per attribute, and\
@@ -5598,7 +5544,6 @@ paths:
       summary: Get a template by ID or slug
       tags:
       - Templates
-      - MCP
     patch:
       description: "Applies partial modifications to an existing template by UUID\
         \ or slug without overwriting omitted fields. Allows modifying name, description,\
@@ -5660,7 +5605,6 @@ paths:
       summary: Patch a template (granular partial update)
       tags:
       - Templates
-      - MCP
     put:
       description: "Performs a full update of an existing template definition by UUID\
         \ or slug. Replaces name, description, category, slug, attribute associations\
@@ -5722,7 +5666,6 @@ paths:
       summary: Update a template (full replacement)
       tags:
       - Templates
-      - MCP
   /templates/entity-counts:
     get:
       description: Returns total entity record counts grouped by template UUID for
@@ -5747,7 +5690,6 @@ paths:
       summary: List entity counts per template
       tags:
       - Templates
-      - MCP
   /users/confirm-email:
     get:
       description: "Validates an email confirmation token sent to a newly registered\
@@ -5884,7 +5826,6 @@ paths:
       summary: List all workspaces for current project
       tags:
       - Workspaces
-      - MCP
     post:
       description: "Creates a new workspace in the current project context with a\
         \ specified multi-pane layout (single, split-v, split-h, quad), optional default\
@@ -5928,7 +5869,6 @@ paths:
       summary: Create a new workspace
       tags:
       - Workspaces
-      - MCP
   /workspaces/{id}/views:
     post:
       description: "Creates and mounts a new view pane within an existing workspace\
@@ -5991,7 +5931,6 @@ paths:
       summary: Add a new view / pane to a workspace
       tags:
       - Workspaces
-      - MCP
   /workspaces/{id}:
     delete:
       description: Permanently removes a workspace and all nested view pane configurations
@@ -6035,7 +5974,6 @@ paths:
       summary: Delete a workspace and its views
       tags:
       - Workspaces
-      - MCP
     get:
       description: "Retrieves detailed information for a specific workspace, including\
         \ its multi-pane layout configuration and all hydrated view panes with their\
@@ -6084,7 +6022,6 @@ paths:
       summary: Get workspace details and its views
       tags:
       - Workspaces
-      - MCP
     put:
       description: "Updates workspace attributes including display name, description,\
         \ multi-pane layout arrangement (single, split-v, split-h, quad), sort order\
@@ -6141,7 +6078,6 @@ paths:
       summary: Update workspace metadata and layout
       tags:
       - Workspaces
-      - MCP
   /workspaces/{id}/views/{viewId}:
     delete:
       description: Permanently removes a view pane from a workspace.
@@ -6195,7 +6131,6 @@ paths:
       summary: Delete a view / pane from a workspace
       tags:
       - Workspaces
-      - MCP
     get:
       description: "Retrieves complete configuration details for a single workspace\
         \ view pane, including its schema template binding, active filter rules, search\
@@ -6254,7 +6189,6 @@ paths:
       summary: Get details of a workspace view / pane
       tags:
       - Workspaces
-      - MCP
     put:
       description: "Updates the configuration of a specific workspace view pane, modifying\
         \ its title, filtering rules, search query and mode, sorting preferences,\
@@ -6323,7 +6257,6 @@ paths:
       summary: "Update workspace view / pane filters, sort, display mode, or columns"
       tags:
       - Workspaces
-      - MCP
   /workspaces/{id}/duplicate:
     post:
       description: "Creates a deep copy of an existing workspace, cloning all nested\
