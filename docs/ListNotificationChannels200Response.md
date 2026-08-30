@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | Pointer to [**[]NotificationChannelResponse**](NotificationChannelResponse.md) |  | [optional] 
+**Data** | Pointer to [**[]NotificationChannelResponse**](NotificationChannelResponse.md) | Array of notification channels | [optional] 
 
 ## Methods
 

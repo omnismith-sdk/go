@@ -85,6 +85,8 @@ Name | Type | Description  | Notes
 
 List all available tiers
 
+
+
 ### Example
 
 ```go
@@ -205,6 +207,8 @@ Other parameters are passed through a pointer to a apiGetPortalUrlRequest struct
 
 Get current tier usage insights
 
+
+
 ### Example
 
 ```go
@@ -264,6 +268,8 @@ Other parameters are passed through a pointer to a apiGetUsageInsightsRequest st
 
 Get current user tier
 
+
+
 ### Example
 
 ```go
@@ -322,6 +328,8 @@ Other parameters are passed through a pointer to a apiGetUserTierRequest struct 
 > LogAiUsage200Response LogAiUsage(ctx).LogAiUsageRequest(logAiUsageRequest).Execute()
 
 Log AI usage credits
+
+
 
 ### Example
 

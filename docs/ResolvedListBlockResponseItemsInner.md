@@ -4,8 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**EntityId** | Pointer to **string** |  | [optional] 
-**Attributes** | Pointer to **map[string]interface{}** |  | [optional] 
+**EntityId** | Pointer to **string** | Entity unique identifier | [optional] 
+**CreatedAt** | Pointer to **time.Time** | ISO 8601 creation timestamp | [optional] 
+**UpdatedAt** | Pointer to **time.Time** | ISO 8601 last update timestamp | [optional] 
+**Attributes** | Pointer to **map[string]interface{}** | Key-value map of resolved entity attributes | [optional] 
 
 ## Methods
 
@@ -50,6 +52,56 @@ SetEntityId sets EntityId field to given value.
 `func (o *ResolvedListBlockResponseItemsInner) HasEntityId() bool`
 
 HasEntityId returns a boolean if a field has been set.
+
+### GetCreatedAt
+
+`func (o *ResolvedListBlockResponseItemsInner) GetCreatedAt() time.Time`
+
+GetCreatedAt returns the CreatedAt field if non-nil, zero value otherwise.
+
+### GetCreatedAtOk
+
+`func (o *ResolvedListBlockResponseItemsInner) GetCreatedAtOk() (*time.Time, bool)`
+
+GetCreatedAtOk returns a tuple with the CreatedAt field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCreatedAt
+
+`func (o *ResolvedListBlockResponseItemsInner) SetCreatedAt(v time.Time)`
+
+SetCreatedAt sets CreatedAt field to given value.
+
+### HasCreatedAt
+
+`func (o *ResolvedListBlockResponseItemsInner) HasCreatedAt() bool`
+
+HasCreatedAt returns a boolean if a field has been set.
+
+### GetUpdatedAt
+
+`func (o *ResolvedListBlockResponseItemsInner) GetUpdatedAt() time.Time`
+
+GetUpdatedAt returns the UpdatedAt field if non-nil, zero value otherwise.
+
+### GetUpdatedAtOk
+
+`func (o *ResolvedListBlockResponseItemsInner) GetUpdatedAtOk() (*time.Time, bool)`
+
+GetUpdatedAtOk returns a tuple with the UpdatedAt field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetUpdatedAt
+
+`func (o *ResolvedListBlockResponseItemsInner) SetUpdatedAt(v time.Time)`
+
+SetUpdatedAt sets UpdatedAt field to given value.
+
+### HasUpdatedAt
+
+`func (o *ResolvedListBlockResponseItemsInner) HasUpdatedAt() bool`
+
+HasUpdatedAt returns a boolean if a field has been set.
 
 ### GetAttributes
 

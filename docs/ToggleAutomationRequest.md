@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**IsEnabled** | **bool** |  | 
+**IsEnabled** | **bool** | Whether the automation rule should be active (true) or paused (false) | 
 
 ## Methods
 

@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**BlockId** | Pointer to **string** |  | [optional] 
-**Title** | Pointer to **string** |  | [optional] 
-**Type** | Pointer to **string** |  | [optional] 
-**BucketWidth** | Pointer to **string** |  | [optional] 
-**Series** | Pointer to [**[]ResolvedChartBlockResponseSeriesInner**](ResolvedChartBlockResponseSeriesInner.md) |  | [optional] 
+**BlockId** | Pointer to **string** | Dashboard block unique identifier | [optional] 
+**Title** | Pointer to **string** | Block header title | [optional] 
+**Type** | Pointer to **string** | Block type discriminator | [optional] 
+**BucketWidth** | Pointer to **string** | Time-bucket aggregation interval applied to telemetry metrics | [optional] 
+**Series** | Pointer to [**[]ResolvedChartBlockResponseSeriesInner**](ResolvedChartBlockResponseSeriesInner.md) | Time-series data grouped per entity | [optional] 
 
 ## Methods
 

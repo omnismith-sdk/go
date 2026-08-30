@@ -1,0 +1,164 @@
+# UpdateEntityRequestAttributeValuesInner
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**AttributeId** | Pointer to **NullableString** | Target attribute UUID (provide either attribute_id or attribute_slug) | [optional] 
+**AttributeSlug** | Pointer to **NullableString** | Target attribute slug identifier (provide either attribute_id or attribute_slug) | [optional] 
+**Value** | Pointer to **string** | Serialized attribute value. Formats: String (\&quot;Sample\&quot;), Number (\&quot;123.45\&quot;), Boolean (\&quot;true\&quot;|\&quot;false\&quot;), Date (\&quot;YYYY-MM-DD\&quot;), Datetime (\&quot;YYYY-MM-DD HH:MM:SS\&quot;), List (ListItem UUID), Reference (target Entity UUID) | [optional] 
+**UpdatedAt** | Pointer to **NullableTime** | Observation or mutation timestamp in ISO 8601 or YYYY-MM-DD HH:MM:SS format. Defaults to current UTC time if omitted. | [optional] 
+
+## Methods
+
+### NewUpdateEntityRequestAttributeValuesInner
+
+`func NewUpdateEntityRequestAttributeValuesInner() *UpdateEntityRequestAttributeValuesInner`
+
+NewUpdateEntityRequestAttributeValuesInner instantiates a new UpdateEntityRequestAttributeValuesInner object
+This constructor will assign default values to properties that have it defined,
+and makes sure properties required by API are set, but the set of arguments
+will change when the set of required properties is changed
+
+### NewUpdateEntityRequestAttributeValuesInnerWithDefaults
+
+`func NewUpdateEntityRequestAttributeValuesInnerWithDefaults() *UpdateEntityRequestAttributeValuesInner`
+
+NewUpdateEntityRequestAttributeValuesInnerWithDefaults instantiates a new UpdateEntityRequestAttributeValuesInner object
+This constructor will only assign default values to properties that have it defined,
+but it doesn't guarantee that properties required by API are set
+
+### GetAttributeId
+
+`func (o *UpdateEntityRequestAttributeValuesInner) GetAttributeId() string`
+
+GetAttributeId returns the AttributeId field if non-nil, zero value otherwise.
+
+### GetAttributeIdOk
+
+`func (o *UpdateEntityRequestAttributeValuesInner) GetAttributeIdOk() (*string, bool)`
+
+GetAttributeIdOk returns a tuple with the AttributeId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAttributeId
+
+`func (o *UpdateEntityRequestAttributeValuesInner) SetAttributeId(v string)`
+
+SetAttributeId sets AttributeId field to given value.
+
+### HasAttributeId
+
+`func (o *UpdateEntityRequestAttributeValuesInner) HasAttributeId() bool`
+
+HasAttributeId returns a boolean if a field has been set.
+
+### SetAttributeIdNil
+
+`func (o *UpdateEntityRequestAttributeValuesInner) SetAttributeIdNil(b bool)`
+
+ SetAttributeIdNil sets the value for AttributeId to be an explicit nil
+
+### UnsetAttributeId
+`func (o *UpdateEntityRequestAttributeValuesInner) UnsetAttributeId()`
+
+UnsetAttributeId ensures that no value is present for AttributeId, not even an explicit nil
+### GetAttributeSlug
+
+`func (o *UpdateEntityRequestAttributeValuesInner) GetAttributeSlug() string`
+
+GetAttributeSlug returns the AttributeSlug field if non-nil, zero value otherwise.
+
+### GetAttributeSlugOk
+
+`func (o *UpdateEntityRequestAttributeValuesInner) GetAttributeSlugOk() (*string, bool)`
+
+GetAttributeSlugOk returns a tuple with the AttributeSlug field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAttributeSlug
+
+`func (o *UpdateEntityRequestAttributeValuesInner) SetAttributeSlug(v string)`
+
+SetAttributeSlug sets AttributeSlug field to given value.
+
+### HasAttributeSlug
+
+`func (o *UpdateEntityRequestAttributeValuesInner) HasAttributeSlug() bool`
+
+HasAttributeSlug returns a boolean if a field has been set.
+
+### SetAttributeSlugNil
+
+`func (o *UpdateEntityRequestAttributeValuesInner) SetAttributeSlugNil(b bool)`
+
+ SetAttributeSlugNil sets the value for AttributeSlug to be an explicit nil
+
+### UnsetAttributeSlug
+`func (o *UpdateEntityRequestAttributeValuesInner) UnsetAttributeSlug()`
+
+UnsetAttributeSlug ensures that no value is present for AttributeSlug, not even an explicit nil
+### GetValue
+
+`func (o *UpdateEntityRequestAttributeValuesInner) GetValue() string`
+
+GetValue returns the Value field if non-nil, zero value otherwise.
+
+### GetValueOk
+
+`func (o *UpdateEntityRequestAttributeValuesInner) GetValueOk() (*string, bool)`
+
+GetValueOk returns a tuple with the Value field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetValue
+
+`func (o *UpdateEntityRequestAttributeValuesInner) SetValue(v string)`
+
+SetValue sets Value field to given value.
+
+### HasValue
+
+`func (o *UpdateEntityRequestAttributeValuesInner) HasValue() bool`
+
+HasValue returns a boolean if a field has been set.
+
+### GetUpdatedAt
+
+`func (o *UpdateEntityRequestAttributeValuesInner) GetUpdatedAt() time.Time`
+
+GetUpdatedAt returns the UpdatedAt field if non-nil, zero value otherwise.
+
+### GetUpdatedAtOk
+
+`func (o *UpdateEntityRequestAttributeValuesInner) GetUpdatedAtOk() (*time.Time, bool)`
+
+GetUpdatedAtOk returns a tuple with the UpdatedAt field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetUpdatedAt
+
+`func (o *UpdateEntityRequestAttributeValuesInner) SetUpdatedAt(v time.Time)`
+
+SetUpdatedAt sets UpdatedAt field to given value.
+
+### HasUpdatedAt
+
+`func (o *UpdateEntityRequestAttributeValuesInner) HasUpdatedAt() bool`
+
+HasUpdatedAt returns a boolean if a field has been set.
+
+### SetUpdatedAtNil
+
+`func (o *UpdateEntityRequestAttributeValuesInner) SetUpdatedAtNil(b bool)`
+
+ SetUpdatedAtNil sets the value for UpdatedAt to be an explicit nil
+
+### UnsetUpdatedAt
+`func (o *UpdateEntityRequestAttributeValuesInner) UnsetUpdatedAt()`
+
+UnsetUpdatedAt ensures that no value is present for UpdatedAt, not even an explicit nil
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

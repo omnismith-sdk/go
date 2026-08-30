@@ -4,12 +4,13 @@ All URIs are relative to *https://api.omnismith.io/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**GetMyPermissions**](AuthAPI.md#GetMyPermissions) | **Get** /auth/me/permissions | Get current user&#39;s role permissions
-[**GoogleLogin**](AuthAPI.md#GoogleLogin) | **Post** /auth/google-login | Login or register via Google Sign-In
-[**ListSessions**](AuthAPI.md#ListSessions) | **Get** /auth/sessions | List recent login sessions
-[**Login**](AuthAPI.md#Login) | **Post** /auth/login | Login user
-[**RefreshToken**](AuthAPI.md#RefreshToken) | **Post** /auth/refresh | Refresh access token
-[**RevokeSession**](AuthAPI.md#RevokeSession) | **Delete** /auth/sessions/{id} | Revoke a login session
+[**GetMyPermissions**](AuthAPI.md#GetMyPermissions) | **Get** /auth/me/permissions | Get current user role permissions
+[**GoogleLogin**](AuthAPI.md#GoogleLogin) | **Post** /auth/google-login | Authenticate or register with Google Sign-In
+[**GoogleLoginRedirect**](AuthAPI.md#GoogleLoginRedirect) | **Post** /auth/google-login-redirect | Google OAuth callback redirect handler
+[**ListSessions**](AuthAPI.md#ListSessions) | **Get** /auth/sessions | List active and historical user sessions
+[**Login**](AuthAPI.md#Login) | **Post** /auth/login | Authenticate user with email and password
+[**RefreshToken**](AuthAPI.md#RefreshToken) | **Post** /auth/refresh | Rotate refresh token and issue new access token
+[**RevokeSession**](AuthAPI.md#RevokeSession) | **Delete** /auth/sessions/{id} | Revoke an active login session
 [**SwitchProject**](AuthAPI.md#SwitchProject) | **Post** /auth/switch-project | Switch active project context
 
 
@@ -18,7 +19,7 @@ Method | HTTP request | Description
 
 > GetMyPermissions200Response GetMyPermissions(ctx).Execute()
 
-Get current user's role permissions
+Get current user role permissions
 
 
 
@@ -79,7 +80,7 @@ Other parameters are passed through a pointer to a apiGetMyPermissionsRequest st
 
 > GoogleLogin200Response GoogleLogin(ctx).GoogleLoginRequest(googleLoginRequest).Execute()
 
-Login or register via Google Sign-In
+Authenticate or register with Google Sign-In
 
 
 
@@ -96,7 +97,7 @@ import (
 )
 
 func main() {
-	googleLoginRequest := *openapiclient.NewGoogleLoginRequest("eyJhbGciOiJSUzI1NiIs...") // GoogleLoginRequest | 
+	googleLoginRequest := *openapiclient.NewGoogleLoginRequest("eyJhbGciOiJSUzI1NiIsImtpZCI6Ij...") // GoogleLoginRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -141,11 +142,79 @@ No authorization required
 [[Back to README]](../README.md)
 
 
+## GoogleLoginRedirect
+
+> GoogleLoginRedirect(ctx).Credential(credential).GCsrfToken(gCsrfToken).Execute()
+
+Google OAuth callback redirect handler
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/omnismith-sdk/go"
+)
+
+func main() {
+	credential := "credential_example" // string | Google ID token credential issued by Google Identity Services
+	gCsrfToken := "gCsrfToken_example" // string | CSRF token provided by Google Identity Services (optional)
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	r, err := apiClient.AuthAPI.GoogleLoginRedirect(context.Background()).Credential(credential).GCsrfToken(gCsrfToken).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `AuthAPI.GoogleLoginRedirect``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGoogleLoginRedirectRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **credential** | **string** | Google ID token credential issued by Google Identity Services | 
+ **gCsrfToken** | **string** | CSRF token provided by Google Identity Services | 
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/x-www-form-urlencoded
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## ListSessions
 
 > ListSessions200Response ListSessions(ctx).Execute()
 
-List recent login sessions
+List active and historical user sessions
+
+
 
 ### Example
 
@@ -204,7 +273,9 @@ Other parameters are passed through a pointer to a apiListSessionsRequest struct
 
 > GoogleLogin200Response Login(ctx).LoginRequest(loginRequest).Execute()
 
-Login user
+Authenticate user with email and password
+
+
 
 ### Example
 
@@ -219,7 +290,7 @@ import (
 )
 
 func main() {
-	loginRequest := *openapiclient.NewLoginRequest("user@example.com", "securePassword123") // LoginRequest | 
+	loginRequest := *openapiclient.NewLoginRequest("demo@omnismith.io", "omni_live_secret_demo_password") // LoginRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -268,7 +339,7 @@ No authorization required
 
 > RefreshToken200Response RefreshToken(ctx).RefreshTokenRequest(refreshTokenRequest).Execute()
 
-Refresh access token
+Rotate refresh token and issue new access token
 
 
 
@@ -334,7 +405,9 @@ No authorization required
 
 > RevokeSession(ctx, id).Execute()
 
-Revoke a login session
+Revoke an active login session
+
+
 
 ### Example
 
@@ -349,7 +422,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Session ID
+	id := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7a" // string | Unique UUID identifier of the session to revoke
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -367,7 +440,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Session ID | 
+**id** | **string** | Unique UUID identifier of the session to revoke | 
 
 ### Other Parameters
 
@@ -389,7 +462,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -398,9 +471,11 @@ Name | Type | Description  | Notes
 
 ## SwitchProject
 
-> GoogleLogin200Response SwitchProject(ctx).SwitchProjectRequest(switchProjectRequest).Execute()
+> SwitchProject200Response SwitchProject(ctx).SwitchProjectRequest(switchProjectRequest).Execute()
 
 Switch active project context
+
+
 
 ### Example
 
@@ -424,7 +499,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `AuthAPI.SwitchProject``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `SwitchProject`: GoogleLogin200Response
+	// response from `SwitchProject`: SwitchProject200Response
 	fmt.Fprintf(os.Stdout, "Response from `AuthAPI.SwitchProject`: %v\n", resp)
 }
 ```
@@ -444,7 +519,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GoogleLogin200Response**](GoogleLogin200Response.md)
+[**SwitchProject200Response**](SwitchProject200Response.md)
 
 ### Authorization
 

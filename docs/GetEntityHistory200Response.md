@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Items** | Pointer to [**[]GetEntityHistory200ResponseItemsInner**](GetEntityHistory200ResponseItemsInner.md) |  | [optional] 
-**Total** | Pointer to **int32** |  | [optional] 
+**Items** | Pointer to [**[]GetEntityHistory200ResponseItemsInner**](GetEntityHistory200ResponseItemsInner.md) | List of historical dimension mutation records | [optional] 
+**Total** | Pointer to **int32** | Total count of history records matching filters | [optional] 
 
 ## Methods
 

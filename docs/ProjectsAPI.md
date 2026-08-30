@@ -23,6 +23,8 @@ Method | HTTP request | Description
 
 Assign user to project
 
+
+
 ### Example
 
 ```go
@@ -36,7 +38,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | Project ID
 	assignUserToProjectRequest := *openapiclient.NewAssignUserToProjectRequest("UserId_example", "RoleId_example") // AssignUserToProjectRequest | 
 
 	configuration := openapiclient.NewConfiguration()
@@ -55,7 +57,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** |  | 
+**id** | **string** | Project ID | 
 
 ### Other Parameters
 
@@ -87,9 +89,11 @@ Name | Type | Description  | Notes
 
 ## CreateProject
 
-> CreateAttributeItem201Response CreateProject(ctx).CreateProjectRequest(createProjectRequest).Execute()
+> CreateProject201Response CreateProject(ctx).CreateProjectRequest(createProjectRequest).Execute()
 
 Create a new project
+
+
 
 ### Example
 
@@ -113,7 +117,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `ProjectsAPI.CreateProject``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `CreateProject`: CreateAttributeItem201Response
+	// response from `CreateProject`: CreateProject201Response
 	fmt.Fprintf(os.Stdout, "Response from `ProjectsAPI.CreateProject`: %v\n", resp)
 }
 ```
@@ -133,7 +137,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateAttributeItem201Response**](CreateAttributeItem201Response.md)
+[**CreateProject201Response**](CreateProject201Response.md)
 
 ### Authorization
 
@@ -155,6 +159,8 @@ Name | Type | Description  | Notes
 
 Delete a project
 
+
+
 ### Example
 
 ```go
@@ -168,7 +174,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | Project ID to delete
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -186,7 +192,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** |  | 
+**id** | **string** | Project ID to delete | 
 
 ### Other Parameters
 
@@ -236,7 +242,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | Unique UUID identifier of the project
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -254,7 +260,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** |  | 
+**id** | **string** | Unique UUID identifier of the project | 
 
 ### Other Parameters
 
@@ -289,6 +295,8 @@ Name | Type | Description  | Notes
 
 Get a project by ID
 
+
+
 ### Example
 
 ```go
@@ -302,7 +310,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | Project ID
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -322,7 +330,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** |  | 
+**id** | **string** | Project ID | 
 
 ### Other Parameters
 
@@ -427,6 +435,8 @@ Name | Type | Description  | Notes
 
 List users in project
 
+
+
 ### Example
 
 ```go
@@ -440,7 +450,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | Project ID
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -460,7 +470,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** |  | 
+**id** | **string** | Project ID | 
 
 ### Other Parameters
 
@@ -494,6 +504,8 @@ Name | Type | Description  | Notes
 > ListProjects200Response ListProjects(ctx).Execute()
 
 List all projects
+
+
 
 ### Example
 
@@ -554,6 +566,8 @@ Other parameters are passed through a pointer to a apiListProjectsRequest struct
 
 Remove user from project
 
+
+
 ### Example
 
 ```go
@@ -567,8 +581,8 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
-	userId := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | Project ID
+	userId := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | User ID to remove from project
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -586,8 +600,8 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** |  | 
-**userId** | **string** |  | 
+**id** | **string** | Project ID | 
+**userId** | **string** | User ID to remove from project | 
 
 ### Other Parameters
 
@@ -623,6 +637,8 @@ Name | Type | Description  | Notes
 
 Update a project
 
+
+
 ### Example
 
 ```go
@@ -636,7 +652,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | Project ID
 	updateProjectRequest := *openapiclient.NewUpdateProjectRequest("My Project") // UpdateProjectRequest | 
 
 	configuration := openapiclient.NewConfiguration()
@@ -655,7 +671,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** |  | 
+**id** | **string** | Project ID | 
 
 ### Other Parameters
 

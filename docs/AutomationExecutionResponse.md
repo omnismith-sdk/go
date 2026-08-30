@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**AutomationId** | Pointer to **string** |  | [optional] 
-**EntityId** | Pointer to **string** |  | [optional] 
-**TriggeredAt** | Pointer to **time.Time** |  | [optional] 
-**CompletedAt** | Pointer to **NullableTime** |  | [optional] 
-**Status** | Pointer to **string** |  | [optional] 
-**ActionResults** | Pointer to [**[]AutomationExecutionResponseActionResultsInner**](AutomationExecutionResponseActionResultsInner.md) |  | [optional] 
-**ErrorMessage** | Pointer to **NullableString** |  | [optional] 
+**Id** | Pointer to **string** | Unique execution record UUID | [optional] 
+**AutomationId** | Pointer to **string** | Associated automation rule UUID | [optional] 
+**EntityId** | Pointer to **string** | UUID of the entity that triggered the execution | [optional] 
+**TriggeredAt** | Pointer to **time.Time** | Timestamp when the trigger event was evaluated | [optional] 
+**CompletedAt** | Pointer to **NullableTime** | Timestamp when all actions completed execution | [optional] 
+**Status** | Pointer to **string** | Overall execution outcome status | [optional] 
+**ActionResults** | Pointer to [**[]AutomationExecutionResponseActionResultsInner**](AutomationExecutionResponseActionResultsInner.md) | Individual action execution outcomes | [optional] 
+**ErrorMessage** | Pointer to **NullableString** | Top-level error message if execution failed | [optional] 
 
 ## Methods
 

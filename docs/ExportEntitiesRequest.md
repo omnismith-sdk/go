@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**GlobalSearch** | Pointer to **NullableString** |  | [optional] 
-**Filters** | Pointer to [**[]ExportEntitiesRequestFiltersInner**](ExportEntitiesRequestFiltersInner.md) |  | [optional] 
+**GlobalSearch** | Pointer to **NullableString** | Full-text search query string across all string dimension attributes | [optional] 
+**Filters** | Pointer to [**[]ExportEntitiesRequestFiltersInner**](ExportEntitiesRequestFiltersInner.md) | List of structured attribute and metadata filter conditions | [optional] 
 
 ## Methods
 

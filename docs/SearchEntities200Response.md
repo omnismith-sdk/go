@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | Pointer to [**[]EntityResponse**](EntityResponse.md) |  | [optional] 
-**Total** | Pointer to **int32** |  | [optional] 
-**Limit** | Pointer to **int32** |  | [optional] 
-**Offset** | Pointer to **int32** |  | [optional] 
+**Data** | Pointer to [**[]EntityResponse**](EntityResponse.md) | List of matching hydrated entity records | [optional] 
+**Total** | Pointer to **int32** | Total count of entities matching filter criteria | [optional] 
+**Limit** | Pointer to **int32** | Applied page limit | [optional] 
+**Offset** | Pointer to **int32** | Applied pagination offset | [optional] 
 
 ## Methods
 

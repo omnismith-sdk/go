@@ -4,17 +4,17 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**Description** | Pointer to **NullableString** |  | [optional] 
-**IsEnabled** | Pointer to **bool** |  | [optional] 
+**Id** | Pointer to **string** | Unique automation UUID | [optional] 
+**Name** | Pointer to **string** | Name of the automation rule | [optional] 
+**Description** | Pointer to **NullableString** | Optional description of the automation rule | [optional] 
+**IsEnabled** | Pointer to **bool** | Whether the automation is currently active and listening for events | [optional] 
 **Trigger** | Pointer to [**AutomationResponseTrigger**](AutomationResponseTrigger.md) |  | [optional] 
-**Conditions** | Pointer to [**[]AutomationResponseConditionsInner**](AutomationResponseConditionsInner.md) |  | [optional] 
-**Actions** | Pointer to [**[]AutomationResponseActionsInner**](AutomationResponseActionsInner.md) |  | [optional] 
-**CooldownSeconds** | Pointer to **NullableInt32** |  | [optional] 
-**LastTriggeredAt** | Pointer to **NullableTime** |  | [optional] 
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
-**UpdatedAt** | Pointer to **time.Time** |  | [optional] 
+**Conditions** | Pointer to [**[]AutomationResponseConditionsInner**](AutomationResponseConditionsInner.md) | Condition expressions that must all evaluate to true to execute actions | [optional] 
+**Actions** | Pointer to [**[]AutomationResponseActionsInner**](AutomationResponseActionsInner.md) | Actions dispatched when conditions evaluate to true | [optional] 
+**CooldownSeconds** | Pointer to **NullableInt32** | Minimum cooldown seconds between trigger firings for the same entity | [optional] 
+**LastTriggeredAt** | Pointer to **NullableTime** | Timestamp when this automation last fired | [optional] 
+**CreatedAt** | Pointer to **time.Time** | Creation timestamp | [optional] 
+**UpdatedAt** | Pointer to **time.Time** | Last update timestamp | [optional] 
 
 ## Methods
 

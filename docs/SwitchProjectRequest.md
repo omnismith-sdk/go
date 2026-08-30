@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ProjectId** | **string** | The ID of the project to switch to | 
+**ProjectId** | **string** | Unique UUID identifier of the workspace project to switch into | 
 
 ## Methods
 

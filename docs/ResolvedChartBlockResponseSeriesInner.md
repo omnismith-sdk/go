@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**EntityId** | Pointer to **string** |  | [optional] 
-**EntityName** | Pointer to **NullableString** |  | [optional] 
-**DataPoints** | Pointer to [**[]GetEntityChart200ResponseSeriesInnerDataInner**](GetEntityChart200ResponseSeriesInnerDataInner.md) |  | [optional] 
+**EntityId** | Pointer to **string** | Entity unique identifier | [optional] 
+**EntityName** | Pointer to **NullableString** | Resolved display name of the entity | [optional] 
+**DataPoints** | Pointer to [**[]ResolvedChartBlockResponseSeriesInnerDataPointsInner**](ResolvedChartBlockResponseSeriesInnerDataPointsInner.md) | Ordered array of time-bucketed metric points | [optional] 
 
 ## Methods
 
@@ -89,20 +89,20 @@ HasEntityName returns a boolean if a field has been set.
 UnsetEntityName ensures that no value is present for EntityName, not even an explicit nil
 ### GetDataPoints
 
-`func (o *ResolvedChartBlockResponseSeriesInner) GetDataPoints() []GetEntityChart200ResponseSeriesInnerDataInner`
+`func (o *ResolvedChartBlockResponseSeriesInner) GetDataPoints() []ResolvedChartBlockResponseSeriesInnerDataPointsInner`
 
 GetDataPoints returns the DataPoints field if non-nil, zero value otherwise.
 
 ### GetDataPointsOk
 
-`func (o *ResolvedChartBlockResponseSeriesInner) GetDataPointsOk() (*[]GetEntityChart200ResponseSeriesInnerDataInner, bool)`
+`func (o *ResolvedChartBlockResponseSeriesInner) GetDataPointsOk() (*[]ResolvedChartBlockResponseSeriesInnerDataPointsInner, bool)`
 
 GetDataPointsOk returns a tuple with the DataPoints field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetDataPoints
 
-`func (o *ResolvedChartBlockResponseSeriesInner) SetDataPoints(v []GetEntityChart200ResponseSeriesInnerDataInner)`
+`func (o *ResolvedChartBlockResponseSeriesInner) SetDataPoints(v []ResolvedChartBlockResponseSeriesInnerDataPointsInner)`
 
 SetDataPoints sets DataPoints field to given value.
 

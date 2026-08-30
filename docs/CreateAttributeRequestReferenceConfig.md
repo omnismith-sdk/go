@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**TargetTemplateId** | Pointer to **string** |  | [optional] 
-**TargetAttributeId** | Pointer to **string** |  | [optional] 
+**TargetTemplateId** | Pointer to **string** | UUID of the target template whose entities can be referenced. | [optional] 
+**TargetAttributeId** | Pointer to **string** | UUID of the attribute on the target template to use for entity display label resolution. | [optional] 
 
 ## Methods
 

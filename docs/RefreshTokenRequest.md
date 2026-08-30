@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**RefreshToken** | **string** | The refresh token obtained from login or previous refresh | 
+**RefreshToken** | **string** | The active refresh token string to rotate | 
 
 ## Methods
 

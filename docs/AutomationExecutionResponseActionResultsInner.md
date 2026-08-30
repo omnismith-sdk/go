@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ActionIndex** | Pointer to **int32** |  | [optional] 
-**Success** | Pointer to **bool** |  | [optional] 
-**ErrorMessage** | Pointer to **NullableString** |  | [optional] 
-**ExecutedAt** | Pointer to **time.Time** |  | [optional] 
+**ActionIndex** | Pointer to **int32** | Zero-based index of the action in the automation definition | [optional] 
+**Success** | Pointer to **bool** | Whether this specific action executed successfully | [optional] 
+**ErrorMessage** | Pointer to **NullableString** | Error message if action execution failed | [optional] 
+**ExecutedAt** | Pointer to **time.Time** | Timestamp of action dispatch | [optional] 
 
 ## Methods
 

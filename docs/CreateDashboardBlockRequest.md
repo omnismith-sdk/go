@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Type** | **string** |  | 
-**Title** | **string** |  | 
-**Config** | Pointer to **map[string]interface{}** | Block-specific configuration | [optional] 
+**Type** | **string** | Block visualization type: stat (single KPI counter of matching entities), chart (time-series telemetry multi-line graph aggregating metric values over time), gauge (radial threshold meter displaying metric aggregate within bounds), list (filtered and sorted entity data table). | 
+**Title** | **string** | Header title displayed on the dashboard widget card (e.g., \&quot;CPU Utilization — Time Series\&quot;, \&quot;Total Servers\&quot;, \&quot;Peak CPU Utilization\&quot;). | 
+**Config** | Pointer to [**CreateDashboardBlockRequestConfig**](CreateDashboardBlockRequestConfig.md) |  | [optional] 
 
 ## Methods
 
@@ -69,20 +69,20 @@ SetTitle sets Title field to given value.
 
 ### GetConfig
 
-`func (o *CreateDashboardBlockRequest) GetConfig() map[string]interface{}`
+`func (o *CreateDashboardBlockRequest) GetConfig() CreateDashboardBlockRequestConfig`
 
 GetConfig returns the Config field if non-nil, zero value otherwise.
 
 ### GetConfigOk
 
-`func (o *CreateDashboardBlockRequest) GetConfigOk() (*map[string]interface{}, bool)`
+`func (o *CreateDashboardBlockRequest) GetConfigOk() (*CreateDashboardBlockRequestConfig, bool)`
 
 GetConfigOk returns a tuple with the Config field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetConfig
 
-`func (o *CreateDashboardBlockRequest) SetConfig(v map[string]interface{})`
+`func (o *CreateDashboardBlockRequest) SetConfig(v CreateDashboardBlockRequestConfig)`
 
 SetConfig sets Config field to given value.
 

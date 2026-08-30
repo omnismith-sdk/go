@@ -4,18 +4,18 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**UserId** | Pointer to **string** |  | [optional] 
-**Email** | Pointer to **string** |  | [optional] 
-**RoleId** | Pointer to **string** |  | [optional] 
-**IpAddress** | Pointer to **NullableString** |  | [optional] 
-**UserAgent** | Pointer to **NullableString** |  | [optional] 
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
-**ExpiresAt** | Pointer to **time.Time** |  | [optional] 
-**RevokedAt** | Pointer to **NullableTime** |  | [optional] 
-**RevokedBy** | Pointer to **NullableString** |  | [optional] 
-**RevokedReason** | Pointer to **NullableString** |  | [optional] 
-**Status** | Pointer to **string** |  | [optional] 
+**Id** | Pointer to **string** | Unique UUID identifier of the session | [optional] 
+**UserId** | Pointer to **string** | UUID of the authenticated user | [optional] 
+**Email** | Pointer to **string** | Email address of the session owner | [optional] 
+**RoleId** | Pointer to **string** | Active role UUID under this session | [optional] 
+**IpAddress** | Pointer to **NullableString** | Client IP address from which the session was established | [optional] 
+**UserAgent** | Pointer to **NullableString** | User-Agent header string of the client browser/application | [optional] 
+**CreatedAt** | Pointer to **time.Time** | Timestamp when the session was created | [optional] 
+**ExpiresAt** | Pointer to **time.Time** | Expiration timestamp after which the session becomes invalid | [optional] 
+**RevokedAt** | Pointer to **NullableTime** | Timestamp when the session was explicitly revoked | [optional] 
+**RevokedBy** | Pointer to **NullableString** | User UUID who revoked the session | [optional] 
+**RevokedReason** | Pointer to **NullableString** | Reason note provided upon session revocation | [optional] 
+**Status** | Pointer to **string** | Current session status state | [optional] 
 
 ## Methods
 

@@ -4,11 +4,12 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
-**AttributeId** | Pointer to **string** |  | [optional] 
-**Value** | Pointer to **string** |  | [optional] 
-**EntityId** | Pointer to **string** |  | [optional] 
-**AuthorEmail** | Pointer to **string** |  | [optional] 
+**CreatedAt** | Pointer to **time.Time** | Mutation timestamp in ISO 8601 format | [optional] 
+**AttributeId** | Pointer to **string** | Mutated attribute UUID | [optional] 
+**OldValue** | Pointer to **NullableString** | Previous serialized attribute value | [optional] 
+**Value** | Pointer to **string** | New serialized attribute value | [optional] 
+**EntityId** | Pointer to **string** | Target entity UUID | [optional] 
+**AuthorEmail** | Pointer to **NullableString** | Actor email who performed the change | [optional] 
 
 ## Methods
 
@@ -79,6 +80,41 @@ SetAttributeId sets AttributeId field to given value.
 
 HasAttributeId returns a boolean if a field has been set.
 
+### GetOldValue
+
+`func (o *GetEntityHistory200ResponseItemsInner) GetOldValue() string`
+
+GetOldValue returns the OldValue field if non-nil, zero value otherwise.
+
+### GetOldValueOk
+
+`func (o *GetEntityHistory200ResponseItemsInner) GetOldValueOk() (*string, bool)`
+
+GetOldValueOk returns a tuple with the OldValue field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetOldValue
+
+`func (o *GetEntityHistory200ResponseItemsInner) SetOldValue(v string)`
+
+SetOldValue sets OldValue field to given value.
+
+### HasOldValue
+
+`func (o *GetEntityHistory200ResponseItemsInner) HasOldValue() bool`
+
+HasOldValue returns a boolean if a field has been set.
+
+### SetOldValueNil
+
+`func (o *GetEntityHistory200ResponseItemsInner) SetOldValueNil(b bool)`
+
+ SetOldValueNil sets the value for OldValue to be an explicit nil
+
+### UnsetOldValue
+`func (o *GetEntityHistory200ResponseItemsInner) UnsetOldValue()`
+
+UnsetOldValue ensures that no value is present for OldValue, not even an explicit nil
 ### GetValue
 
 `func (o *GetEntityHistory200ResponseItemsInner) GetValue() string`
@@ -154,6 +190,16 @@ SetAuthorEmail sets AuthorEmail field to given value.
 
 HasAuthorEmail returns a boolean if a field has been set.
 
+### SetAuthorEmailNil
+
+`func (o *GetEntityHistory200ResponseItemsInner) SetAuthorEmailNil(b bool)`
+
+ SetAuthorEmailNil sets the value for AuthorEmail to be an explicit nil
+
+### UnsetAuthorEmail
+`func (o *GetEntityHistory200ResponseItemsInner) UnsetAuthorEmail()`
+
+UnsetAuthorEmail ensures that no value is present for AuthorEmail, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

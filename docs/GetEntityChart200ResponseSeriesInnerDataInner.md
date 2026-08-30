@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Time** | Pointer to **time.Time** |  | [optional] 
-**Value** | Pointer to **float32** |  | [optional] 
+**Time** | Pointer to **time.Time** | Bucket start timestamp in ISO 8601 format | [optional] 
+**Value** | Pointer to **float32** | Aggregated numeric metric value | [optional] 
 
 ## Methods
 

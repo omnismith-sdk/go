@@ -4,16 +4,17 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**Description** | Pointer to **NullableString** |  | [optional] 
+**Id** | Pointer to **string** | Attribute UUID | [optional] 
+**Slug** | Pointer to **NullableString** | Unique slug identifier within the project | [optional] 
+**Name** | Pointer to **string** | Human-readable attribute name | [optional] 
+**Description** | Pointer to **NullableString** | Attribute description | [optional] 
 **AttributeType** | Pointer to **int32** | 0: Dimension, 1: Metric, 2: List, 3: Reference | [optional] 
-**DataType** | Pointer to **int32** | 0: String, 1: Number, 2: Boolean, 3: Datetime, 4: Date, 5: File, 6: Image | [optional] 
-**TemplateIds** | Pointer to **[]string** |  | [optional] 
+**DataType** | Pointer to **int32** | 0: String, 1: Number, 2: Boolean, 3: Datetime, 4: Date, 5: File, 6: Image, 7: Markdown | [optional] 
+**TemplateIds** | Pointer to **[]string** | Array of template UUIDs associated with this attribute | [optional] 
 **ReferenceConfig** | Pointer to [**NullableAttributeResponseReferenceConfig**](AttributeResponseReferenceConfig.md) |  | [optional] 
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
-**UpdatedAt** | Pointer to **time.Time** |  | [optional] 
-**DeletedAt** | Pointer to **NullableTime** |  | [optional] 
+**CreatedAt** | Pointer to **time.Time** | Creation timestamp | [optional] 
+**UpdatedAt** | Pointer to **time.Time** | Last update timestamp | [optional] 
+**DeletedAt** | Pointer to **NullableTime** | Deletion timestamp if soft-deleted | [optional] 
 
 ## Methods
 
@@ -59,6 +60,41 @@ SetId sets Id field to given value.
 
 HasId returns a boolean if a field has been set.
 
+### GetSlug
+
+`func (o *AttributeResponse) GetSlug() string`
+
+GetSlug returns the Slug field if non-nil, zero value otherwise.
+
+### GetSlugOk
+
+`func (o *AttributeResponse) GetSlugOk() (*string, bool)`
+
+GetSlugOk returns a tuple with the Slug field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSlug
+
+`func (o *AttributeResponse) SetSlug(v string)`
+
+SetSlug sets Slug field to given value.
+
+### HasSlug
+
+`func (o *AttributeResponse) HasSlug() bool`
+
+HasSlug returns a boolean if a field has been set.
+
+### SetSlugNil
+
+`func (o *AttributeResponse) SetSlugNil(b bool)`
+
+ SetSlugNil sets the value for Slug to be an explicit nil
+
+### UnsetSlug
+`func (o *AttributeResponse) UnsetSlug()`
+
+UnsetSlug ensures that no value is present for Slug, not even an explicit nil
 ### GetName
 
 `func (o *AttributeResponse) GetName() string`

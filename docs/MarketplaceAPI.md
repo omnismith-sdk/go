@@ -7,7 +7,7 @@ Method | HTTP request | Description
 [**DeleteMarketplaceBlueprint**](MarketplaceAPI.md#DeleteMarketplaceBlueprint) | **Delete** /marketplace/blueprints/{id} | Delete a marketplace blueprint
 [**GetMarketplaceBlueprint**](MarketplaceAPI.md#GetMarketplaceBlueprint) | **Get** /marketplace/blueprints/{id} | Get marketplace blueprint details
 [**InstallMarketplaceBlueprint**](MarketplaceAPI.md#InstallMarketplaceBlueprint) | **Post** /marketplace/blueprints/{id}/install | Install a marketplace blueprint into a project
-[**ListMarketplaceKeywords**](MarketplaceAPI.md#ListMarketplaceKeywords) | **Get** /marketplace/keywords | List all marketplace keywords with blueprint counts
+[**ListMarketplaceKeywords**](MarketplaceAPI.md#ListMarketplaceKeywords) | **Get** /marketplace/keywords | List marketplace keywords
 [**PublishMarketplaceBlueprint**](MarketplaceAPI.md#PublishMarketplaceBlueprint) | **Post** /marketplace/blueprints | Publish or update a marketplace blueprint
 [**SearchMarketplaceBlueprints**](MarketplaceAPI.md#SearchMarketplaceBlueprints) | **Get** /marketplace/blueprints | Search marketplace blueprints
 
@@ -18,6 +18,8 @@ Method | HTTP request | Description
 > DeleteMarketplaceBlueprint(ctx, id).Execute()
 
 Delete a marketplace blueprint
+
+
 
 ### Example
 
@@ -32,7 +34,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Blueprint ID
+	id := "01912ecb-4654-7890-a1b2-c3d4e5f60003" // string | Unique blueprint UUID to delete
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -50,7 +52,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Blueprint ID | 
+**id** | **string** | Unique blueprint UUID to delete | 
 
 ### Other Parameters
 
@@ -85,6 +87,8 @@ Name | Type | Description  | Notes
 
 Get marketplace blueprint details
 
+
+
 ### Example
 
 ```go
@@ -98,7 +102,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Blueprint ID
+	id := "01912ecb-4654-7890-a1b2-c3d4e5f60003" // string | Unique marketplace blueprint UUID
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -118,7 +122,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Blueprint ID | 
+**id** | **string** | Unique marketplace blueprint UUID | 
 
 ### Other Parameters
 
@@ -153,6 +157,8 @@ No authorization required
 
 Install a marketplace blueprint into a project
 
+
+
 ### Example
 
 ```go
@@ -166,8 +172,8 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Blueprint ID
-	installMarketplaceBlueprintRequest := *openapiclient.NewInstallMarketplaceBlueprintRequest("ProjectId_example") // InstallMarketplaceBlueprintRequest | 
+	id := "01912ecb-4654-7890-a1b2-c3d4e5f60003" // string | Unique UUID of the blueprint to install
+	installMarketplaceBlueprintRequest := *openapiclient.NewInstallMarketplaceBlueprintRequest("01912ecb-4654-7890-a1b2-c3d4e5f60011") // InstallMarketplaceBlueprintRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -185,7 +191,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Blueprint ID | 
+**id** | **string** | Unique UUID of the blueprint to install | 
 
 ### Other Parameters
 
@@ -219,7 +225,9 @@ Name | Type | Description  | Notes
 
 > ListMarketplaceKeywords200Response ListMarketplaceKeywords(ctx).Execute()
 
-List all marketplace keywords with blueprint counts
+List marketplace keywords
+
+
 
 ### Example
 
@@ -280,6 +288,8 @@ No authorization required
 
 Publish or update a marketplace blueprint
 
+
+
 ### Example
 
 ```go
@@ -293,7 +303,7 @@ import (
 )
 
 func main() {
-	publishMarketplaceBlueprintRequest := *openapiclient.NewPublishMarketplaceBlueprintRequest("CRM Pipeline", []string{"TemplateIds_example"}) // PublishMarketplaceBlueprintRequest | 
+	publishMarketplaceBlueprintRequest := *openapiclient.NewPublishMarketplaceBlueprintRequest("CRM Pipeline & Lead Tracker", []string{"TemplateIds_example"}) // PublishMarketplaceBlueprintRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -344,6 +354,8 @@ Name | Type | Description  | Notes
 
 Search marketplace blueprints
 
+
+
 ### Example
 
 ```go
@@ -357,13 +369,13 @@ import (
 )
 
 func main() {
-	search := "search_example" // string | Free-text search on title and description (optional)
-	keywords := "keywords_example" // string | Comma-separated keywords to filter by (optional)
-	limit := int32(56) // int32 | Number of results per page (optional) (default to 20)
-	offset := int32(56) // int32 | Pagination offset (optional) (default to 0)
-	sortBy := "sortBy_example" // string | Sort field (optional) (default to "created_at")
-	sortDirection := "sortDirection_example" // string | Sort direction (optional) (default to "desc")
-	featured := true // bool | Filter by featured status (optional)
+	search := "crm pipeline" // string | Free-text search filter across blueprint title and description (optional)
+	keywords := "crm,sales,leads" // string | Comma-separated keywords or tags to filter blueprints (optional)
+	limit := int32(20) // int32 | Number of blueprint records to return per page (max 100) (optional) (default to 20)
+	offset := int32(0) // int32 | Number of blueprint records to skip for pagination (optional) (default to 0)
+	sortBy := "installs" // string | Field to sort blueprint results by (optional) (default to "created_at")
+	sortDirection := "desc" // string | Sort direction order (ascending or descending) (optional) (default to "desc")
+	featured := true // bool | Filter to return only curated and featured marketplace blueprints (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -388,13 +400,13 @@ Other parameters are passed through a pointer to a apiSearchMarketplaceBlueprint
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **search** | **string** | Free-text search on title and description | 
- **keywords** | **string** | Comma-separated keywords to filter by | 
- **limit** | **int32** | Number of results per page | [default to 20]
- **offset** | **int32** | Pagination offset | [default to 0]
- **sortBy** | **string** | Sort field | [default to &quot;created_at&quot;]
- **sortDirection** | **string** | Sort direction | [default to &quot;desc&quot;]
- **featured** | **bool** | Filter by featured status | 
+ **search** | **string** | Free-text search filter across blueprint title and description | 
+ **keywords** | **string** | Comma-separated keywords or tags to filter blueprints | 
+ **limit** | **int32** | Number of blueprint records to return per page (max 100) | [default to 20]
+ **offset** | **int32** | Number of blueprint records to skip for pagination | [default to 0]
+ **sortBy** | **string** | Field to sort blueprint results by | [default to &quot;created_at&quot;]
+ **sortDirection** | **string** | Sort direction order (ascending or descending) | [default to &quot;desc&quot;]
+ **featured** | **bool** | Filter to return only curated and featured marketplace blueprints | 
 
 ### Return type
 

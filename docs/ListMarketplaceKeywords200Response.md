@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | Pointer to [**[]ListMarketplaceKeywords200ResponseDataInner**](ListMarketplaceKeywords200ResponseDataInner.md) |  | [optional] 
+**Data** | Pointer to [**[]ListMarketplaceKeywords200ResponseDataInner**](ListMarketplaceKeywords200ResponseDataInner.md) | List of keyword counts | [optional] 
 
 ## Methods
 

@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ResourceType** | Pointer to **string** |  | [optional] 
-**ResourceId** | Pointer to **string** |  | [optional] 
-**AccessLevel** | Pointer to **string** |  | [optional] 
+**ResourceType** | Pointer to **string** | Type of resource: template or attribute | [optional] 
+**ResourceId** | Pointer to **string** | UUID identifier of the restricted template or attribute | [optional] 
+**AccessLevel** | Pointer to **string** | Granted access level for this specific resource | [optional] 
 
 ## Methods
 

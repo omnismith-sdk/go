@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Title** | **string** | Blueprint title | 
-**Description** | Pointer to **string** | Blueprint description | [optional] 
-**Keywords** | Pointer to **[]string** | Keywords for search/filtering | [optional] 
-**TemplateIds** | **[]string** | Selected template IDs to snapshot into the marketplace blueprint | 
-**Id** | Pointer to **NullableString** | Existing blueprint ID for updates | [optional] 
+**Title** | **string** | Public display title of the blueprint | 
+**Description** | Pointer to **string** | Detailed markdown description explaining what schemas, attributes, and relationships are included in the blueprint | [optional] 
+**Keywords** | Pointer to **[]string** | List of categorization tags and keywords for search indexing | [optional] 
+**TemplateIds** | **[]string** | Array of entity template UUIDs from the current project to snapshot into the blueprint package | 
+**Id** | Pointer to **NullableString** | Optional blueprint UUID when updating an existing published blueprint owned by the user | [optional] 
 
 ## Methods
 

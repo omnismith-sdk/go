@@ -9,19 +9,23 @@ Method | HTTP request | Description
 [**GetRole**](RolesAPI.md#GetRole) | **Get** /roles/{id} | Get a role
 [**GetRolePermissions**](RolesAPI.md#GetRolePermissions) | **Get** /roles/{id}/permissions | Get role permissions
 [**GetRoleResources**](RolesAPI.md#GetRoleResources) | **Get** /roles/{id}/resources | Get role resource restrictions
+[**GetRoleScopes**](RolesAPI.md#GetRoleScopes) | **Get** /roles/{id}/scopes | Get role entity-access scopes
 [**ListAvailablePermissions**](RolesAPI.md#ListAvailablePermissions) | **Get** /roles/permissions/available | List available permissions for role assignment
 [**ListRoles**](RolesAPI.md#ListRoles) | **Get** /roles | List roles
 [**SetRolePermissions**](RolesAPI.md#SetRolePermissions) | **Put** /roles/{id}/permissions | Set role permissions
 [**SetRoleResources**](RolesAPI.md#SetRoleResources) | **Put** /roles/{id}/resources | Set role resource restrictions
+[**SetRoleScopes**](RolesAPI.md#SetRoleScopes) | **Put** /roles/{id}/scopes | Set role entity-access scopes
 [**UpdateRole**](RolesAPI.md#UpdateRole) | **Put** /roles/{id} | Update a role
 
 
 
 ## CreateRole
 
-> CreateAttributeItem201Response CreateRole(ctx).CreateRoleRequest(createRoleRequest).Execute()
+> CreateProject201Response CreateRole(ctx).CreateRoleRequest(createRoleRequest).Execute()
 
 Create a new role
+
+
 
 ### Example
 
@@ -45,7 +49,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `RolesAPI.CreateRole``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `CreateRole`: CreateAttributeItem201Response
+	// response from `CreateRole`: CreateProject201Response
 	fmt.Fprintf(os.Stdout, "Response from `RolesAPI.CreateRole`: %v\n", resp)
 }
 ```
@@ -65,7 +69,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateAttributeItem201Response**](CreateAttributeItem201Response.md)
+[**CreateProject201Response**](CreateProject201Response.md)
 
 ### Authorization
 
@@ -87,6 +91,8 @@ Name | Type | Description  | Notes
 
 Delete a role
 
+
+
 ### Example
 
 ```go
@@ -100,7 +106,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Role ID
+	id := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7a" // string | Unique UUID of the role to delete
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -118,7 +124,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Role ID | 
+**id** | **string** | Unique UUID of the role to delete | 
 
 ### Other Parameters
 
@@ -153,6 +159,8 @@ Name | Type | Description  | Notes
 
 Get a role
 
+
+
 ### Example
 
 ```go
@@ -166,7 +174,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Role ID
+	id := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7a" // string | Unique UUID of the role
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -186,7 +194,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Role ID | 
+**id** | **string** | Unique UUID of the role | 
 
 ### Other Parameters
 
@@ -221,6 +229,8 @@ Name | Type | Description  | Notes
 
 Get role permissions
 
+
+
 ### Example
 
 ```go
@@ -234,7 +244,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Role ID
+	id := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7a" // string | Unique UUID of the role
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -254,7 +264,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Role ID | 
+**id** | **string** | Unique UUID of the role | 
 
 ### Other Parameters
 
@@ -289,6 +299,8 @@ Name | Type | Description  | Notes
 
 Get role resource restrictions
 
+
+
 ### Example
 
 ```go
@@ -302,7 +314,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Role ID
+	id := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7a" // string | Unique UUID of the role
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -322,7 +334,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Role ID | 
+**id** | **string** | Unique UUID of the role | 
 
 ### Other Parameters
 
@@ -336,6 +348,76 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**GetRoleResources200Response**](GetRoleResources200Response.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetRoleScopes
+
+> GetRoleScopes200Response GetRoleScopes(ctx, id).Execute()
+
+Get role entity-access scopes
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/omnismith-sdk/go"
+)
+
+func main() {
+	id := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7a" // string | Unique UUID of the role
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.RolesAPI.GetRoleScopes(context.Background(), id).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `RolesAPI.GetRoleScopes``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `GetRoleScopes`: GetRoleScopes200Response
+	fmt.Fprintf(os.Stdout, "Response from `RolesAPI.GetRoleScopes`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **string** | Unique UUID of the role | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetRoleScopesRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+[**GetRoleScopes200Response**](GetRoleScopes200Response.md)
 
 ### Authorization
 
@@ -418,6 +500,8 @@ Other parameters are passed through a pointer to a apiListAvailablePermissionsRe
 
 List roles
 
+
+
 ### Example
 
 ```go
@@ -477,6 +561,8 @@ Other parameters are passed through a pointer to a apiListRolesRequest struct vi
 
 Set role permissions
 
+
+
 ### Example
 
 ```go
@@ -490,7 +576,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Role ID
+	id := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7a" // string | Unique UUID of the role
 	setRolePermissionsRequest := *openapiclient.NewSetRolePermissionsRequest([]string{"template.view"}) // SetRolePermissionsRequest | 
 
 	configuration := openapiclient.NewConfiguration()
@@ -509,7 +595,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Role ID | 
+**id** | **string** | Unique UUID of the role | 
 
 ### Other Parameters
 
@@ -545,6 +631,8 @@ Name | Type | Description  | Notes
 
 Set role resource restrictions
 
+
+
 ### Example
 
 ```go
@@ -558,7 +646,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Role ID
+	id := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7a" // string | Unique UUID of the role
 	setRoleResourcesRequest := *openapiclient.NewSetRoleResourcesRequest([]openapiclient.ResourceAccessInput{*openapiclient.NewResourceAccessInput("ResourceType_example", "ResourceId_example", "AccessLevel_example")}) // SetRoleResourcesRequest | 
 
 	configuration := openapiclient.NewConfiguration()
@@ -577,7 +665,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Role ID | 
+**id** | **string** | Unique UUID of the role | 
 
 ### Other Parameters
 
@@ -607,11 +695,13 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## UpdateRole
+## SetRoleScopes
 
-> UpdateRole(ctx, id).UpdateRoleRequest(updateRoleRequest).Execute()
+> SetRoleScopes(ctx, id).SetRoleScopesRequest(setRoleScopesRequest).Execute()
 
-Update a role
+Set role entity-access scopes
+
+
 
 ### Example
 
@@ -626,7 +716,77 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Role ID
+	id := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7a" // string | Unique UUID of the role
+	setRoleScopesRequest := *openapiclient.NewSetRoleScopesRequest([]openapiclient.ScopeAccessInput{*openapiclient.NewScopeAccessInput("TemplateId_example", []openapiclient.ScopeConditionInput{*openapiclient.NewScopeConditionInput("Field_example", "Operator_example")})}) // SetRoleScopesRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	r, err := apiClient.RolesAPI.SetRoleScopes(context.Background(), id).SetRoleScopesRequest(setRoleScopesRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `RolesAPI.SetRoleScopes``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **string** | Unique UUID of the role | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiSetRoleScopesRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **setRoleScopesRequest** | [**SetRoleScopesRequest**](SetRoleScopesRequest.md) |  | 
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## UpdateRole
+
+> UpdateRole(ctx, id).UpdateRoleRequest(updateRoleRequest).Execute()
+
+Update a role
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/omnismith-sdk/go"
+)
+
+func main() {
+	id := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7a" // string | Unique UUID of the role
 	updateRoleRequest := *openapiclient.NewUpdateRoleRequest("Updated Role Name") // UpdateRoleRequest | 
 
 	configuration := openapiclient.NewConfiguration()
@@ -645,7 +805,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Role ID | 
+**id** | **string** | Unique UUID of the role | 
 
 ### Other Parameters
 

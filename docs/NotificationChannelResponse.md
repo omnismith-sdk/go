@@ -4,12 +4,12 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Type** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**Credentials** | Pointer to **map[string]string** |  | [optional] 
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
-**UpdatedAt** | Pointer to **time.Time** |  | [optional] 
+**Id** | Pointer to **string** | Unique notification channel UUID | [optional] 
+**Type** | Pointer to **string** | Channel delivery type (telegram, webhook, push) | [optional] 
+**Name** | Pointer to **string** | User-friendly display name of the notification channel | [optional] 
+**Credentials** | Pointer to **map[string]string** | Sanitized or configured integration credentials for the channel | [optional] 
+**CreatedAt** | Pointer to **time.Time** | Creation timestamp | [optional] 
+**UpdatedAt** | Pointer to **time.Time** | Last update timestamp | [optional] 
 
 ## Methods
 

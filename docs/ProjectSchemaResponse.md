@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Attributes** | Pointer to [**[]AttributeResponse**](AttributeResponse.md) |  | [optional] 
-**Templates** | Pointer to [**[]TemplateResponse**](TemplateResponse.md) |  | [optional] 
-**ListItems** | Pointer to [**[]ListItemResponse**](ListItemResponse.md) |  | [optional] 
-**ReferenceConfigs** | Pointer to [**[]ReferenceConfigResponse**](ReferenceConfigResponse.md) |  | [optional] 
+**Attributes** | Pointer to [**[]AttributeResponse**](AttributeResponse.md) | All active attributes in the project schema | [optional] 
+**Templates** | Pointer to [**[]TemplateResponse**](TemplateResponse.md) | All active templates and their attribute layout configurations | [optional] 
+**ListItems** | Pointer to [**[]ListItemResponse**](ListItemResponse.md) | All selectable choice items for List-type attributes | [optional] 
+**ReferenceConfigs** | Pointer to [**[]ReferenceConfigResponse**](ReferenceConfigResponse.md) | All entity relationship configurations for Reference-type attributes | [optional] 
 
 ## Methods
 

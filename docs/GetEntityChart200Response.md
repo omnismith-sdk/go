@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Series** | Pointer to [**[]GetEntityChart200ResponseSeriesInner**](GetEntityChart200ResponseSeriesInner.md) |  | [optional] 
+**Series** | Pointer to [**[]GetEntityChart200ResponseSeriesInner**](GetEntityChart200ResponseSeriesInner.md) | List of aggregated metric series | [optional] 
 
 ## Methods
 

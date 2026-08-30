@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**BlockId** | Pointer to **string** |  | [optional] 
-**Title** | Pointer to **string** |  | [optional] 
-**Type** | Pointer to **string** |  | [optional] 
-**Value** | Pointer to **float32** |  | [optional] 
-**Min** | Pointer to **float32** |  | [optional] 
-**Max** | Pointer to **float32** |  | [optional] 
-**Percentage** | Pointer to **float32** |  | [optional] 
+**BlockId** | Pointer to **string** | Dashboard block unique identifier | [optional] 
+**Title** | Pointer to **string** | Block header title | [optional] 
+**Type** | Pointer to **string** | Block type discriminator | [optional] 
+**Value** | Pointer to **float32** | Current aggregated metric value | [optional] 
+**Min** | Pointer to **float32** | Configured minimum gauge scale bound | [optional] 
+**Max** | Pointer to **float32** | Configured maximum gauge scale bound | [optional] 
+**Percentage** | Pointer to **float32** | Computed progress percentage within [min, max] bounds | [optional] 
 
 ## Methods
 

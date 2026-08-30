@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Type** | **string** |  | 
-**Config** | **map[string]interface{}** |  | 
+**Type** | **string** | Action delivery channel type | 
+**Config** | **map[string]interface{}** | Action payload and channel routing configuration | 
 
 ## Methods
 

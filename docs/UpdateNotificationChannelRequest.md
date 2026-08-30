@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Name** | Pointer to **NullableString** |  | [optional] 
+**Name** | Pointer to **NullableString** | Updated display name of the notification channel | [optional] 
 **Credentials** | Pointer to [**NullableUpdateNotificationChannelRequestCredentials**](UpdateNotificationChannelRequestCredentials.md) |  | [optional] 
 
 ## Methods

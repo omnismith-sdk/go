@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Email** | **string** | User email address | 
 **Password** | **string** | User password (min 8 chars) | 
+**CaptchaToken** | Pointer to **NullableString** | CAPTCHA response token (required for anonymous/public signups) | [optional] 
 
 ## Methods
 
@@ -66,6 +67,41 @@ and a boolean to check if the value has been set.
 SetPassword sets Password field to given value.
 
 
+### GetCaptchaToken
+
+`func (o *RegisterUserRequest) GetCaptchaToken() string`
+
+GetCaptchaToken returns the CaptchaToken field if non-nil, zero value otherwise.
+
+### GetCaptchaTokenOk
+
+`func (o *RegisterUserRequest) GetCaptchaTokenOk() (*string, bool)`
+
+GetCaptchaTokenOk returns a tuple with the CaptchaToken field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCaptchaToken
+
+`func (o *RegisterUserRequest) SetCaptchaToken(v string)`
+
+SetCaptchaToken sets CaptchaToken field to given value.
+
+### HasCaptchaToken
+
+`func (o *RegisterUserRequest) HasCaptchaToken() bool`
+
+HasCaptchaToken returns a boolean if a field has been set.
+
+### SetCaptchaTokenNil
+
+`func (o *RegisterUserRequest) SetCaptchaTokenNil(b bool)`
+
+ SetCaptchaTokenNil sets the value for CaptchaToken to be an explicit nil
+
+### UnsetCaptchaToken
+`func (o *RegisterUserRequest) UnsetCaptchaToken()`
+
+UnsetCaptchaToken ensures that no value is present for CaptchaToken, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

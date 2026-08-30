@@ -4,9 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**TemplateId** | Pointer to **string** |  | [optional] 
-**AttributeValues** | Pointer to [**[]CreateEntityRequestAttributeValuesInner**](CreateEntityRequestAttributeValuesInner.md) |  | [optional] 
-**Id** | Pointer to **string** |  | [optional] 
+**TemplateId** | Pointer to **NullableString** | Template UUID to instantiate (mutually exclusive with template_slug) | [optional] 
+**AttributeValues** | Pointer to [**[]CreateEntityRequestAttributeValuesInner**](CreateEntityRequestAttributeValuesInner.md) | Initial attribute values for dimensions, lists, references, and initial metrics | [optional] 
+**Id** | Pointer to **NullableString** | Optional client-assigned UUIDv7 identifier for the entity record. If omitted, a UUIDv7 is automatically generated. | [optional] 
+**TemplateSlug** | Pointer to **NullableString** | Template slug identifier to instantiate (mutually exclusive with template_id) | [optional] 
 
 ## Methods
 
@@ -52,6 +53,16 @@ SetTemplateId sets TemplateId field to given value.
 
 HasTemplateId returns a boolean if a field has been set.
 
+### SetTemplateIdNil
+
+`func (o *CreateEntityRequest) SetTemplateIdNil(b bool)`
+
+ SetTemplateIdNil sets the value for TemplateId to be an explicit nil
+
+### UnsetTemplateId
+`func (o *CreateEntityRequest) UnsetTemplateId()`
+
+UnsetTemplateId ensures that no value is present for TemplateId, not even an explicit nil
 ### GetAttributeValues
 
 `func (o *CreateEntityRequest) GetAttributeValues() []CreateEntityRequestAttributeValuesInner`
@@ -102,6 +113,51 @@ SetId sets Id field to given value.
 
 HasId returns a boolean if a field has been set.
 
+### SetIdNil
+
+`func (o *CreateEntityRequest) SetIdNil(b bool)`
+
+ SetIdNil sets the value for Id to be an explicit nil
+
+### UnsetId
+`func (o *CreateEntityRequest) UnsetId()`
+
+UnsetId ensures that no value is present for Id, not even an explicit nil
+### GetTemplateSlug
+
+`func (o *CreateEntityRequest) GetTemplateSlug() string`
+
+GetTemplateSlug returns the TemplateSlug field if non-nil, zero value otherwise.
+
+### GetTemplateSlugOk
+
+`func (o *CreateEntityRequest) GetTemplateSlugOk() (*string, bool)`
+
+GetTemplateSlugOk returns a tuple with the TemplateSlug field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTemplateSlug
+
+`func (o *CreateEntityRequest) SetTemplateSlug(v string)`
+
+SetTemplateSlug sets TemplateSlug field to given value.
+
+### HasTemplateSlug
+
+`func (o *CreateEntityRequest) HasTemplateSlug() bool`
+
+HasTemplateSlug returns a boolean if a field has been set.
+
+### SetTemplateSlugNil
+
+`func (o *CreateEntityRequest) SetTemplateSlugNil(b bool)`
+
+ SetTemplateSlugNil sets the value for TemplateSlug to be an explicit nil
+
+### UnsetTemplateSlug
+`func (o *CreateEntityRequest) UnsetTemplateSlug()`
+
+UnsetTemplateSlug ensures that no value is present for TemplateSlug, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

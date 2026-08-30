@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Total** | Pointer to **int32** |  | [optional] 
+**Total** | Pointer to **int32** | Total number of matching blueprints | [optional] 
 
 ## Methods
 

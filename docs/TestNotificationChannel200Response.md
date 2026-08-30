@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Success** | Pointer to **bool** |  | [optional] 
-**Message** | Pointer to **string** |  | [optional] 
+**Success** | Pointer to **bool** | Indicates test delivery succeeded | [optional] 
+**Message** | Pointer to **string** | Success status message | [optional] 
 
 ## Methods
 

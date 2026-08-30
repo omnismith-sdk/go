@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | Pointer to [**[]AutomationExecutionResponse**](AutomationExecutionResponse.md) |  | [optional] 
-**Total** | Pointer to **int32** |  | [optional] 
+**Data** | Pointer to [**[]AutomationExecutionResponse**](AutomationExecutionResponse.md) | Array of execution records | [optional] 
+**Total** | Pointer to **int32** | Total count of execution records matching filters | [optional] 
 
 ## Methods
 

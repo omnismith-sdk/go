@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ChatId** | Pointer to **string** | Telegram chat ID (required for Telegram channels) | [optional] 
-**Message** | Pointer to **string** |  | [optional] 
-**Title** | Pointer to **string** | Notification title (used for push notifications) | [optional] 
+**ChatId** | Pointer to **string** | Target Telegram chat ID or channel username (required when testing Telegram channels) | [optional] 
+**Message** | Pointer to **string** | Test notification body text content | [optional] 
+**Title** | Pointer to **string** | Optional notification title header (used for mobile push notifications) | [optional] 
 
 ## Methods
 

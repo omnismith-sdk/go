@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | Pointer to [**[]PushDeviceResponse**](PushDeviceResponse.md) |  | [optional] 
+**Data** | Pointer to [**[]PushDeviceResponse**](PushDeviceResponse.md) | Array of registered push devices | [optional] 
 
 ## Methods
 

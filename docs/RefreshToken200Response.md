@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**AccessToken** | Pointer to **string** | New JWT access token | [optional] 
-**ExpiresAt** | Pointer to **int32** | Access token expiration timestamp | [optional] 
-**RefreshToken** | Pointer to **string** | New refresh token (rotation) | [optional] 
-**RefreshExpiresAt** | Pointer to **int32** | Refresh token expiration timestamp | [optional] 
+**AccessToken** | Pointer to **string** | New JWT access token for authenticating Bearer requests | [optional] 
+**ExpiresAt** | Pointer to **int32** | Unix timestamp when the access token expires | [optional] 
+**RefreshToken** | Pointer to **string** | New rotated refresh token for future refreshes | [optional] 
+**RefreshExpiresAt** | Pointer to **int32** | Unix timestamp when the new refresh token expires | [optional] 
 
 ## Methods
 

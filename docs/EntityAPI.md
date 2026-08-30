@@ -4,23 +4,27 @@ All URIs are relative to *https://api.omnismith.io/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**CreateEntity**](EntityAPI.md#CreateEntity) | **Post** /entities | Create a new entity
-[**DeleteEntity**](EntityAPI.md#DeleteEntity) | **Delete** /entities/{id} | Delete an entity
-[**ExportEntities**](EntityAPI.md#ExportEntities) | **Post** /entities/export/{template_id} | Export entities to CSV
-[**GetEntity**](EntityAPI.md#GetEntity) | **Get** /entities/{id} | Get an entity
+[**CreateEntity**](EntityAPI.md#CreateEntity) | **Post** /entities | Create a new dynamic entity
+[**DeleteEntity**](EntityAPI.md#DeleteEntity) | **Delete** /entities/{id} | Soft-delete an entity record
+[**ExportEntities**](EntityAPI.md#ExportEntities) | **Post** /entities/export/{template_id} | Export entities to structured CSV file
+[**GetEntity**](EntityAPI.md#GetEntity) | **Get** /entities/{id} | Get an entity record by ID
 [**GetEntityChart**](EntityAPI.md#GetEntityChart) | **Get** /entities/{id}/chart | Get entity chart time-series data
-[**GetEntityHistory**](EntityAPI.md#GetEntityHistory) | **Get** /entities/{id}/history | Get entity history
-[**ImportEntities**](EntityAPI.md#ImportEntities) | **Post** /entities/import/{template_id} | Import entities from CSV
-[**SearchEntities**](EntityAPI.md#SearchEntities) | **Post** /entities/search/{template_id} | Search entities
-[**UpdateEntity**](EntityAPI.md#UpdateEntity) | **Put** /entities/{id} | Update an entity
+[**GetEntityHistory**](EntityAPI.md#GetEntityHistory) | **Get** /entities/{id}/history | Get entity dimension change history
+[**ImportEntities**](EntityAPI.md#ImportEntities) | **Post** /entities/import/{template_id} | Import entities from structured CSV file
+[**IngestEntityMetrics**](EntityAPI.md#IngestEntityMetrics) | **Post** /entities/{id}/metrics | Ingest high-frequency metric observations for an entity
+[**SearchEntities**](EntityAPI.md#SearchEntities) | **Post** /entities/search/{template_id} | Search entities with filtering, sorting, and pagination
+[**SemanticSearchEntities**](EntityAPI.md#SemanticSearchEntities) | **Post** /entities/semantic-search | Perform semantic vector similarity search on entities
+[**UpdateEntity**](EntityAPI.md#UpdateEntity) | **Patch** /entities/{id} | Update entity attribute values
 
 
 
 ## CreateEntity
 
-> CreateAttributeItem201Response CreateEntity(ctx).CreateEntityRequest(createEntityRequest).Execute()
+> CreateEntity201Response CreateEntity(ctx).CreateEntityRequest(createEntityRequest).Execute()
 
-Create a new entity
+Create a new dynamic entity
+
+
 
 ### Example
 
@@ -44,7 +48,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `EntityAPI.CreateEntity``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `CreateEntity`: CreateAttributeItem201Response
+	// response from `CreateEntity`: CreateEntity201Response
 	fmt.Fprintf(os.Stdout, "Response from `EntityAPI.CreateEntity`: %v\n", resp)
 }
 ```
@@ -64,7 +68,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateAttributeItem201Response**](CreateAttributeItem201Response.md)
+[**CreateEntity201Response**](CreateEntity201Response.md)
 
 ### Authorization
 
@@ -84,7 +88,9 @@ Name | Type | Description  | Notes
 
 > DeleteEntity(ctx, id).Execute()
 
-Delete an entity
+Soft-delete an entity record
+
+
 
 ### Example
 
@@ -99,7 +105,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | Unique entity identifier (UUID) to soft-delete
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -117,7 +123,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** |  | 
+**id** | **string** | Unique entity identifier (UUID) to soft-delete | 
 
 ### Other Parameters
 
@@ -139,7 +145,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -150,7 +156,7 @@ Name | Type | Description  | Notes
 
 > *os.File ExportEntities(ctx, templateId).ExportEntitiesRequest(exportEntitiesRequest).SortField(sortField).SortDirection(sortDirection).Execute()
 
-Export entities to CSV
+Export entities to structured CSV file
 
 
 
@@ -167,10 +173,10 @@ import (
 )
 
 func main() {
-	templateId := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Template ID
+	templateId := "018b2f1b-8c1a-75b3-8000-7f0000010001" // string | Unique identifier (UUID) of the template schema to export
 	exportEntitiesRequest := *openapiclient.NewExportEntitiesRequest() // ExportEntitiesRequest | 
-	sortField := "sortField_example" // string | Attribute ID to sort by (UUID) OR one of: id, created_at, updated_at, deleted_at (optional)
-	sortDirection := "sortDirection_example" // string | Sort direction (only used when sort_field is provided) (optional) (default to "asc")
+	sortField := "created_at" // string | Attribute UUID, attribute slug, or standard field (id, created_at, updated_at, deleted_at) to sort by (optional)
+	sortDirection := "asc" // string | Sort direction: \"asc\" (ascending) or \"desc\" (descending) (optional) (default to "asc")
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -190,7 +196,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**templateId** | **string** | Template ID | 
+**templateId** | **string** | Unique identifier (UUID) of the template schema to export | 
 
 ### Other Parameters
 
@@ -201,8 +207,8 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
  **exportEntitiesRequest** | [**ExportEntitiesRequest**](ExportEntitiesRequest.md) |  | 
- **sortField** | **string** | Attribute ID to sort by (UUID) OR one of: id, created_at, updated_at, deleted_at | 
- **sortDirection** | **string** | Sort direction (only used when sort_field is provided) | [default to &quot;asc&quot;]
+ **sortField** | **string** | Attribute UUID, attribute slug, or standard field (id, created_at, updated_at, deleted_at) to sort by | 
+ **sortDirection** | **string** | Sort direction: \&quot;asc\&quot; (ascending) or \&quot;desc\&quot; (descending) | [default to &quot;asc&quot;]
 
 ### Return type
 
@@ -224,9 +230,11 @@ Name | Type | Description  | Notes
 
 ## GetEntity
 
-> EntityResponse GetEntity(ctx, id).Execute()
+> EntityResponse GetEntity(ctx, id).AttributeKey(attributeKey).Execute()
 
-Get an entity
+Get an entity record by ID
+
+
 
 ### Example
 
@@ -241,11 +249,12 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | Unique entity identifier (UUID)
+	attributeKey := "slug" // string | Format for attribute_values dictionary keys: \"id\" for attribute UUIDs or \"slug\" for human-readable attribute slugs (optional) (default to "id")
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.EntityAPI.GetEntity(context.Background(), id).Execute()
+	resp, r, err := apiClient.EntityAPI.GetEntity(context.Background(), id).AttributeKey(attributeKey).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `EntityAPI.GetEntity``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -261,7 +270,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** |  | 
+**id** | **string** | Unique entity identifier (UUID) | 
 
 ### Other Parameters
 
@@ -271,6 +280,7 @@ Other parameters are passed through a pointer to a apiGetEntityRequest struct vi
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **attributeKey** | **string** | Format for attribute_values dictionary keys: \&quot;id\&quot; for attribute UUIDs or \&quot;slug\&quot; for human-readable attribute slugs | [default to &quot;id&quot;]
 
 ### Return type
 
@@ -296,6 +306,8 @@ Name | Type | Description  | Notes
 
 Get entity chart time-series data
 
+
+
 ### Example
 
 ```go
@@ -309,12 +321,12 @@ import (
 )
 
 func main() {
-	id := "id_example" // string | Entity ID
-	attributeIds := "attributeIds_example" // string | Comma-separated attribute IDs
-	start := int32(56) // int32 | Start timestamp (Unix seconds)
-	end := int32(56) // int32 | End timestamp (Unix seconds)
-	aggregateFunc := "aggregateFunc_example" // string | Aggregate function (optional) (default to "avg")
-	bucketWidth := "bucketWidth_example" // string | Time bucket width (PostgreSQL interval) (optional) (default to "1 hour")
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | Unique entity identifier (UUID)
+	attributeIds := "018b2f1b-8c1a-75b3-8000-7f0000010010,018b2f1b-8c1a-75b3-8000-7f0000010011" // string | Comma-separated metric attribute UUIDs to aggregate
+	start := int32(1774396800) // int32 | Start timestamp as Unix epoch in seconds
+	end := int32(1774483200) // int32 | End timestamp as Unix epoch in seconds
+	aggregateFunc := "avg" // string | Aggregation function applied within each bucket (optional) (default to "avg")
+	bucketWidth := "1 hour" // string | Time bucket width interval (e.g. 1 minute, 5 minutes, 1 hour, 1 day) (optional) (default to "1 hour")
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -334,7 +346,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Entity ID | 
+**id** | **string** | Unique entity identifier (UUID) | 
 
 ### Other Parameters
 
@@ -344,11 +356,11 @@ Other parameters are passed through a pointer to a apiGetEntityChartRequest stru
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **attributeIds** | **string** | Comma-separated attribute IDs | 
- **start** | **int32** | Start timestamp (Unix seconds) | 
- **end** | **int32** | End timestamp (Unix seconds) | 
- **aggregateFunc** | **string** | Aggregate function | [default to &quot;avg&quot;]
- **bucketWidth** | **string** | Time bucket width (PostgreSQL interval) | [default to &quot;1 hour&quot;]
+ **attributeIds** | **string** | Comma-separated metric attribute UUIDs to aggregate | 
+ **start** | **int32** | Start timestamp as Unix epoch in seconds | 
+ **end** | **int32** | End timestamp as Unix epoch in seconds | 
+ **aggregateFunc** | **string** | Aggregation function applied within each bucket | [default to &quot;avg&quot;]
+ **bucketWidth** | **string** | Time bucket width interval (e.g. 1 minute, 5 minutes, 1 hour, 1 day) | [default to &quot;1 hour&quot;]
 
 ### Return type
 
@@ -356,7 +368,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -372,7 +384,9 @@ No authorization required
 
 > GetEntityHistory200Response GetEntityHistory(ctx, id).Page(page).Limit(limit).SortBy(sortBy).SortDirection(sortDirection).Search(search).AttributeIds(attributeIds).Start(start).End(end).AuthorEmail(authorEmail).Execute()
 
-Get entity history
+Get entity dimension change history
+
+
 
 ### Example
 
@@ -388,16 +402,16 @@ import (
 )
 
 func main() {
-	id := "id_example" // string | Entity ID
-	page := int32(56) // int32 |  (optional) (default to 1)
-	limit := int32(56) // int32 |  (optional) (default to 20)
-	sortBy := "sortBy_example" // string |  (optional) (default to "created_at")
-	sortDirection := "sortDirection_example" // string |  (optional) (default to "desc")
-	search := "search_example" // string |  (optional)
-	attributeIds := "attributeIds_example" // string |  (optional)
-	start := time.Now() // time.Time | Filter logs created after this timestamp (optional)
-	end := time.Now() // time.Time | Filter logs created before this timestamp (optional)
-	authorEmail := "authorEmail_example" // string | Filter logs by author email (optional)
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | Unique entity identifier (UUID)
+	page := int32(1) // int32 | 1-based page number for pagination (optional) (default to 1)
+	limit := int32(20) // int32 | Number of history records per page (1-100) (optional) (default to 20)
+	sortBy := "created_at" // string | Field to sort change logs by (optional) (default to "created_at")
+	sortDirection := "desc" // string | Sort direction: \"asc\" (ascending) or \"desc\" (descending) (optional) (default to "desc")
+	search := "Electronics" // string | Free-text search filter matching against old and new attribute values (optional)
+	attributeIds := "018b2f1b-8c1a-75b3-8000-7f0000010002,018b2f1b-8c1a-75b3-8000-7f0000010003" // string | Comma-separated attribute UUIDs to filter change history (optional)
+	start := time.Now() // time.Time | Filter change records occurring on or after this timestamp (ISO 8601 or YYYY-MM-DD HH:MM:SS format) (optional)
+	end := time.Now() // time.Time | Filter change records occurring on or before this timestamp (ISO 8601 or YYYY-MM-DD HH:MM:SS format) (optional)
+	authorEmail := "demo@omnismith.io" // string | Filter change records by author or actor email (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -417,7 +431,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Entity ID | 
+**id** | **string** | Unique entity identifier (UUID) | 
 
 ### Other Parameters
 
@@ -427,15 +441,15 @@ Other parameters are passed through a pointer to a apiGetEntityHistoryRequest st
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **page** | **int32** |  | [default to 1]
- **limit** | **int32** |  | [default to 20]
- **sortBy** | **string** |  | [default to &quot;created_at&quot;]
- **sortDirection** | **string** |  | [default to &quot;desc&quot;]
- **search** | **string** |  | 
- **attributeIds** | **string** |  | 
- **start** | **time.Time** | Filter logs created after this timestamp | 
- **end** | **time.Time** | Filter logs created before this timestamp | 
- **authorEmail** | **string** | Filter logs by author email | 
+ **page** | **int32** | 1-based page number for pagination | [default to 1]
+ **limit** | **int32** | Number of history records per page (1-100) | [default to 20]
+ **sortBy** | **string** | Field to sort change logs by | [default to &quot;created_at&quot;]
+ **sortDirection** | **string** | Sort direction: \&quot;asc\&quot; (ascending) or \&quot;desc\&quot; (descending) | [default to &quot;desc&quot;]
+ **search** | **string** | Free-text search filter matching against old and new attribute values | 
+ **attributeIds** | **string** | Comma-separated attribute UUIDs to filter change history | 
+ **start** | **time.Time** | Filter change records occurring on or after this timestamp (ISO 8601 or YYYY-MM-DD HH:MM:SS format) | 
+ **end** | **time.Time** | Filter change records occurring on or before this timestamp (ISO 8601 or YYYY-MM-DD HH:MM:SS format) | 
+ **authorEmail** | **string** | Filter change records by author or actor email | 
 
 ### Return type
 
@@ -443,7 +457,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -459,7 +473,7 @@ No authorization required
 
 > ImportEntities200Response ImportEntities(ctx, templateId).File(file).Execute()
 
-Import entities from CSV
+Import entities from structured CSV file
 
 
 
@@ -476,7 +490,7 @@ import (
 )
 
 func main() {
-	templateId := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Template ID
+	templateId := "018b2f1b-8c1a-75b3-8000-7f0000010001" // string | Unique identifier (UUID) of the template schema to import entities into
 	file := os.NewFile(1234, "some_file") // *os.File | CSV file exported from the export endpoint or matching its format
 
 	configuration := openapiclient.NewConfiguration()
@@ -497,7 +511,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**templateId** | **string** | Template ID | 
+**templateId** | **string** | Unique identifier (UUID) of the template schema to import entities into | 
 
 ### Other Parameters
 
@@ -527,11 +541,13 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## SearchEntities
+## IngestEntityMetrics
 
-> SearchEntities200Response SearchEntities(ctx, templateId).SearchEntitiesRequest(searchEntitiesRequest).Limit(limit).Offset(offset).SortField(sortField).SortDirection(sortDirection).Execute()
+> IngestEntityMetrics(ctx, id).IngestMetricsRequest(ingestMetricsRequest).Execute()
 
-Search entities
+Ingest high-frequency metric observations for an entity
+
+
 
 ### Example
 
@@ -546,16 +562,87 @@ import (
 )
 
 func main() {
-	templateId := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Template ID
-	searchEntitiesRequest := *openapiclient.NewSearchEntitiesRequest() // SearchEntitiesRequest | 
-	limit := int32(56) // int32 | Number of results (optional) (default to 50)
-	offset := int32(56) // int32 | Pagination offset (optional) (default to 0)
-	sortField := "sortField_example" // string | Attribute ID to sort by (UUID) OR one of: id, created_at, updated_at, deleted_at (optional)
-	sortDirection := "sortDirection_example" // string | Sort direction (only used when sort_field is provided) (optional) (default to "asc")
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | Unique entity identifier (UUID)
+	ingestMetricsRequest := *openapiclient.NewIngestMetricsRequest() // IngestMetricsRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.EntityAPI.SearchEntities(context.Background(), templateId).SearchEntitiesRequest(searchEntitiesRequest).Limit(limit).Offset(offset).SortField(sortField).SortDirection(sortDirection).Execute()
+	r, err := apiClient.EntityAPI.IngestEntityMetrics(context.Background(), id).IngestMetricsRequest(ingestMetricsRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `EntityAPI.IngestEntityMetrics``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **string** | Unique entity identifier (UUID) | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiIngestEntityMetricsRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **ingestMetricsRequest** | [**IngestMetricsRequest**](IngestMetricsRequest.md) |  | 
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## SearchEntities
+
+> SearchEntities200Response SearchEntities(ctx, templateId).SearchEntitiesRequest(searchEntitiesRequest).Limit(limit).Offset(offset).SortField(sortField).SortDirection(sortDirection).AttributeKey(attributeKey).Execute()
+
+Search entities with filtering, sorting, and pagination
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/omnismith-sdk/go"
+)
+
+func main() {
+	templateId := "product_catalog" // string | Template UUID or human-readable template slug
+	searchEntitiesRequest := *openapiclient.NewSearchEntitiesRequest() // SearchEntitiesRequest | 
+	limit := int32(50) // int32 | Maximum number of entity records to return (1-100) (optional) (default to 50)
+	offset := int32(0) // int32 | Zero-based pagination offset (optional) (default to 0)
+	sortField := "created_at" // string | Attribute UUID, attribute slug, or standard field (id, created_at, updated_at, deleted_at) to sort by (optional)
+	sortDirection := "desc" // string | Sort direction: \"asc\" (ascending) or \"desc\" (descending) (optional) (default to "asc")
+	attributeKey := "slug" // string | Format for attribute_values dictionary keys: \"id\" for attribute UUIDs or \"slug\" for human-readable attribute slugs (optional) (default to "id")
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.EntityAPI.SearchEntities(context.Background(), templateId).SearchEntitiesRequest(searchEntitiesRequest).Limit(limit).Offset(offset).SortField(sortField).SortDirection(sortDirection).AttributeKey(attributeKey).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `EntityAPI.SearchEntities``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -571,7 +658,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**templateId** | **string** | Template ID | 
+**templateId** | **string** | Template UUID or human-readable template slug | 
 
 ### Other Parameters
 
@@ -582,10 +669,11 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
  **searchEntitiesRequest** | [**SearchEntitiesRequest**](SearchEntitiesRequest.md) |  | 
- **limit** | **int32** | Number of results | [default to 50]
- **offset** | **int32** | Pagination offset | [default to 0]
- **sortField** | **string** | Attribute ID to sort by (UUID) OR one of: id, created_at, updated_at, deleted_at | 
- **sortDirection** | **string** | Sort direction (only used when sort_field is provided) | [default to &quot;asc&quot;]
+ **limit** | **int32** | Maximum number of entity records to return (1-100) | [default to 50]
+ **offset** | **int32** | Zero-based pagination offset | [default to 0]
+ **sortField** | **string** | Attribute UUID, attribute slug, or standard field (id, created_at, updated_at, deleted_at) to sort by | 
+ **sortDirection** | **string** | Sort direction: \&quot;asc\&quot; (ascending) or \&quot;desc\&quot; (descending) | [default to &quot;asc&quot;]
+ **attributeKey** | **string** | Format for attribute_values dictionary keys: \&quot;id\&quot; for attribute UUIDs or \&quot;slug\&quot; for human-readable attribute slugs | [default to &quot;id&quot;]
 
 ### Return type
 
@@ -605,11 +693,13 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## UpdateEntity
+## SemanticSearchEntities
 
-> UpdateEntity(ctx, id).UpdateEntityRequest(updateEntityRequest).Execute()
+> []SemanticSearchResultItem SemanticSearchEntities(ctx).SemanticSearchEntitiesRequest(semanticSearchEntitiesRequest).Execute()
 
-Update an entity
+Perform semantic vector similarity search on entities
+
+
 
 ### Example
 
@@ -624,7 +714,73 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
+	semanticSearchEntitiesRequest := *openapiclient.NewSemanticSearchEntitiesRequest([]float32{float32(0.0123)}) // SemanticSearchEntitiesRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.EntityAPI.SemanticSearchEntities(context.Background()).SemanticSearchEntitiesRequest(semanticSearchEntitiesRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `EntityAPI.SemanticSearchEntities``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `SemanticSearchEntities`: []SemanticSearchResultItem
+	fmt.Fprintf(os.Stdout, "Response from `EntityAPI.SemanticSearchEntities`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiSemanticSearchEntitiesRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **semanticSearchEntitiesRequest** | [**SemanticSearchEntitiesRequest**](SemanticSearchEntitiesRequest.md) |  | 
+
+### Return type
+
+[**[]SemanticSearchResultItem**](SemanticSearchResultItem.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## UpdateEntity
+
+> UpdateEntity(ctx, id).UpdateEntityRequest(updateEntityRequest).Execute()
+
+Update entity attribute values
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/omnismith-sdk/go"
+)
+
+func main() {
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | Unique entity identifier (UUID)
 	updateEntityRequest := *openapiclient.NewUpdateEntityRequest() // UpdateEntityRequest | 
 
 	configuration := openapiclient.NewConfiguration()
@@ -643,7 +799,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** |  | 
+**id** | **string** | Unique entity identifier (UUID) | 
 
 ### Other Parameters
 

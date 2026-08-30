@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ProjectId** | **string** | Target project ID | 
-**IncludeDemoData** | Pointer to **bool** | Whether to install sample entities included in the blueprint | [optional] [default to false]
+**ProjectId** | **string** | Target project UUID where templates and attributes will be provisioned | 
+**IncludeDemoData** | Pointer to **bool** | Whether to install sample entities and records included in the blueprint package | [optional] [default to false]
 
 ## Methods
 

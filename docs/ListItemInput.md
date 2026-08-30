@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Value** | **string** |  | 
-**SortOrder** | Pointer to **int32** |  | [optional] 
-**Id** | Pointer to **NullableString** |  | [optional] 
+**Value** | **string** | Display label / value for this choice option. | 
+**SortOrder** | Pointer to **int32** | Sorting rank for displaying this option in selection lists (lower numbers appear first). | [optional] [default to 0]
+**Id** | Pointer to **NullableString** | Optional explicit UUID for the list item. Generated automatically if omitted. | [optional] 
 
 ## Methods
 

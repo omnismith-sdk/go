@@ -4,12 +4,12 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Name** | **string** |  | 
-**Description** | Pointer to **NullableString** |  | [optional] 
+**Name** | **string** | Descriptive display name of the automation rule | 
+**Description** | Pointer to **NullableString** | Optional summary describing the purpose and behavior of the automation | [optional] 
 **Trigger** | [**CreateAutomationRequestTrigger**](CreateAutomationRequestTrigger.md) |  | 
-**Conditions** | [**[]CreateAutomationRequestConditionsInner**](CreateAutomationRequestConditionsInner.md) |  | 
-**Actions** | [**[]CreateAutomationRequestActionsInner**](CreateAutomationRequestActionsInner.md) |  | 
-**CooldownSeconds** | Pointer to **NullableInt32** |  | [optional] 
+**Conditions** | [**[]CreateAutomationRequestConditionsInner**](CreateAutomationRequestConditionsInner.md) | Condition expressions that must all evaluate to true against the entity for actions to run | 
+**Actions** | [**[]CreateAutomationRequestActionsInner**](CreateAutomationRequestActionsInner.md) | List of dispatch actions to execute when trigger and conditions are met | 
+**CooldownSeconds** | Pointer to **NullableInt32** | Minimum throttle cooldown window in seconds between firings for the same entity | [optional] 
 
 ## Methods
 

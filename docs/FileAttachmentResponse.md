@@ -8,6 +8,8 @@ Name | Type | Description | Notes
 **OriginalFilename** | Pointer to **string** |  | [optional] 
 **MimeType** | Pointer to **string** |  | [optional] 
 **Size** | Pointer to **int32** |  | [optional] 
+**Context** | Pointer to **NullableString** |  | [optional] 
+**ExpiresAt** | Pointer to **NullableTime** |  | [optional] 
 
 ## Methods
 
@@ -128,6 +130,76 @@ SetSize sets Size field to given value.
 
 HasSize returns a boolean if a field has been set.
 
+### GetContext
+
+`func (o *FileAttachmentResponse) GetContext() string`
+
+GetContext returns the Context field if non-nil, zero value otherwise.
+
+### GetContextOk
+
+`func (o *FileAttachmentResponse) GetContextOk() (*string, bool)`
+
+GetContextOk returns a tuple with the Context field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetContext
+
+`func (o *FileAttachmentResponse) SetContext(v string)`
+
+SetContext sets Context field to given value.
+
+### HasContext
+
+`func (o *FileAttachmentResponse) HasContext() bool`
+
+HasContext returns a boolean if a field has been set.
+
+### SetContextNil
+
+`func (o *FileAttachmentResponse) SetContextNil(b bool)`
+
+ SetContextNil sets the value for Context to be an explicit nil
+
+### UnsetContext
+`func (o *FileAttachmentResponse) UnsetContext()`
+
+UnsetContext ensures that no value is present for Context, not even an explicit nil
+### GetExpiresAt
+
+`func (o *FileAttachmentResponse) GetExpiresAt() time.Time`
+
+GetExpiresAt returns the ExpiresAt field if non-nil, zero value otherwise.
+
+### GetExpiresAtOk
+
+`func (o *FileAttachmentResponse) GetExpiresAtOk() (*time.Time, bool)`
+
+GetExpiresAtOk returns a tuple with the ExpiresAt field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetExpiresAt
+
+`func (o *FileAttachmentResponse) SetExpiresAt(v time.Time)`
+
+SetExpiresAt sets ExpiresAt field to given value.
+
+### HasExpiresAt
+
+`func (o *FileAttachmentResponse) HasExpiresAt() bool`
+
+HasExpiresAt returns a boolean if a field has been set.
+
+### SetExpiresAtNil
+
+`func (o *FileAttachmentResponse) SetExpiresAtNil(b bool)`
+
+ SetExpiresAtNil sets the value for ExpiresAt to be an explicit nil
+
+### UnsetExpiresAt
+`func (o *FileAttachmentResponse) UnsetExpiresAt()`
+
+UnsetExpiresAt ensures that no value is present for ExpiresAt, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

@@ -4,7 +4,7 @@ All URIs are relative to *https://api.omnismith.io/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**GetProjectSchema**](SchemaAPI.md#GetProjectSchema) | **Get** /discovery/project-schema | Get complete project schema
+[**GetProjectSchema**](SchemaAPI.md#GetProjectSchema) | **Get** /discovery/project-schema | Get complete project schema graph
 
 
 
@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 > ProjectSchemaResponse GetProjectSchema(ctx).Execute()
 
-Get complete project schema
+Get complete project schema graph
 
 
 

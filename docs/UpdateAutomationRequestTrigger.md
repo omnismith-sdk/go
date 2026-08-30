@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Type** | Pointer to **string** |  | [optional] 
-**TemplateId** | Pointer to **NullableString** |  | [optional] 
-**AttributeId** | Pointer to **NullableString** |  | [optional] 
+**Type** | Pointer to **string** | Trigger event type | [optional] 
+**TemplateId** | Pointer to **NullableString** | Template UUID | [optional] 
+**AttributeId** | Pointer to **NullableString** | Attribute UUID for attribute change triggers | [optional] 
 
 ## Methods
 

@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**AttributeId** | Pointer to **string** |  | [optional] 
-**Value** | Pointer to **string** |  | [optional] 
-**SortOrder** | Pointer to **int32** |  | [optional] 
+**Id** | Pointer to **string** | Unique identifier for the list item | [optional] 
+**AttributeId** | Pointer to **string** | UUID of the parent List attribute | [optional] 
+**Value** | Pointer to **string** | Display label / choice value | [optional] 
+**SortOrder** | Pointer to **int32** | Display sorting rank (lower numbers first) | [optional] 
 
 ## Methods
 

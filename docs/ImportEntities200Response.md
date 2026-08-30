@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **Updated** | Pointer to **int32** | Number of entities updated | [optional] 
 **Skipped** | Pointer to **int32** | Number of rows skipped (no changes) | [optional] 
 **Failed** | Pointer to **int32** | Number of rows that failed | [optional] 
+**AffectedEntities** | Pointer to [**[]ImportEntities200ResponseAffectedEntitiesInner**](ImportEntities200ResponseAffectedEntitiesInner.md) | Created or updated entities that may require background indexing before they appear in search results | [optional] 
 **Errors** | Pointer to [**[]ImportEntities200ResponseErrorsInner**](ImportEntities200ResponseErrorsInner.md) |  | [optional] 
 
 ## Methods
@@ -154,6 +155,31 @@ SetFailed sets Failed field to given value.
 `func (o *ImportEntities200Response) HasFailed() bool`
 
 HasFailed returns a boolean if a field has been set.
+
+### GetAffectedEntities
+
+`func (o *ImportEntities200Response) GetAffectedEntities() []ImportEntities200ResponseAffectedEntitiesInner`
+
+GetAffectedEntities returns the AffectedEntities field if non-nil, zero value otherwise.
+
+### GetAffectedEntitiesOk
+
+`func (o *ImportEntities200Response) GetAffectedEntitiesOk() (*[]ImportEntities200ResponseAffectedEntitiesInner, bool)`
+
+GetAffectedEntitiesOk returns a tuple with the AffectedEntities field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAffectedEntities
+
+`func (o *ImportEntities200Response) SetAffectedEntities(v []ImportEntities200ResponseAffectedEntitiesInner)`
+
+SetAffectedEntities sets AffectedEntities field to given value.
+
+### HasAffectedEntities
+
+`func (o *ImportEntities200Response) HasAffectedEntities() bool`
+
+HasAffectedEntities returns a boolean if a field has been set.
 
 ### GetErrors
 

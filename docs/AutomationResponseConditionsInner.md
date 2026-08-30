@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**AttributeId** | Pointer to **string** |  | [optional] 
-**Operator** | Pointer to **string** |  | [optional] 
-**Value** | Pointer to **interface{}** |  | [optional] 
-**Mode** | Pointer to **string** |  | [optional] 
+**AttributeId** | Pointer to **string** | Attribute UUID to evaluate | [optional] 
+**Operator** | Pointer to **string** | Comparison operator | [optional] 
+**Value** | Pointer to **interface{}** | Expected comparison value | [optional] 
+**Mode** | Pointer to **string** | Evaluation mode: current value, absolute numeric change, or percentage change | [optional] 
 
 ## Methods
 

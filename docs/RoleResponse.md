@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**IsOwner** | Pointer to **bool** |  | [optional] 
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
+**Id** | Pointer to **string** | Unique UUIDv7 identifier of the role | [optional] 
+**Name** | Pointer to **string** | Display name of the role | [optional] 
+**IsOwner** | Pointer to **bool** | Whether this is the root project owner role with full administrative privileges | [optional] 
+**CreatedAt** | Pointer to **time.Time** | Timestamp when the role was created | [optional] 
 
 ## Methods
 

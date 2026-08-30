@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**ExpiresAt** | Pointer to **time.Time** |  | [optional] 
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
-**LastUsedAt** | Pointer to **NullableTime** |  | [optional] 
+**Id** | Pointer to **string** | Unique UUIDv7 identifier of the access token | [optional] 
+**Name** | Pointer to **string** | Friendly human-readable label identifying the access token | [optional] 
+**ExpiresAt** | Pointer to **time.Time** | Expiration timestamp in ISO 8601 UTC format | [optional] 
+**CreatedAt** | Pointer to **time.Time** | Creation timestamp in ISO 8601 UTC format | [optional] 
+**LastUsedAt** | Pointer to **NullableTime** | Timestamp when this token was last used to authenticate an API request | [optional] 
 
 ## Methods
 

@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**AttributeId** | Pointer to **string** |  | [optional] 
-**Data** | Pointer to [**[]GetEntityChart200ResponseSeriesInnerDataInner**](GetEntityChart200ResponseSeriesInnerDataInner.md) |  | [optional] 
+**AttributeId** | Pointer to **string** | Metric attribute UUID | [optional] 
+**Data** | Pointer to [**[]GetEntityChart200ResponseSeriesInnerDataInner**](GetEntityChart200ResponseSeriesInnerDataInner.md) | Chronological time-series data points | [optional] 
 
 ## Methods
 

@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Items** | [**[]ListItemInput**](ListItemInput.md) |  | 
+**Items** | [**[]ListItemInput**](ListItemInput.md) | Array of list item specifications to set. | 
 
 ## Methods
 

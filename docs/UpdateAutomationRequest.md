@@ -4,12 +4,12 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Name** | Pointer to **NullableString** |  | [optional] 
-**Description** | Pointer to **NullableString** |  | [optional] 
+**Name** | Pointer to **NullableString** | Updated display name of the automation rule | [optional] 
+**Description** | Pointer to **NullableString** | Updated description of the automation rule | [optional] 
 **Trigger** | Pointer to [**NullableUpdateAutomationRequestTrigger**](UpdateAutomationRequestTrigger.md) |  | [optional] 
-**Conditions** | Pointer to [**[]AutomationResponseConditionsInner**](AutomationResponseConditionsInner.md) |  | [optional] 
-**Actions** | Pointer to [**[]AutomationResponseActionsInner**](AutomationResponseActionsInner.md) |  | [optional] 
-**CooldownSeconds** | Pointer to **NullableInt32** |  | [optional] 
+**Conditions** | Pointer to [**[]UpdateAutomationRequestConditionsInner**](UpdateAutomationRequestConditionsInner.md) | Updated array of condition criteria evaluated against entity state | [optional] 
+**Actions** | Pointer to [**[]UpdateAutomationRequestActionsInner**](UpdateAutomationRequestActionsInner.md) | Updated list of dispatch actions | [optional] 
+**CooldownSeconds** | Pointer to **NullableInt32** | Updated cooldown throttle duration in seconds | [optional] 
 
 ## Methods
 
@@ -137,20 +137,20 @@ HasTrigger returns a boolean if a field has been set.
 UnsetTrigger ensures that no value is present for Trigger, not even an explicit nil
 ### GetConditions
 
-`func (o *UpdateAutomationRequest) GetConditions() []AutomationResponseConditionsInner`
+`func (o *UpdateAutomationRequest) GetConditions() []UpdateAutomationRequestConditionsInner`
 
 GetConditions returns the Conditions field if non-nil, zero value otherwise.
 
 ### GetConditionsOk
 
-`func (o *UpdateAutomationRequest) GetConditionsOk() (*[]AutomationResponseConditionsInner, bool)`
+`func (o *UpdateAutomationRequest) GetConditionsOk() (*[]UpdateAutomationRequestConditionsInner, bool)`
 
 GetConditionsOk returns a tuple with the Conditions field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetConditions
 
-`func (o *UpdateAutomationRequest) SetConditions(v []AutomationResponseConditionsInner)`
+`func (o *UpdateAutomationRequest) SetConditions(v []UpdateAutomationRequestConditionsInner)`
 
 SetConditions sets Conditions field to given value.
 
@@ -172,20 +172,20 @@ HasConditions returns a boolean if a field has been set.
 UnsetConditions ensures that no value is present for Conditions, not even an explicit nil
 ### GetActions
 
-`func (o *UpdateAutomationRequest) GetActions() []AutomationResponseActionsInner`
+`func (o *UpdateAutomationRequest) GetActions() []UpdateAutomationRequestActionsInner`
 
 GetActions returns the Actions field if non-nil, zero value otherwise.
 
 ### GetActionsOk
 
-`func (o *UpdateAutomationRequest) GetActionsOk() (*[]AutomationResponseActionsInner, bool)`
+`func (o *UpdateAutomationRequest) GetActionsOk() (*[]UpdateAutomationRequestActionsInner, bool)`
 
 GetActionsOk returns a tuple with the Actions field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetActions
 
-`func (o *UpdateAutomationRequest) SetActions(v []AutomationResponseActionsInner)`
+`func (o *UpdateAutomationRequest) SetActions(v []UpdateAutomationRequestActionsInner)`
 
 SetActions sets Actions field to given value.
 

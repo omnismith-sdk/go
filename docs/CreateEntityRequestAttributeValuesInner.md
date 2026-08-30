@@ -4,9 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**AttributeId** | Pointer to **string** |  | [optional] 
-**Value** | Pointer to **string** |  | [optional] 
-**UpdatedAt** | Pointer to **NullableTime** |  | [optional] 
+**AttributeId** | Pointer to **NullableString** | Target attribute UUID (provide either attribute_id or attribute_slug) | [optional] 
+**AttributeSlug** | Pointer to **NullableString** | Target attribute slug identifier (provide either attribute_id or attribute_slug) | [optional] 
+**Value** | Pointer to **string** | Serialized attribute value. Formats: String (\&quot;Sample\&quot;), Number (\&quot;123.45\&quot;), Boolean (\&quot;true\&quot;|\&quot;false\&quot;), Date (\&quot;YYYY-MM-DD\&quot;), Datetime (\&quot;YYYY-MM-DD HH:MM:SS\&quot;), List (ListItem UUID), Reference (target Entity UUID) | [optional] 
+**UpdatedAt** | Pointer to **NullableTime** | Observation or creation timestamp in ISO 8601 or YYYY-MM-DD HH:MM:SS format. Defaults to current UTC time if omitted. | [optional] 
 
 ## Methods
 
@@ -52,6 +53,51 @@ SetAttributeId sets AttributeId field to given value.
 
 HasAttributeId returns a boolean if a field has been set.
 
+### SetAttributeIdNil
+
+`func (o *CreateEntityRequestAttributeValuesInner) SetAttributeIdNil(b bool)`
+
+ SetAttributeIdNil sets the value for AttributeId to be an explicit nil
+
+### UnsetAttributeId
+`func (o *CreateEntityRequestAttributeValuesInner) UnsetAttributeId()`
+
+UnsetAttributeId ensures that no value is present for AttributeId, not even an explicit nil
+### GetAttributeSlug
+
+`func (o *CreateEntityRequestAttributeValuesInner) GetAttributeSlug() string`
+
+GetAttributeSlug returns the AttributeSlug field if non-nil, zero value otherwise.
+
+### GetAttributeSlugOk
+
+`func (o *CreateEntityRequestAttributeValuesInner) GetAttributeSlugOk() (*string, bool)`
+
+GetAttributeSlugOk returns a tuple with the AttributeSlug field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAttributeSlug
+
+`func (o *CreateEntityRequestAttributeValuesInner) SetAttributeSlug(v string)`
+
+SetAttributeSlug sets AttributeSlug field to given value.
+
+### HasAttributeSlug
+
+`func (o *CreateEntityRequestAttributeValuesInner) HasAttributeSlug() bool`
+
+HasAttributeSlug returns a boolean if a field has been set.
+
+### SetAttributeSlugNil
+
+`func (o *CreateEntityRequestAttributeValuesInner) SetAttributeSlugNil(b bool)`
+
+ SetAttributeSlugNil sets the value for AttributeSlug to be an explicit nil
+
+### UnsetAttributeSlug
+`func (o *CreateEntityRequestAttributeValuesInner) UnsetAttributeSlug()`
+
+UnsetAttributeSlug ensures that no value is present for AttributeSlug, not even an explicit nil
 ### GetValue
 
 `func (o *CreateEntityRequestAttributeValuesInner) GetValue() string`

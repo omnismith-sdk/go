@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**TargetTemplateId** | Pointer to **string** |  | [optional] 
-**TargetAttributeId** | Pointer to **string** |  | [optional] 
+**TargetTemplateId** | Pointer to **string** | UUID of target template | [optional] 
+**TargetAttributeId** | Pointer to **string** | UUID of target display attribute | [optional] 
 
 ## Methods
 

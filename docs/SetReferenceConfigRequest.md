@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**TargetTemplateId** | **string** | Target template UUID | 
-**TargetAttributeId** | **string** | Target attribute UUID (display attribute) | 
+**TargetTemplateId** | **string** | UUID of the target template whose entities can be referenced. | 
+**TargetAttributeId** | **string** | UUID of the attribute on the target template to display as reference label. | 
 
 ## Methods
 

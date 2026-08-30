@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Field** | Pointer to **string** |  | [optional] 
-**Operator** | Pointer to **string** |  | [optional] 
-**Value** | Pointer to **string** |  | [optional] 
+**Field** | Pointer to **string** | Attribute UUID, attribute slug, or standard field (id, created_at, updated_at) | [optional] 
+**Operator** | Pointer to **string** | Filter comparison operator: eq, neq, gt, lt, like, not-like, empty, not-empty | [optional] 
+**Value** | Pointer to **NullableString** | Comparison value serialized as string | [optional] 
 
 ## Methods
 
@@ -102,6 +102,16 @@ SetValue sets Value field to given value.
 
 HasValue returns a boolean if a field has been set.
 
+### SetValueNil
+
+`func (o *ExportEntitiesRequestFiltersInner) SetValueNil(b bool)`
+
+ SetValueNil sets the value for Value to be an explicit nil
+
+### UnsetValue
+`func (o *ExportEntitiesRequestFiltersInner) UnsetValue()`
+
+UnsetValue ensures that no value is present for Value, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

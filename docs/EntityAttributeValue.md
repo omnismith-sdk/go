@@ -4,9 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Value** | Pointer to **string** |  | [optional] 
-**CustomValue** | Pointer to **NullableString** |  | [optional] 
-**ReferenceEntityId** | Pointer to **NullableString** |  | [optional] 
+**Value** | Pointer to **string** | Raw serialized attribute value (string, numeric string, ISO date, or UUID) | [optional] 
+**CustomValue** | Pointer to **NullableString** | Resolved display label or custom representation (for list options, reference entities, or formatted values) | [optional] 
+**ReferenceEntityId** | Pointer to **NullableString** | Target entity UUID when the attribute kind is reference | [optional] 
+**AttributeId** | Pointer to **NullableString** | Canonical attribute definition UUID | [optional] 
+**AttributeSlug** | Pointer to **NullableString** | Human-readable attribute slug identifier | [optional] 
 
 ## Methods
 
@@ -122,6 +124,76 @@ HasReferenceEntityId returns a boolean if a field has been set.
 `func (o *EntityAttributeValue) UnsetReferenceEntityId()`
 
 UnsetReferenceEntityId ensures that no value is present for ReferenceEntityId, not even an explicit nil
+### GetAttributeId
+
+`func (o *EntityAttributeValue) GetAttributeId() string`
+
+GetAttributeId returns the AttributeId field if non-nil, zero value otherwise.
+
+### GetAttributeIdOk
+
+`func (o *EntityAttributeValue) GetAttributeIdOk() (*string, bool)`
+
+GetAttributeIdOk returns a tuple with the AttributeId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAttributeId
+
+`func (o *EntityAttributeValue) SetAttributeId(v string)`
+
+SetAttributeId sets AttributeId field to given value.
+
+### HasAttributeId
+
+`func (o *EntityAttributeValue) HasAttributeId() bool`
+
+HasAttributeId returns a boolean if a field has been set.
+
+### SetAttributeIdNil
+
+`func (o *EntityAttributeValue) SetAttributeIdNil(b bool)`
+
+ SetAttributeIdNil sets the value for AttributeId to be an explicit nil
+
+### UnsetAttributeId
+`func (o *EntityAttributeValue) UnsetAttributeId()`
+
+UnsetAttributeId ensures that no value is present for AttributeId, not even an explicit nil
+### GetAttributeSlug
+
+`func (o *EntityAttributeValue) GetAttributeSlug() string`
+
+GetAttributeSlug returns the AttributeSlug field if non-nil, zero value otherwise.
+
+### GetAttributeSlugOk
+
+`func (o *EntityAttributeValue) GetAttributeSlugOk() (*string, bool)`
+
+GetAttributeSlugOk returns a tuple with the AttributeSlug field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAttributeSlug
+
+`func (o *EntityAttributeValue) SetAttributeSlug(v string)`
+
+SetAttributeSlug sets AttributeSlug field to given value.
+
+### HasAttributeSlug
+
+`func (o *EntityAttributeValue) HasAttributeSlug() bool`
+
+HasAttributeSlug returns a boolean if a field has been set.
+
+### SetAttributeSlugNil
+
+`func (o *EntityAttributeValue) SetAttributeSlugNil(b bool)`
+
+ SetAttributeSlugNil sets the value for AttributeSlug to be an explicit nil
+
+### UnsetAttributeSlug
+`func (o *EntityAttributeValue) UnsetAttributeSlug()`
+
+UnsetAttributeSlug ensures that no value is present for AttributeSlug, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

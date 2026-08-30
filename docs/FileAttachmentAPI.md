@@ -18,6 +18,8 @@ Method | HTTP request | Description
 
 Delete a file attachment
 
+
+
 ### Example
 
 ```go
@@ -31,7 +33,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | File attachment UUID to delete
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -49,7 +51,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** |  | 
+**id** | **string** | File attachment UUID to delete | 
 
 ### Other Parameters
 
@@ -84,6 +86,8 @@ Name | Type | Description  | Notes
 
 Download a file attachment
 
+
+
 ### Example
 
 ```go
@@ -97,7 +101,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | Unique UUID identifier of the file attachment to download
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -115,7 +119,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** |  | 
+**id** | **string** | Unique UUID identifier of the file attachment to download | 
 
 ### Other Parameters
 
@@ -150,6 +154,8 @@ Name | Type | Description  | Notes
 
 Get file metadata without downloading content
 
+
+
 ### Example
 
 ```go
@@ -163,7 +169,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | Unique UUID identifier of the file attachment
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -183,7 +189,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** |  | 
+**id** | **string** | Unique UUID identifier of the file attachment | 
 
 ### Other Parameters
 
@@ -218,6 +224,8 @@ Name | Type | Description  | Notes
 
 Get image thumbnail
 
+
+
 ### Example
 
 ```go
@@ -231,9 +239,9 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
-	width := int32(56) // int32 |  (optional) (default to 200)
-	height := int32(56) // int32 |  (optional) (default to 200)
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | Unique UUID identifier of the image file attachment
+	width := int32(200) // int32 | Target thumbnail width in pixels (range 50 to 1000, default 200) (optional) (default to 200)
+	height := int32(200) // int32 | Target thumbnail height in pixels (range 50 to 1000, default 200) (optional) (default to 200)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -251,7 +259,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** |  | 
+**id** | **string** | Unique UUID identifier of the image file attachment | 
 
 ### Other Parameters
 
@@ -261,8 +269,8 @@ Other parameters are passed through a pointer to a apiGetFileAttachmentThumbnail
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **width** | **int32** |  | [default to 200]
- **height** | **int32** |  | [default to 200]
+ **width** | **int32** | Target thumbnail width in pixels (range 50 to 1000, default 200) | [default to 200]
+ **height** | **int32** | Target thumbnail height in pixels (range 50 to 1000, default 200) | [default to 200]
 
 ### Return type
 
@@ -284,9 +292,11 @@ Name | Type | Description  | Notes
 
 ## UploadFileAttachment
 
-> FileAttachmentResponse UploadFileAttachment(ctx).File(file).Id(id).Execute()
+> FileAttachmentResponse UploadFileAttachment(ctx).File(file).Id(id).Context(context).TtlHours(ttlHours).Execute()
 
 Upload a file attachment
+
+
 
 ### Example
 
@@ -303,10 +313,12 @@ import (
 func main() {
 	file := os.NewFile(1234, "some_file") // *os.File | 
 	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string |  (optional)
+	context := "context_example" // string |  (optional) (default to "entity")
+	ttlHours := int32(56) // int32 |  (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.FileAttachmentAPI.UploadFileAttachment(context.Background()).File(file).Id(id).Execute()
+	resp, r, err := apiClient.FileAttachmentAPI.UploadFileAttachment(context.Background()).File(file).Id(id).Context(context).TtlHours(ttlHours).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `FileAttachmentAPI.UploadFileAttachment``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -329,6 +341,8 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **file** | ***os.File** |  | 
  **id** | **string** |  | 
+ **context** | **string** |  | [default to &quot;entity&quot;]
+ **ttlHours** | **int32** |  | 
 
 ### Return type
 

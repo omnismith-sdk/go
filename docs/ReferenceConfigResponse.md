@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**AttributeId** | Pointer to **string** |  | [optional] 
-**TargetTemplateId** | Pointer to **string** |  | [optional] 
-**TargetAttributeId** | Pointer to **string** |  | [optional] 
+**AttributeId** | Pointer to **string** | Source attribute UUID | [optional] 
+**TargetTemplateId** | Pointer to **string** | Target template UUID | [optional] 
+**TargetAttributeId** | Pointer to **string** | Target display attribute UUID | [optional] 
 
 ## Methods
 

@@ -4,11 +4,12 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**TemplateId** | Pointer to **string** |  | [optional] 
-**CreatedAt** | Pointer to **string** |  | [optional] 
-**UpdatedAt** | Pointer to **string** |  | [optional] 
-**AttributeValues** | Pointer to [**map[string]EntityAttributeValue**](EntityAttributeValue.md) |  | [optional] 
+**Id** | Pointer to **string** | Unique entity identifier (UUIDv7) | [optional] 
+**TemplateId** | Pointer to **string** | UUID of the template schema to which this entity conforms | [optional] 
+**TemplateSlug** | Pointer to **NullableString** | Human-readable slug of the template schema | [optional] 
+**CreatedAt** | Pointer to **time.Time** | Record creation timestamp in ISO 8601 format | [optional] 
+**UpdatedAt** | Pointer to **time.Time** | Last modification timestamp in ISO 8601 format | [optional] 
+**AttributeValues** | Pointer to [**map[string]EntityAttributeValue**](EntityAttributeValue.md) | Dictionary of attribute values keyed by attribute UUID or attribute slug (controlled by the attribute_key query parameter) | [optional] 
 
 ## Methods
 
@@ -79,22 +80,57 @@ SetTemplateId sets TemplateId field to given value.
 
 HasTemplateId returns a boolean if a field has been set.
 
+### GetTemplateSlug
+
+`func (o *EntityResponse) GetTemplateSlug() string`
+
+GetTemplateSlug returns the TemplateSlug field if non-nil, zero value otherwise.
+
+### GetTemplateSlugOk
+
+`func (o *EntityResponse) GetTemplateSlugOk() (*string, bool)`
+
+GetTemplateSlugOk returns a tuple with the TemplateSlug field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTemplateSlug
+
+`func (o *EntityResponse) SetTemplateSlug(v string)`
+
+SetTemplateSlug sets TemplateSlug field to given value.
+
+### HasTemplateSlug
+
+`func (o *EntityResponse) HasTemplateSlug() bool`
+
+HasTemplateSlug returns a boolean if a field has been set.
+
+### SetTemplateSlugNil
+
+`func (o *EntityResponse) SetTemplateSlugNil(b bool)`
+
+ SetTemplateSlugNil sets the value for TemplateSlug to be an explicit nil
+
+### UnsetTemplateSlug
+`func (o *EntityResponse) UnsetTemplateSlug()`
+
+UnsetTemplateSlug ensures that no value is present for TemplateSlug, not even an explicit nil
 ### GetCreatedAt
 
-`func (o *EntityResponse) GetCreatedAt() string`
+`func (o *EntityResponse) GetCreatedAt() time.Time`
 
 GetCreatedAt returns the CreatedAt field if non-nil, zero value otherwise.
 
 ### GetCreatedAtOk
 
-`func (o *EntityResponse) GetCreatedAtOk() (*string, bool)`
+`func (o *EntityResponse) GetCreatedAtOk() (*time.Time, bool)`
 
 GetCreatedAtOk returns a tuple with the CreatedAt field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCreatedAt
 
-`func (o *EntityResponse) SetCreatedAt(v string)`
+`func (o *EntityResponse) SetCreatedAt(v time.Time)`
 
 SetCreatedAt sets CreatedAt field to given value.
 
@@ -106,20 +142,20 @@ HasCreatedAt returns a boolean if a field has been set.
 
 ### GetUpdatedAt
 
-`func (o *EntityResponse) GetUpdatedAt() string`
+`func (o *EntityResponse) GetUpdatedAt() time.Time`
 
 GetUpdatedAt returns the UpdatedAt field if non-nil, zero value otherwise.
 
 ### GetUpdatedAtOk
 
-`func (o *EntityResponse) GetUpdatedAtOk() (*string, bool)`
+`func (o *EntityResponse) GetUpdatedAtOk() (*time.Time, bool)`
 
 GetUpdatedAtOk returns a tuple with the UpdatedAt field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetUpdatedAt
 
-`func (o *EntityResponse) SetUpdatedAt(v string)`
+`func (o *EntityResponse) SetUpdatedAt(v time.Time)`
 
 SetUpdatedAt sets UpdatedAt field to given value.
 

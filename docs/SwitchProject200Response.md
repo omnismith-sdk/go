@@ -1,0 +1,134 @@
+# SwitchProject200Response
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**AccessToken** | Pointer to **string** | New project-scoped JWT access token | [optional] 
+**ExpiresAt** | Pointer to **int32** | Unix timestamp when the access token expires | [optional] 
+**RefreshToken** | Pointer to **string** | New refresh token for rotating access tokens | [optional] 
+**RefreshExpiresAt** | Pointer to **int32** | Unix timestamp when the refresh token expires | [optional] 
+
+## Methods
+
+### NewSwitchProject200Response
+
+`func NewSwitchProject200Response() *SwitchProject200Response`
+
+NewSwitchProject200Response instantiates a new SwitchProject200Response object
+This constructor will assign default values to properties that have it defined,
+and makes sure properties required by API are set, but the set of arguments
+will change when the set of required properties is changed
+
+### NewSwitchProject200ResponseWithDefaults
+
+`func NewSwitchProject200ResponseWithDefaults() *SwitchProject200Response`
+
+NewSwitchProject200ResponseWithDefaults instantiates a new SwitchProject200Response object
+This constructor will only assign default values to properties that have it defined,
+but it doesn't guarantee that properties required by API are set
+
+### GetAccessToken
+
+`func (o *SwitchProject200Response) GetAccessToken() string`
+
+GetAccessToken returns the AccessToken field if non-nil, zero value otherwise.
+
+### GetAccessTokenOk
+
+`func (o *SwitchProject200Response) GetAccessTokenOk() (*string, bool)`
+
+GetAccessTokenOk returns a tuple with the AccessToken field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAccessToken
+
+`func (o *SwitchProject200Response) SetAccessToken(v string)`
+
+SetAccessToken sets AccessToken field to given value.
+
+### HasAccessToken
+
+`func (o *SwitchProject200Response) HasAccessToken() bool`
+
+HasAccessToken returns a boolean if a field has been set.
+
+### GetExpiresAt
+
+`func (o *SwitchProject200Response) GetExpiresAt() int32`
+
+GetExpiresAt returns the ExpiresAt field if non-nil, zero value otherwise.
+
+### GetExpiresAtOk
+
+`func (o *SwitchProject200Response) GetExpiresAtOk() (*int32, bool)`
+
+GetExpiresAtOk returns a tuple with the ExpiresAt field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetExpiresAt
+
+`func (o *SwitchProject200Response) SetExpiresAt(v int32)`
+
+SetExpiresAt sets ExpiresAt field to given value.
+
+### HasExpiresAt
+
+`func (o *SwitchProject200Response) HasExpiresAt() bool`
+
+HasExpiresAt returns a boolean if a field has been set.
+
+### GetRefreshToken
+
+`func (o *SwitchProject200Response) GetRefreshToken() string`
+
+GetRefreshToken returns the RefreshToken field if non-nil, zero value otherwise.
+
+### GetRefreshTokenOk
+
+`func (o *SwitchProject200Response) GetRefreshTokenOk() (*string, bool)`
+
+GetRefreshTokenOk returns a tuple with the RefreshToken field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRefreshToken
+
+`func (o *SwitchProject200Response) SetRefreshToken(v string)`
+
+SetRefreshToken sets RefreshToken field to given value.
+
+### HasRefreshToken
+
+`func (o *SwitchProject200Response) HasRefreshToken() bool`
+
+HasRefreshToken returns a boolean if a field has been set.
+
+### GetRefreshExpiresAt
+
+`func (o *SwitchProject200Response) GetRefreshExpiresAt() int32`
+
+GetRefreshExpiresAt returns the RefreshExpiresAt field if non-nil, zero value otherwise.
+
+### GetRefreshExpiresAtOk
+
+`func (o *SwitchProject200Response) GetRefreshExpiresAtOk() (*int32, bool)`
+
+GetRefreshExpiresAtOk returns a tuple with the RefreshExpiresAt field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRefreshExpiresAt
+
+`func (o *SwitchProject200Response) SetRefreshExpiresAt(v int32)`
+
+SetRefreshExpiresAt sets RefreshExpiresAt field to given value.
+
+### HasRefreshExpiresAt
+
+`func (o *SwitchProject200Response) HasRefreshExpiresAt() bool`
+
+HasRefreshExpiresAt returns a boolean if a field has been set.
+
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

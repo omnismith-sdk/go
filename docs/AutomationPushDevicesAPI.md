@@ -4,9 +4,9 @@ All URIs are relative to *https://api.omnismith.io/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**ListPushDevices**](AutomationPushDevicesAPI.md#ListPushDevices) | **Get** /automation/push-devices | List the current user&#39;s registered push devices
-[**RegisterPushDevice**](AutomationPushDevicesAPI.md#RegisterPushDevice) | **Post** /automation/push-devices | Register a push notification device token
-[**UnregisterPushDevice**](AutomationPushDevicesAPI.md#UnregisterPushDevice) | **Delete** /automation/push-devices | Unregister a push notification device token
+[**ListPushDevices**](AutomationPushDevicesAPI.md#ListPushDevices) | **Get** /automation/push-devices | List registered push devices
+[**RegisterPushDevice**](AutomationPushDevicesAPI.md#RegisterPushDevice) | **Post** /automation/push-devices | Register a mobile push notification device
+[**UnregisterPushDevice**](AutomationPushDevicesAPI.md#UnregisterPushDevice) | **Delete** /automation/push-devices | Unregister a mobile push notification device
 
 
 
@@ -14,7 +14,9 @@ Method | HTTP request | Description
 
 > ListPushDevices200Response ListPushDevices(ctx).Execute()
 
-List the current user's registered push devices
+List registered push devices
+
+
 
 ### Example
 
@@ -71,9 +73,11 @@ Other parameters are passed through a pointer to a apiListPushDevicesRequest str
 
 ## RegisterPushDevice
 
-> CreateAttributeItem201Response RegisterPushDevice(ctx).RegisterPushDeviceRequest(registerPushDeviceRequest).Execute()
+> RegisterPushDevice201Response RegisterPushDevice(ctx).RegisterPushDeviceRequest(registerPushDeviceRequest).Execute()
 
-Register a push notification device token
+Register a mobile push notification device
+
+
 
 ### Example
 
@@ -88,7 +92,7 @@ import (
 )
 
 func main() {
-	registerPushDeviceRequest := *openapiclient.NewRegisterPushDeviceRequest("Token_example") // RegisterPushDeviceRequest | 
+	registerPushDeviceRequest := *openapiclient.NewRegisterPushDeviceRequest("dK1_f92La...xR8_token") // RegisterPushDeviceRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -97,7 +101,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `AutomationPushDevicesAPI.RegisterPushDevice``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `RegisterPushDevice`: CreateAttributeItem201Response
+	// response from `RegisterPushDevice`: RegisterPushDevice201Response
 	fmt.Fprintf(os.Stdout, "Response from `AutomationPushDevicesAPI.RegisterPushDevice`: %v\n", resp)
 }
 ```
@@ -117,7 +121,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateAttributeItem201Response**](CreateAttributeItem201Response.md)
+[**RegisterPushDevice201Response**](RegisterPushDevice201Response.md)
 
 ### Authorization
 
@@ -137,7 +141,9 @@ Name | Type | Description  | Notes
 
 > UnregisterPushDevice(ctx).UnregisterPushDeviceRequest(unregisterPushDeviceRequest).Execute()
 
-Unregister a push notification device token
+Unregister a mobile push notification device
+
+
 
 ### Example
 
@@ -152,7 +158,7 @@ import (
 )
 
 func main() {
-	unregisterPushDeviceRequest := *openapiclient.NewUnregisterPushDeviceRequest("Token_example") // UnregisterPushDeviceRequest | 
+	unregisterPushDeviceRequest := *openapiclient.NewUnregisterPushDeviceRequest("dK1_f92La...xR8_token") // UnregisterPushDeviceRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)

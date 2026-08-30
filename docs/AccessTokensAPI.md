@@ -4,7 +4,7 @@ All URIs are relative to *https://api.omnismith.io/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**CreateAccessToken**](AccessTokensAPI.md#CreateAccessToken) | **Post** /access-tokens | Create an API access token
+[**CreateAccessToken**](AccessTokensAPI.md#CreateAccessToken) | **Post** /access-tokens | Create a programmatic API access token
 [**DeleteAccessToken**](AccessTokensAPI.md#DeleteAccessToken) | **Delete** /access-tokens/{id} | Delete an API access token
 [**ListAccessTokens**](AccessTokensAPI.md#ListAccessTokens) | **Get** /access-tokens | List API access tokens
 
@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 > CreateAccessToken201Response CreateAccessToken(ctx).CreateAccessTokenRequest(createAccessTokenRequest).Execute()
 
-Create an API access token
+Create a programmatic API access token
 
 
 
@@ -32,7 +32,7 @@ import (
 )
 
 func main() {
-	createAccessTokenRequest := *openapiclient.NewCreateAccessTokenRequest("Name_example", time.Now()) // CreateAccessTokenRequest | 
+	createAccessTokenRequest := *openapiclient.NewCreateAccessTokenRequest("CI/CD Deployment Key", time.Now()) // CreateAccessTokenRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -83,6 +83,8 @@ Name | Type | Description  | Notes
 
 Delete an API access token
 
+
+
 ### Example
 
 ```go
@@ -96,7 +98,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
+	id := "0192a543-7f28-72b1-9b7e-97c997321034" // string | Unique UUIDv7 identifier of the access token to delete
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -114,7 +116,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** |  | 
+**id** | **string** | Unique UUIDv7 identifier of the access token to delete | 
 
 ### Other Parameters
 
@@ -136,7 +138,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)

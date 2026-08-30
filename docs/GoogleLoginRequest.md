@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Credential** | **string** | Google ID token credential from Google Sign-In | 
+**Credential** | **string** | Cryptographically signed Google ID token (JWT) issued by Google Identity Services SDK | 
 
 ## Methods
 

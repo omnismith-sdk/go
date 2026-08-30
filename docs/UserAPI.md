@@ -16,6 +16,8 @@ Method | HTTP request | Description
 
 Confirm a user's email address using a confirmation token
 
+
+
 ### Example
 
 ```go
@@ -29,7 +31,7 @@ import (
 )
 
 func main() {
-	token := "token_example" // string | The email confirmation token
+	token := "cf_token_abc123xyz" // string | The email confirmation token received via email
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -54,7 +56,7 @@ Other parameters are passed through a pointer to a apiConfirmUserEmailRequest st
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **token** | **string** | The email confirmation token | 
+ **token** | **string** | The email confirmation token received via email | 
 
 ### Return type
 
@@ -76,9 +78,11 @@ No authorization required
 
 ## RegisterUser
 
-> CreateAttributeItem201Response RegisterUser(ctx).RegisterUserRequest(registerUserRequest).Execute()
+> CreateProject201Response RegisterUser(ctx).RegisterUserRequest(registerUserRequest).Execute()
 
 Register a new user
+
+
 
 ### Example
 
@@ -102,7 +106,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `UserAPI.RegisterUser``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `RegisterUser`: CreateAttributeItem201Response
+	// response from `RegisterUser`: CreateProject201Response
 	fmt.Fprintf(os.Stdout, "Response from `UserAPI.RegisterUser`: %v\n", resp)
 }
 ```
@@ -122,7 +126,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateAttributeItem201Response**](CreateAttributeItem201Response.md)
+[**CreateProject201Response**](CreateProject201Response.md)
 
 ### Authorization
 
@@ -143,6 +147,8 @@ No authorization required
 > ResendConfirmationEmail200Response ResendConfirmationEmail(ctx).ResendConfirmationEmailRequest(resendConfirmationEmailRequest).Execute()
 
 Resend the email confirmation link
+
+
 
 ### Example
 

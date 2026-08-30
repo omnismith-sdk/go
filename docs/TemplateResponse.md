@@ -4,14 +4,17 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**Description** | Pointer to **NullableString** |  | [optional] 
-**Category** | Pointer to **NullableString** |  | [optional] 
-**AttributeIds** | Pointer to **[]string** |  | [optional] 
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
-**UpdatedAt** | Pointer to **time.Time** |  | [optional] 
-**DeletedAt** | Pointer to **NullableTime** |  | [optional] 
+**Id** | Pointer to **string** | Template UUID | [optional] 
+**Slug** | Pointer to **NullableString** | Unique template slug identifier | [optional] 
+**Name** | Pointer to **string** | Human-readable template name | [optional] 
+**Description** | Pointer to **NullableString** | Template description | [optional] 
+**Category** | Pointer to **NullableString** | Template category for UI grouping | [optional] 
+**AttributeIds** | Pointer to **[]string** | Flat list of associated attribute UUIDs | [optional] 
+**Attributes** | Pointer to [**[]TemplateResponseAttributesInner**](TemplateResponseAttributesInner.md) | Template attributes with their per-template default values. | [optional] 
+**Groups** | Pointer to [**[]TemplateGroupResponse**](TemplateGroupResponse.md) | Ordered attribute groups for organizing template fields into visual UI sections. | [optional] 
+**CreatedAt** | Pointer to **time.Time** | Creation timestamp | [optional] 
+**UpdatedAt** | Pointer to **time.Time** | Last update timestamp | [optional] 
+**DeletedAt** | Pointer to **NullableTime** | Deletion timestamp if soft-deleted | [optional] 
 
 ## Methods
 
@@ -57,6 +60,41 @@ SetId sets Id field to given value.
 
 HasId returns a boolean if a field has been set.
 
+### GetSlug
+
+`func (o *TemplateResponse) GetSlug() string`
+
+GetSlug returns the Slug field if non-nil, zero value otherwise.
+
+### GetSlugOk
+
+`func (o *TemplateResponse) GetSlugOk() (*string, bool)`
+
+GetSlugOk returns a tuple with the Slug field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSlug
+
+`func (o *TemplateResponse) SetSlug(v string)`
+
+SetSlug sets Slug field to given value.
+
+### HasSlug
+
+`func (o *TemplateResponse) HasSlug() bool`
+
+HasSlug returns a boolean if a field has been set.
+
+### SetSlugNil
+
+`func (o *TemplateResponse) SetSlugNil(b bool)`
+
+ SetSlugNil sets the value for Slug to be an explicit nil
+
+### UnsetSlug
+`func (o *TemplateResponse) UnsetSlug()`
+
+UnsetSlug ensures that no value is present for Slug, not even an explicit nil
 ### GetName
 
 `func (o *TemplateResponse) GetName() string`
@@ -176,6 +214,56 @@ SetAttributeIds sets AttributeIds field to given value.
 `func (o *TemplateResponse) HasAttributeIds() bool`
 
 HasAttributeIds returns a boolean if a field has been set.
+
+### GetAttributes
+
+`func (o *TemplateResponse) GetAttributes() []TemplateResponseAttributesInner`
+
+GetAttributes returns the Attributes field if non-nil, zero value otherwise.
+
+### GetAttributesOk
+
+`func (o *TemplateResponse) GetAttributesOk() (*[]TemplateResponseAttributesInner, bool)`
+
+GetAttributesOk returns a tuple with the Attributes field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAttributes
+
+`func (o *TemplateResponse) SetAttributes(v []TemplateResponseAttributesInner)`
+
+SetAttributes sets Attributes field to given value.
+
+### HasAttributes
+
+`func (o *TemplateResponse) HasAttributes() bool`
+
+HasAttributes returns a boolean if a field has been set.
+
+### GetGroups
+
+`func (o *TemplateResponse) GetGroups() []TemplateGroupResponse`
+
+GetGroups returns the Groups field if non-nil, zero value otherwise.
+
+### GetGroupsOk
+
+`func (o *TemplateResponse) GetGroupsOk() (*[]TemplateGroupResponse, bool)`
+
+GetGroupsOk returns a tuple with the Groups field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetGroups
+
+`func (o *TemplateResponse) SetGroups(v []TemplateGroupResponse)`
+
+SetGroups sets Groups field to given value.
+
+### HasGroups
+
+`func (o *TemplateResponse) HasGroups() bool`
+
+HasGroups returns a boolean if a field has been set.
 
 ### GetCreatedAt
 

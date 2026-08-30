@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | Pointer to **[]interface{}** |  | [optional] 
+**Data** | Pointer to [**[]MarketplaceBlueprintSummaryResponse**](MarketplaceBlueprintSummaryResponse.md) | Array of blueprint summaries | [optional] 
 **Meta** | Pointer to [**SearchMarketplaceBlueprints200ResponseMeta**](SearchMarketplaceBlueprints200ResponseMeta.md) |  | [optional] 
 
 ## Methods
@@ -28,20 +28,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetData
 
-`func (o *SearchMarketplaceBlueprints200Response) GetData() []interface{}`
+`func (o *SearchMarketplaceBlueprints200Response) GetData() []MarketplaceBlueprintSummaryResponse`
 
 GetData returns the Data field if non-nil, zero value otherwise.
 
 ### GetDataOk
 
-`func (o *SearchMarketplaceBlueprints200Response) GetDataOk() (*[]interface{}, bool)`
+`func (o *SearchMarketplaceBlueprints200Response) GetDataOk() (*[]MarketplaceBlueprintSummaryResponse, bool)`
 
 GetDataOk returns a tuple with the Data field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetData
 
-`func (o *SearchMarketplaceBlueprints200Response) SetData(v []interface{})`
+`func (o *SearchMarketplaceBlueprints200Response) SetData(v []MarketplaceBlueprintSummaryResponse)`
 
 SetData sets Data field to given value.
 

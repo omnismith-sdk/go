@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Name** | **string** |  | 
-**Description** | Pointer to **string** |  | [optional] 
-**Config** | Pointer to **map[string]interface{}** |  | [optional] 
+**Name** | **string** | Display name of the dashboard | 
+**Description** | Pointer to **string** | Detailed description of the dashboard purpose and telemetry scope | [optional] 
+**Config** | Pointer to [**CreateDashboardRequestConfig**](CreateDashboardRequestConfig.md) |  | [optional] 
 
 ## Methods
 
@@ -74,20 +74,20 @@ HasDescription returns a boolean if a field has been set.
 
 ### GetConfig
 
-`func (o *CreateDashboardRequest) GetConfig() map[string]interface{}`
+`func (o *CreateDashboardRequest) GetConfig() CreateDashboardRequestConfig`
 
 GetConfig returns the Config field if non-nil, zero value otherwise.
 
 ### GetConfigOk
 
-`func (o *CreateDashboardRequest) GetConfigOk() (*map[string]interface{}, bool)`
+`func (o *CreateDashboardRequest) GetConfigOk() (*CreateDashboardRequestConfig, bool)`
 
 GetConfigOk returns a tuple with the Config field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetConfig
 
-`func (o *CreateDashboardRequest) SetConfig(v map[string]interface{})`
+`func (o *CreateDashboardRequest) SetConfig(v CreateDashboardRequestConfig)`
 
 SetConfig sets Config field to given value.
 

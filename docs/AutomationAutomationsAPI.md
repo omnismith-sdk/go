@@ -4,11 +4,11 @@ All URIs are relative to *https://api.omnismith.io/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**CreateAutomation**](AutomationAutomationsAPI.md#CreateAutomation) | **Post** /automation/automations | Create a new automation
+[**CreateAutomation**](AutomationAutomationsAPI.md#CreateAutomation) | **Post** /automation/automations | Create an automation rule
 [**DeleteAutomation**](AutomationAutomationsAPI.md#DeleteAutomation) | **Delete** /automation/automations/{id} | Delete an automation
 [**GetAutomation**](AutomationAutomationsAPI.md#GetAutomation) | **Get** /automation/automations/{id} | Get an automation by ID
-[**ListAutomationExecutions**](AutomationAutomationsAPI.md#ListAutomationExecutions) | **Get** /automation/automations/{id}/executions | List automation executions
-[**ListAutomations**](AutomationAutomationsAPI.md#ListAutomations) | **Get** /automation/automations | List automations
+[**ListAutomationExecutions**](AutomationAutomationsAPI.md#ListAutomationExecutions) | **Get** /automation/automations/{id}/executions | List automation execution logs
+[**ListAutomations**](AutomationAutomationsAPI.md#ListAutomations) | **Get** /automation/automations | List project automations
 [**ToggleAutomation**](AutomationAutomationsAPI.md#ToggleAutomation) | **Patch** /automation/automations/{id}/toggle | Toggle automation enabled status
 [**UpdateAutomation**](AutomationAutomationsAPI.md#UpdateAutomation) | **Put** /automation/automations/{id} | Update an automation
 
@@ -16,9 +16,11 @@ Method | HTTP request | Description
 
 ## CreateAutomation
 
-> CreateAttributeItem201Response CreateAutomation(ctx).CreateAutomationRequest(createAutomationRequest).Execute()
+> CreateAutomation201Response CreateAutomation(ctx).CreateAutomationRequest(createAutomationRequest).Execute()
 
-Create a new automation
+Create an automation rule
+
+
 
 ### Example
 
@@ -33,7 +35,7 @@ import (
 )
 
 func main() {
-	createAutomationRequest := *openapiclient.NewCreateAutomationRequest("Notify on status change", *openapiclient.NewCreateAutomationRequestTrigger("on_attribute_changed"), []openapiclient.CreateAutomationRequestConditionsInner{*openapiclient.NewCreateAutomationRequestConditionsInner("AttributeId_example", "eq", "current")}, []openapiclient.CreateAutomationRequestActionsInner{*openapiclient.NewCreateAutomationRequestActionsInner("telegram", map[string]interface{}(123))}) // CreateAutomationRequest | 
+	createAutomationRequest := *openapiclient.NewCreateAutomationRequest("Notify on status change", *openapiclient.NewCreateAutomationRequestTrigger("on_attribute_changed"), []openapiclient.CreateAutomationRequestConditionsInner{*openapiclient.NewCreateAutomationRequestConditionsInner("01912ecb-4654-7890-a1b2-c3d4e5f60077", "eq", "current")}, []openapiclient.CreateAutomationRequestActionsInner{*openapiclient.NewCreateAutomationRequestActionsInner("telegram", map[string]interface{}(123))}) // CreateAutomationRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -42,7 +44,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `AutomationAutomationsAPI.CreateAutomation``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `CreateAutomation`: CreateAttributeItem201Response
+	// response from `CreateAutomation`: CreateAutomation201Response
 	fmt.Fprintf(os.Stdout, "Response from `AutomationAutomationsAPI.CreateAutomation`: %v\n", resp)
 }
 ```
@@ -62,7 +64,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateAttributeItem201Response**](CreateAttributeItem201Response.md)
+[**CreateAutomation201Response**](CreateAutomation201Response.md)
 
 ### Authorization
 
@@ -84,6 +86,8 @@ Name | Type | Description  | Notes
 
 Delete an automation
 
+
+
 ### Example
 
 ```go
@@ -97,7 +101,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
+	id := "01912ecb-4654-7890-a1b2-c3d4e5f60001" // string | Unique automation UUID to delete
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -115,7 +119,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** |  | 
+**id** | **string** | Unique automation UUID to delete | 
 
 ### Other Parameters
 
@@ -150,6 +154,8 @@ Name | Type | Description  | Notes
 
 Get an automation by ID
 
+
+
 ### Example
 
 ```go
@@ -163,7 +169,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
+	id := "01912ecb-4654-7890-a1b2-c3d4e5f60001" // string | Unique automation UUID
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -183,7 +189,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** |  | 
+**id** | **string** | Unique automation UUID | 
 
 ### Other Parameters
 
@@ -216,7 +222,9 @@ Name | Type | Description  | Notes
 
 > ListAutomationExecutions200Response ListAutomationExecutions(ctx, id).Limit(limit).Offset(offset).Status(status).Execute()
 
-List automation executions
+List automation execution logs
+
+
 
 ### Example
 
@@ -231,10 +239,10 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Automation ID
-	limit := int32(56) // int32 | Number of results (optional) (default to 20)
-	offset := int32(56) // int32 | Pagination offset (optional) (default to 0)
-	status := "status_example" // string | Filter by status (optional)
+	id := "01912ecb-4654-7890-a1b2-c3d4e5f60001" // string | Automation UUID to fetch execution history for
+	limit := int32(20) // int32 | Maximum number of execution log entries to return per page (optional) (default to 20)
+	offset := int32(0) // int32 | Number of execution log records to skip for pagination (optional) (default to 0)
+	status := "success" // string | Filter execution logs by execution outcome status (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -254,7 +262,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Automation ID | 
+**id** | **string** | Automation UUID to fetch execution history for | 
 
 ### Other Parameters
 
@@ -264,9 +272,9 @@ Other parameters are passed through a pointer to a apiListAutomationExecutionsRe
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **limit** | **int32** | Number of results | [default to 20]
- **offset** | **int32** | Pagination offset | [default to 0]
- **status** | **string** | Filter by status | 
+ **limit** | **int32** | Maximum number of execution log entries to return per page | [default to 20]
+ **offset** | **int32** | Number of execution log records to skip for pagination | [default to 0]
+ **status** | **string** | Filter execution logs by execution outcome status | 
 
 ### Return type
 
@@ -290,7 +298,9 @@ Name | Type | Description  | Notes
 
 > []AutomationResponse ListAutomations(ctx).TemplateId(templateId).IsEnabled(isEnabled).Execute()
 
-List automations
+List project automations
+
+
 
 ### Example
 
@@ -305,8 +315,8 @@ import (
 )
 
 func main() {
-	templateId := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Filter by template ID (optional)
-	isEnabled := true // bool | Filter by enabled status (optional)
+	templateId := "01912ecb-4654-7890-a1b2-c3d4e5f60088" // string | Filter automations scoped to a specific entity template UUID (optional)
+	isEnabled := true // bool | Filter automations by active enabled status (true for active rules, false for paused rules) (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -331,8 +341,8 @@ Other parameters are passed through a pointer to a apiListAutomationsRequest str
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **templateId** | **string** | Filter by template ID | 
- **isEnabled** | **bool** | Filter by enabled status | 
+ **templateId** | **string** | Filter automations scoped to a specific entity template UUID | 
+ **isEnabled** | **bool** | Filter automations by active enabled status (true for active rules, false for paused rules) | 
 
 ### Return type
 
@@ -358,6 +368,8 @@ Name | Type | Description  | Notes
 
 Toggle automation enabled status
 
+
+
 ### Example
 
 ```go
@@ -371,7 +383,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
+	id := "01912ecb-4654-7890-a1b2-c3d4e5f60001" // string | Unique automation UUID to toggle
 	toggleAutomationRequest := *openapiclient.NewToggleAutomationRequest(true) // ToggleAutomationRequest | 
 
 	configuration := openapiclient.NewConfiguration()
@@ -392,7 +404,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** |  | 
+**id** | **string** | Unique automation UUID to toggle | 
 
 ### Other Parameters
 
@@ -428,6 +440,8 @@ Name | Type | Description  | Notes
 
 Update an automation
 
+
+
 ### Example
 
 ```go
@@ -441,7 +455,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
+	id := "01912ecb-4654-7890-a1b2-c3d4e5f60001" // string | Unique automation UUID to update
 	updateAutomationRequest := *openapiclient.NewUpdateAutomationRequest() // UpdateAutomationRequest | 
 
 	configuration := openapiclient.NewConfiguration()
@@ -460,7 +474,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** |  | 
+**id** | **string** | Unique automation UUID to update | 
 
 ### Other Parameters
 

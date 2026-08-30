@@ -4,13 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Name** | **string** |  | 
-**AttributeType** | **int32** | 0: Dimension, 1: Metric, 2: List, 3: Reference | 
-**DataType** | **int32** | 0: String, 1: Number, 2: Boolean, 3: Datetime, 4: Date, 5: File, 6: Image | 
-**TemplateIds** | Pointer to **[]string** |  | [optional] 
-**Description** | Pointer to **NullableString** |  | [optional] 
+**Name** | **string** | Human-readable name of the attribute. | 
+**AttributeType** | **int32** | Attribute kind. 0: Dimension (standard field), 1: Metric (time-series observation), 2: List (enumerated choice option), 3: Reference (foreign entity pointer). | 
+**DataType** | **int32** | Storage data type. 0: String, 1: Number, 2: Boolean, 3: Datetime, 4: Date, 5: File, 6: Image, 7: Markdown. | 
+**TemplateIds** | Pointer to **[]string** | Optional array of template UUIDs to immediately associate this attribute with. | [optional] 
+**Description** | Pointer to **NullableString** | Optional descriptive summary of the attribute and its business purpose. | [optional] 
 **ReferenceConfig** | Pointer to [**NullableCreateAttributeRequestReferenceConfig**](CreateAttributeRequestReferenceConfig.md) |  | [optional] 
-**Id** | Pointer to **string** |  | [optional] 
+**Id** | Pointer to **NullableString** | Optional explicit client-generated UUIDv7. If omitted, a UUIDv7 is automatically generated. | [optional] 
+**Slug** | Pointer to **NullableString** | Unique slug identifier within the project (letters, numbers, underscores). If omitted, generated automatically from name. | [optional] 
 
 ## Methods
 
@@ -211,6 +212,51 @@ SetId sets Id field to given value.
 
 HasId returns a boolean if a field has been set.
 
+### SetIdNil
+
+`func (o *CreateAttributeRequest) SetIdNil(b bool)`
+
+ SetIdNil sets the value for Id to be an explicit nil
+
+### UnsetId
+`func (o *CreateAttributeRequest) UnsetId()`
+
+UnsetId ensures that no value is present for Id, not even an explicit nil
+### GetSlug
+
+`func (o *CreateAttributeRequest) GetSlug() string`
+
+GetSlug returns the Slug field if non-nil, zero value otherwise.
+
+### GetSlugOk
+
+`func (o *CreateAttributeRequest) GetSlugOk() (*string, bool)`
+
+GetSlugOk returns a tuple with the Slug field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSlug
+
+`func (o *CreateAttributeRequest) SetSlug(v string)`
+
+SetSlug sets Slug field to given value.
+
+### HasSlug
+
+`func (o *CreateAttributeRequest) HasSlug() bool`
+
+HasSlug returns a boolean if a field has been set.
+
+### SetSlugNil
+
+`func (o *CreateAttributeRequest) SetSlugNil(b bool)`
+
+ SetSlugNil sets the value for Slug to be an explicit nil
+
+### UnsetSlug
+`func (o *CreateAttributeRequest) UnsetSlug()`
+
+UnsetSlug ensures that no value is present for Slug, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

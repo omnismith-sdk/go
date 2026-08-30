@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**ApiKey** | Pointer to **string** | The raw API key. Shown once only. | [optional] 
-**ExpiresAt** | Pointer to **time.Time** |  | [optional] 
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
+**Id** | Pointer to **string** | Unique UUIDv7 identifier of the created access token | [optional] 
+**Name** | Pointer to **string** | Friendly human-readable label assigned to the access token | [optional] 
+**ApiKey** | Pointer to **string** | The raw secret API key starting with &#x60;omni_&#x60;. Displayed once only upon creation. | [optional] 
+**ExpiresAt** | Pointer to **time.Time** | Expiration timestamp in ISO 8601 UTC format | [optional] 
+**CreatedAt** | Pointer to **time.Time** | Creation timestamp in ISO 8601 UTC format | [optional] 
 
 ## Methods
 

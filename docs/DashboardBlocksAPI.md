@@ -15,9 +15,11 @@ Method | HTTP request | Description
 
 ## CreateDashboardBlock
 
-> CreateAttributeItem201Response CreateDashboardBlock(ctx, dashboardId).CreateDashboardBlockRequest(createDashboardBlockRequest).Execute()
+> CreateDashboardBlock201Response CreateDashboardBlock(ctx, dashboardId).CreateDashboardBlockRequest(createDashboardBlockRequest).Execute()
 
 Create a new block in a dashboard
+
+
 
 ### Example
 
@@ -32,8 +34,8 @@ import (
 )
 
 func main() {
-	dashboardId := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Dashboard ID
-	createDashboardBlockRequest := *openapiclient.NewCreateDashboardBlockRequest("Type_example", "My Block") // CreateDashboardBlockRequest | 
+	dashboardId := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6b" // string | Target dashboard unique identifier (UUID)
+	createDashboardBlockRequest := *openapiclient.NewCreateDashboardBlockRequest("chart", "CPU Utilization — Time Series") // CreateDashboardBlockRequest | Dashboard block creation payload
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -42,7 +44,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `DashboardBlocksAPI.CreateDashboardBlock``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `CreateDashboardBlock`: CreateAttributeItem201Response
+	// response from `CreateDashboardBlock`: CreateDashboardBlock201Response
 	fmt.Fprintf(os.Stdout, "Response from `DashboardBlocksAPI.CreateDashboardBlock`: %v\n", resp)
 }
 ```
@@ -53,7 +55,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**dashboardId** | **string** | Dashboard ID | 
+**dashboardId** | **string** | Target dashboard unique identifier (UUID) | 
 
 ### Other Parameters
 
@@ -63,11 +65,11 @@ Other parameters are passed through a pointer to a apiCreateDashboardBlockReques
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **createDashboardBlockRequest** | [**CreateDashboardBlockRequest**](CreateDashboardBlockRequest.md) |  | 
+ **createDashboardBlockRequest** | [**CreateDashboardBlockRequest**](CreateDashboardBlockRequest.md) | Dashboard block creation payload | 
 
 ### Return type
 
-[**CreateAttributeItem201Response**](CreateAttributeItem201Response.md)
+[**CreateDashboardBlock201Response**](CreateDashboardBlock201Response.md)
 
 ### Authorization
 
@@ -89,6 +91,8 @@ Name | Type | Description  | Notes
 
 Delete a dashboard block
 
+
+
 ### Example
 
 ```go
@@ -102,8 +106,8 @@ import (
 )
 
 func main() {
-	dashboardId := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Dashboard ID
-	blockId := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Block ID
+	dashboardId := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6b" // string | Parent dashboard unique identifier (UUID)
+	blockId := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6c" // string | Dashboard block unique identifier (UUID) to delete
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -121,8 +125,8 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**dashboardId** | **string** | Dashboard ID | 
-**blockId** | **string** | Block ID | 
+**dashboardId** | **string** | Parent dashboard unique identifier (UUID) | 
+**blockId** | **string** | Dashboard block unique identifier (UUID) to delete | 
 
 ### Other Parameters
 
@@ -145,7 +149,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -157,6 +161,8 @@ Name | Type | Description  | Notes
 > DashboardBlockResponse GetDashboardBlock(ctx, dashboardId, blockId).Execute()
 
 Get a dashboard block by ID
+
+
 
 ### Example
 
@@ -171,8 +177,8 @@ import (
 )
 
 func main() {
-	dashboardId := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Dashboard ID
-	blockId := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Block ID
+	dashboardId := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6b" // string | Parent dashboard unique identifier (UUID)
+	blockId := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6c" // string | Dashboard block unique identifier (UUID)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -192,8 +198,8 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**dashboardId** | **string** | Dashboard ID | 
-**blockId** | **string** | Block ID | 
+**dashboardId** | **string** | Parent dashboard unique identifier (UUID) | 
+**blockId** | **string** | Dashboard block unique identifier (UUID) | 
 
 ### Other Parameters
 
@@ -229,6 +235,8 @@ Name | Type | Description  | Notes
 
 List all blocks in a dashboard
 
+
+
 ### Example
 
 ```go
@@ -242,7 +250,7 @@ import (
 )
 
 func main() {
-	dashboardId := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Dashboard ID
+	dashboardId := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6b" // string | Parent dashboard unique identifier (UUID)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -262,7 +270,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**dashboardId** | **string** | Dashboard ID | 
+**dashboardId** | **string** | Parent dashboard unique identifier (UUID) | 
 
 ### Other Parameters
 
@@ -312,8 +320,8 @@ import (
 )
 
 func main() {
-	dashboardId := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Dashboard ID
-	blockId := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Block ID
+	dashboardId := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6b" // string | Parent dashboard unique identifier (UUID)
+	blockId := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6c" // string | Dashboard block unique identifier (UUID) to resolve and compute
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -333,8 +341,8 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**dashboardId** | **string** | Dashboard ID | 
-**blockId** | **string** | Block ID | 
+**dashboardId** | **string** | Parent dashboard unique identifier (UUID) | 
+**blockId** | **string** | Dashboard block unique identifier (UUID) to resolve and compute | 
 
 ### Other Parameters
 
@@ -370,6 +378,8 @@ Name | Type | Description  | Notes
 
 Update a dashboard block
 
+
+
 ### Example
 
 ```go
@@ -383,9 +393,9 @@ import (
 )
 
 func main() {
-	dashboardId := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Dashboard ID
-	blockId := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Block ID
-	updateDashboardBlockRequest := *openapiclient.NewUpdateDashboardBlockRequest() // UpdateDashboardBlockRequest | 
+	dashboardId := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6b" // string | Parent dashboard unique identifier (UUID)
+	blockId := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6c" // string | Dashboard block unique identifier (UUID) to update
+	updateDashboardBlockRequest := *openapiclient.NewUpdateDashboardBlockRequest() // UpdateDashboardBlockRequest | Dashboard block update payload
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -403,8 +413,8 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**dashboardId** | **string** | Dashboard ID | 
-**blockId** | **string** | Block ID | 
+**dashboardId** | **string** | Parent dashboard unique identifier (UUID) | 
+**blockId** | **string** | Dashboard block unique identifier (UUID) to update | 
 
 ### Other Parameters
 
@@ -415,7 +425,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
 
- **updateDashboardBlockRequest** | [**UpdateDashboardBlockRequest**](UpdateDashboardBlockRequest.md) |  | 
+ **updateDashboardBlockRequest** | [**UpdateDashboardBlockRequest**](UpdateDashboardBlockRequest.md) | Dashboard block update payload | 
 
 ### Return type
 

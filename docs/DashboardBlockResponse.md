@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**DashboardId** | Pointer to **string** |  | [optional] 
-**Type** | Pointer to **string** |  | [optional] 
-**Title** | Pointer to **string** |  | [optional] 
-**Config** | Pointer to **map[string]interface{}** |  | [optional] 
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
-**UpdatedAt** | Pointer to **NullableTime** |  | [optional] 
+**Id** | Pointer to **string** | Dashboard block unique identifier | [optional] 
+**DashboardId** | Pointer to **string** | Parent dashboard unique identifier | [optional] 
+**Type** | Pointer to **string** | Visualization widget type | [optional] 
+**Title** | Pointer to **string** | Display title for the block widget header | [optional] 
+**Config** | Pointer to **map[string]interface{}** | Block layout (x, y, cols, rows) and query configuration object | [optional] 
+**CreatedAt** | Pointer to **time.Time** | ISO 8601 creation timestamp | [optional] 
+**UpdatedAt** | Pointer to **NullableTime** | ISO 8601 last update timestamp | [optional] 
 
 ## Methods
 

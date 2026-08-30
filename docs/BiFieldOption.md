@@ -1,0 +1,108 @@
+# BiFieldOption
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**Id** | Pointer to **string** | List option UUID | [optional] 
+**Value** | Pointer to **string** | Display label of the list option | [optional] 
+**SortOrder** | Pointer to **int32** | Display sort order index | [optional] 
+
+## Methods
+
+### NewBiFieldOption
+
+`func NewBiFieldOption() *BiFieldOption`
+
+NewBiFieldOption instantiates a new BiFieldOption object
+This constructor will assign default values to properties that have it defined,
+and makes sure properties required by API are set, but the set of arguments
+will change when the set of required properties is changed
+
+### NewBiFieldOptionWithDefaults
+
+`func NewBiFieldOptionWithDefaults() *BiFieldOption`
+
+NewBiFieldOptionWithDefaults instantiates a new BiFieldOption object
+This constructor will only assign default values to properties that have it defined,
+but it doesn't guarantee that properties required by API are set
+
+### GetId
+
+`func (o *BiFieldOption) GetId() string`
+
+GetId returns the Id field if non-nil, zero value otherwise.
+
+### GetIdOk
+
+`func (o *BiFieldOption) GetIdOk() (*string, bool)`
+
+GetIdOk returns a tuple with the Id field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetId
+
+`func (o *BiFieldOption) SetId(v string)`
+
+SetId sets Id field to given value.
+
+### HasId
+
+`func (o *BiFieldOption) HasId() bool`
+
+HasId returns a boolean if a field has been set.
+
+### GetValue
+
+`func (o *BiFieldOption) GetValue() string`
+
+GetValue returns the Value field if non-nil, zero value otherwise.
+
+### GetValueOk
+
+`func (o *BiFieldOption) GetValueOk() (*string, bool)`
+
+GetValueOk returns a tuple with the Value field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetValue
+
+`func (o *BiFieldOption) SetValue(v string)`
+
+SetValue sets Value field to given value.
+
+### HasValue
+
+`func (o *BiFieldOption) HasValue() bool`
+
+HasValue returns a boolean if a field has been set.
+
+### GetSortOrder
+
+`func (o *BiFieldOption) GetSortOrder() int32`
+
+GetSortOrder returns the SortOrder field if non-nil, zero value otherwise.
+
+### GetSortOrderOk
+
+`func (o *BiFieldOption) GetSortOrderOk() (*int32, bool)`
+
+GetSortOrderOk returns a tuple with the SortOrder field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSortOrder
+
+`func (o *BiFieldOption) SetSortOrder(v int32)`
+
+SetSortOrder sets SortOrder field to given value.
+
+### HasSortOrder
+
+`func (o *BiFieldOption) HasSortOrder() bool`
+
+HasSortOrder returns a boolean if a field has been set.
+
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

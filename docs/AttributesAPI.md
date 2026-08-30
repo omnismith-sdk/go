@@ -9,22 +9,25 @@ Method | HTTP request | Description
 [**DeleteAttribute**](AttributesAPI.md#DeleteAttribute) | **Delete** /attributes/{id} | Delete an attribute
 [**DeleteAttributeItem**](AttributesAPI.md#DeleteAttributeItem) | **Delete** /attributes/{id}/items/{itemId} | Remove a list item from an attribute
 [**DeleteAttributeReferenceConfig**](AttributesAPI.md#DeleteAttributeReferenceConfig) | **Delete** /attributes/{id}/reference | Delete reference configuration for an attribute
-[**GetAttribute**](AttributesAPI.md#GetAttribute) | **Get** /attributes/{id} | Get an attribute
+[**GetAttribute**](AttributesAPI.md#GetAttribute) | **Get** /attributes/{id} | Get an attribute by ID
 [**GetAttributeReferenceConfig**](AttributesAPI.md#GetAttributeReferenceConfig) | **Get** /attributes/{id}/reference | Get reference configuration for an attribute
 [**ListAttributeItems**](AttributesAPI.md#ListAttributeItems) | **Get** /attributes/{id}/items | List items of an attribute
-[**ListAttributes**](AttributesAPI.md#ListAttributes) | **Get** /attributes | List attributes
+[**ListAttributes**](AttributesAPI.md#ListAttributes) | **Get** /attributes | List all attributes
+[**PatchAttribute**](AttributesAPI.md#PatchAttribute) | **Patch** /attributes/{id} | Patch an attribute (granular partial update)
 [**SetAttributeItems**](AttributesAPI.md#SetAttributeItems) | **Put** /attributes/{id}/items | Set list items for an attribute (replaces all existing items)
 [**SetAttributeReferenceConfig**](AttributesAPI.md#SetAttributeReferenceConfig) | **Put** /attributes/{id}/reference | Set or update reference configuration for an attribute
-[**UpdateAttribute**](AttributesAPI.md#UpdateAttribute) | **Put** /attributes/{id} | Update an attribute
+[**UpdateAttribute**](AttributesAPI.md#UpdateAttribute) | **Put** /attributes/{id} | Update an attribute (full replacement)
 [**UpdateAttributeItem**](AttributesAPI.md#UpdateAttributeItem) | **Put** /attributes/{id}/items/{itemId} | Update a list item of an attribute
 
 
 
 ## CreateAttribute
 
-> CreateAttributeItem201Response CreateAttribute(ctx).CreateAttributeRequest(createAttributeRequest).Execute()
+> CreateAttribute201Response CreateAttribute(ctx).CreateAttributeRequest(createAttributeRequest).Execute()
 
 Create a new attribute
+
+
 
 ### Example
 
@@ -39,7 +42,7 @@ import (
 )
 
 func main() {
-	createAttributeRequest := *openapiclient.NewCreateAttributeRequest("Color", int32(0), int32(0)) // CreateAttributeRequest | 
+	createAttributeRequest := *openapiclient.NewCreateAttributeRequest("Product Color", int32(0), int32(0)) // CreateAttributeRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -48,7 +51,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `AttributesAPI.CreateAttribute``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `CreateAttribute`: CreateAttributeItem201Response
+	// response from `CreateAttribute`: CreateAttribute201Response
 	fmt.Fprintf(os.Stdout, "Response from `AttributesAPI.CreateAttribute`: %v\n", resp)
 }
 ```
@@ -68,7 +71,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateAttributeItem201Response**](CreateAttributeItem201Response.md)
+[**CreateAttribute201Response**](CreateAttribute201Response.md)
 
 ### Authorization
 
@@ -90,6 +93,8 @@ Name | Type | Description  | Notes
 
 Add a list item to an attribute
 
+
+
 ### Example
 
 ```go
@@ -103,8 +108,8 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Attribute ID
-	addListItemRequest := *openapiclient.NewAddListItemRequest("red") // AddListItemRequest | 
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the List-type attribute
+	addListItemRequest := *openapiclient.NewAddListItemRequest("Green") // AddListItemRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -124,7 +129,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Attribute ID | 
+**id** | **string** | UUID of the List-type attribute | 
 
 ### Other Parameters
 
@@ -160,6 +165,8 @@ Name | Type | Description  | Notes
 
 Delete an attribute
 
+
+
 ### Example
 
 ```go
@@ -173,7 +180,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the attribute to delete
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -191,7 +198,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** |  | 
+**id** | **string** | UUID of the attribute to delete | 
 
 ### Other Parameters
 
@@ -213,7 +220,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -225,6 +232,8 @@ Name | Type | Description  | Notes
 > DeleteAttributeItem(ctx, id, itemId).Execute()
 
 Remove a list item from an attribute
+
+
 
 ### Example
 
@@ -239,8 +248,8 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Attribute ID
-	itemId := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | List Item ID
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the parent List attribute
+	itemId := "019a6b2c-8c3a-7c2e-8b3f-6c8a1a2b3c4d" // string | UUID of the list item to delete
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -258,8 +267,8 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Attribute ID | 
-**itemId** | **string** | List Item ID | 
+**id** | **string** | UUID of the parent List attribute | 
+**itemId** | **string** | UUID of the list item to delete | 
 
 ### Other Parameters
 
@@ -282,7 +291,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -294,6 +303,8 @@ Name | Type | Description  | Notes
 > DeleteAttributeReferenceConfig(ctx, id).Execute()
 
 Delete reference configuration for an attribute
+
+
 
 ### Example
 
@@ -308,7 +319,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Attribute ID
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the Reference attribute
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -326,7 +337,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Attribute ID | 
+**id** | **string** | UUID of the Reference attribute | 
 
 ### Other Parameters
 
@@ -348,7 +359,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -359,7 +370,9 @@ Name | Type | Description  | Notes
 
 > AttributeResponse GetAttribute(ctx, id).Execute()
 
-Get an attribute
+Get an attribute by ID
+
+
 
 ### Example
 
@@ -374,7 +387,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the attribute to fetch
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -394,7 +407,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** |  | 
+**id** | **string** | UUID of the attribute to fetch | 
 
 ### Other Parameters
 
@@ -429,6 +442,8 @@ Name | Type | Description  | Notes
 
 Get reference configuration for an attribute
 
+
+
 ### Example
 
 ```go
@@ -442,7 +457,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Attribute ID
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the Reference attribute
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -462,7 +477,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Attribute ID | 
+**id** | **string** | UUID of the Reference attribute | 
 
 ### Other Parameters
 
@@ -497,6 +512,8 @@ Name | Type | Description  | Notes
 
 List items of an attribute
 
+
+
 ### Example
 
 ```go
@@ -510,7 +527,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Attribute ID
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the List-type attribute
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -530,7 +547,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Attribute ID | 
+**id** | **string** | UUID of the List-type attribute | 
 
 ### Other Parameters
 
@@ -563,7 +580,9 @@ Name | Type | Description  | Notes
 
 > ListAttributes200Response ListAttributes(ctx).Execute()
 
-List attributes
+List all attributes
+
+
 
 ### Example
 
@@ -618,11 +637,13 @@ Other parameters are passed through a pointer to a apiListAttributesRequest stru
 [[Back to README]](../README.md)
 
 
-## SetAttributeItems
+## PatchAttribute
 
-> SetAttributeItems(ctx, id).SetListItemsRequest(setListItemsRequest).Execute()
+> PatchAttribute(ctx, id).PatchAttributeRequest(patchAttributeRequest).Execute()
 
-Set list items for an attribute (replaces all existing items)
+Patch an attribute (granular partial update)
+
+
 
 ### Example
 
@@ -637,8 +658,78 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Attribute ID
-	setListItemsRequest := *openapiclient.NewSetListItemsRequest([]openapiclient.ListItemInput{*openapiclient.NewListItemInput("red")}) // SetListItemsRequest | 
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the attribute to patch
+	patchAttributeRequest := *openapiclient.NewPatchAttributeRequest() // PatchAttributeRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	r, err := apiClient.AttributesAPI.PatchAttribute(context.Background(), id).PatchAttributeRequest(patchAttributeRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `AttributesAPI.PatchAttribute``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **string** | UUID of the attribute to patch | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiPatchAttributeRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **patchAttributeRequest** | [**PatchAttributeRequest**](PatchAttributeRequest.md) |  | 
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## SetAttributeItems
+
+> SetAttributeItems(ctx, id).SetListItemsRequest(setListItemsRequest).Execute()
+
+Set list items for an attribute (replaces all existing items)
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/omnismith-sdk/go"
+)
+
+func main() {
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the List-type attribute
+	setListItemsRequest := *openapiclient.NewSetListItemsRequest([]openapiclient.ListItemInput{*openapiclient.NewListItemInput("Red")}) // SetListItemsRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -656,7 +747,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Attribute ID | 
+**id** | **string** | UUID of the List-type attribute | 
 
 ### Other Parameters
 
@@ -692,6 +783,8 @@ Name | Type | Description  | Notes
 
 Set or update reference configuration for an attribute
 
+
+
 ### Example
 
 ```go
@@ -705,8 +798,8 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Attribute ID
-	setReferenceConfigRequest := *openapiclient.NewSetReferenceConfigRequest("TargetTemplateId_example", "TargetAttributeId_example") // SetReferenceConfigRequest | 
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the Reference attribute
+	setReferenceConfigRequest := *openapiclient.NewSetReferenceConfigRequest("018b2f1b-8c1a-75b3-8000-7f0000010002", "018b2f1b-8c1a-75b3-8000-7f0000010003") // SetReferenceConfigRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -724,7 +817,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Attribute ID | 
+**id** | **string** | UUID of the Reference attribute | 
 
 ### Other Parameters
 
@@ -758,7 +851,9 @@ Name | Type | Description  | Notes
 
 > UpdateAttribute(ctx, id).UpdateAttributeRequest(updateAttributeRequest).Execute()
 
-Update an attribute
+Update an attribute (full replacement)
+
+
 
 ### Example
 
@@ -773,8 +868,8 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | 
-	updateAttributeRequest := *openapiclient.NewUpdateAttributeRequest("Color") // UpdateAttributeRequest | 
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the attribute to update
+	updateAttributeRequest := *openapiclient.NewUpdateAttributeRequest("Product Color Variant") // UpdateAttributeRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -792,7 +887,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** |  | 
+**id** | **string** | UUID of the attribute to update | 
 
 ### Other Parameters
 
@@ -828,6 +923,8 @@ Name | Type | Description  | Notes
 
 Update a list item of an attribute
 
+
+
 ### Example
 
 ```go
@@ -841,9 +938,9 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Attribute ID
-	itemId := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | List Item ID
-	updateListItemRequest := *openapiclient.NewUpdateListItemRequest("blue") // UpdateListItemRequest | 
+	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the parent List attribute
+	itemId := "019a6b2c-8c3a-7c2e-8b3f-6c8a1a2b3c4d" // string | UUID of the list item to update
+	updateListItemRequest := *openapiclient.NewUpdateListItemRequest("Blue") // UpdateListItemRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -861,8 +958,8 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Attribute ID | 
-**itemId** | **string** | List Item ID | 
+**id** | **string** | UUID of the parent List attribute | 
+**itemId** | **string** | UUID of the list item to update | 
 
 ### Other Parameters
 

@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**AttributeValues** | Pointer to [**[]CreateEntityRequestAttributeValuesInner**](CreateEntityRequestAttributeValuesInner.md) |  | [optional] 
+**AttributeValues** | Pointer to [**[]UpdateEntityRequestAttributeValuesInner**](UpdateEntityRequestAttributeValuesInner.md) | List of attribute value mutations to apply | [optional] 
 
 ## Methods
 
@@ -27,20 +27,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetAttributeValues
 
-`func (o *UpdateEntityRequest) GetAttributeValues() []CreateEntityRequestAttributeValuesInner`
+`func (o *UpdateEntityRequest) GetAttributeValues() []UpdateEntityRequestAttributeValuesInner`
 
 GetAttributeValues returns the AttributeValues field if non-nil, zero value otherwise.
 
 ### GetAttributeValuesOk
 
-`func (o *UpdateEntityRequest) GetAttributeValuesOk() (*[]CreateEntityRequestAttributeValuesInner, bool)`
+`func (o *UpdateEntityRequest) GetAttributeValuesOk() (*[]UpdateEntityRequestAttributeValuesInner, bool)`
 
 GetAttributeValuesOk returns a tuple with the AttributeValues field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetAttributeValues
 
-`func (o *UpdateEntityRequest) SetAttributeValues(v []CreateEntityRequestAttributeValuesInner)`
+`func (o *UpdateEntityRequest) SetAttributeValues(v []UpdateEntityRequestAttributeValuesInner)`
 
 SetAttributeValues sets AttributeValues field to given value.
 

@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Token** | Pointer to **string** | FCM device token (masked) | [optional] 
-**DeviceName** | Pointer to **NullableString** |  | [optional] 
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
-**UpdatedAt** | Pointer to **time.Time** |  | [optional] 
+**Id** | Pointer to **string** | Unique device token record UUID | [optional] 
+**Token** | Pointer to **string** | FCM device registration token (masked for security) | [optional] 
+**DeviceName** | Pointer to **NullableString** | Optional user-assigned or hardware device name | [optional] 
+**CreatedAt** | Pointer to **time.Time** | Registration timestamp | [optional] 
+**UpdatedAt** | Pointer to **time.Time** | Last update timestamp | [optional] 
 
 ## Methods
 

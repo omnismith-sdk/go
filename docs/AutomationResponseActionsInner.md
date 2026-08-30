@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Type** | Pointer to **string** |  | [optional] 
-**Config** | Pointer to **map[string]interface{}** |  | [optional] 
+**Type** | Pointer to **string** | Action dispatch type | [optional] 
+**Config** | Pointer to **map[string]interface{}** | Action-specific payload and routing configuration | [optional] 
 
 ## Methods
 

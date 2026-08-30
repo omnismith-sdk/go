@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**TemplateId** | Pointer to **string** |  | [optional] 
-**EntityCount** | Pointer to **int32** |  | [optional] 
+**TemplateId** | Pointer to **string** | Template UUID | [optional] 
+**EntityCount** | Pointer to **int32** | Total count of active entities conforming to this template | [optional] 
 
 ## Methods
 

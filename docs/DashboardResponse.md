@@ -4,12 +4,12 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**Description** | Pointer to **string** |  | [optional] 
-**Config** | Pointer to **map[string]interface{}** |  | [optional] 
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
-**UpdatedAt** | Pointer to **NullableTime** |  | [optional] 
+**Id** | Pointer to **string** | Dashboard unique identifier | [optional] 
+**Name** | Pointer to **string** | Display name of the dashboard | [optional] 
+**Description** | Pointer to **string** | Detailed description of the dashboard purpose | [optional] 
+**Config** | Pointer to **map[string]interface{}** | Dashboard canvas and refresh configuration | [optional] 
+**CreatedAt** | Pointer to **time.Time** | ISO 8601 creation timestamp | [optional] 
+**UpdatedAt** | Pointer to **NullableTime** | ISO 8601 last update timestamp | [optional] 
 
 ## Methods
 

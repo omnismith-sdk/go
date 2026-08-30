@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**BlockId** | Pointer to **string** |  | [optional] 
-**Title** | Pointer to **string** |  | [optional] 
-**Type** | Pointer to **string** |  | [optional] 
-**Count** | Pointer to **int32** |  | [optional] 
+**BlockId** | Pointer to **string** | Dashboard block unique identifier | [optional] 
+**Title** | Pointer to **string** | Block header title | [optional] 
+**Type** | Pointer to **string** | Block type discriminator | [optional] 
+**Count** | Pointer to **int32** | Total count of entities matching template and active filter rules | [optional] 
 
 ## Methods
 

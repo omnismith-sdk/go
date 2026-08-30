@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Keyword** | Pointer to **string** |  | [optional] 
-**Count** | Pointer to **int32** |  | [optional] 
+**Keyword** | Pointer to **string** | Keyword tag name | [optional] 
+**Count** | Pointer to **int32** | Number of blueprints tagged with this keyword | [optional] 
 
 ## Methods
 

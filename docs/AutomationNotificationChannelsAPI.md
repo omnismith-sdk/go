@@ -4,20 +4,22 @@ All URIs are relative to *https://api.omnismith.io/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**CreateNotificationChannel**](AutomationNotificationChannelsAPI.md#CreateNotificationChannel) | **Post** /automation/notification-channels | Create a new notification channel
+[**CreateNotificationChannel**](AutomationNotificationChannelsAPI.md#CreateNotificationChannel) | **Post** /automation/notification-channels | Create a notification channel
 [**DeleteNotificationChannel**](AutomationNotificationChannelsAPI.md#DeleteNotificationChannel) | **Delete** /automation/notification-channels/{id} | Delete a notification channel
-[**GetNotificationChannel**](AutomationNotificationChannelsAPI.md#GetNotificationChannel) | **Get** /automation/notification-channels/{id} | Get a notification channel
-[**ListNotificationChannels**](AutomationNotificationChannelsAPI.md#ListNotificationChannels) | **Get** /automation/notification-channels | List all notification channels
-[**TestNotificationChannel**](AutomationNotificationChannelsAPI.md#TestNotificationChannel) | **Post** /automation/notification-channels/{id}/test | Send a test message via the notification channel
+[**GetNotificationChannel**](AutomationNotificationChannelsAPI.md#GetNotificationChannel) | **Get** /automation/notification-channels/{id} | Get a notification channel by ID
+[**ListNotificationChannels**](AutomationNotificationChannelsAPI.md#ListNotificationChannels) | **Get** /automation/notification-channels | List notification channels
+[**TestNotificationChannel**](AutomationNotificationChannelsAPI.md#TestNotificationChannel) | **Post** /automation/notification-channels/{id}/test | Send a test notification message
 [**UpdateNotificationChannel**](AutomationNotificationChannelsAPI.md#UpdateNotificationChannel) | **Put** /automation/notification-channels/{id} | Update a notification channel
 
 
 
 ## CreateNotificationChannel
 
-> CreateAttributeItem201Response CreateNotificationChannel(ctx).CreateNotificationChannelRequest(createNotificationChannelRequest).Execute()
+> CreateNotificationChannel201Response CreateNotificationChannel(ctx).CreateNotificationChannelRequest(createNotificationChannelRequest).Execute()
 
-Create a new notification channel
+Create a notification channel
+
+
 
 ### Example
 
@@ -41,7 +43,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `AutomationNotificationChannelsAPI.CreateNotificationChannel``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `CreateNotificationChannel`: CreateAttributeItem201Response
+	// response from `CreateNotificationChannel`: CreateNotificationChannel201Response
 	fmt.Fprintf(os.Stdout, "Response from `AutomationNotificationChannelsAPI.CreateNotificationChannel`: %v\n", resp)
 }
 ```
@@ -61,7 +63,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CreateAttributeItem201Response**](CreateAttributeItem201Response.md)
+[**CreateNotificationChannel201Response**](CreateNotificationChannel201Response.md)
 
 ### Authorization
 
@@ -83,6 +85,8 @@ Name | Type | Description  | Notes
 
 Delete a notification channel
 
+
+
 ### Example
 
 ```go
@@ -96,7 +100,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Channel UUID
+	id := "01912ecb-4654-7890-a1b2-c3d4e5f60002" // string | Unique notification channel UUID to delete
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -114,7 +118,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Channel UUID | 
+**id** | **string** | Unique notification channel UUID to delete | 
 
 ### Other Parameters
 
@@ -147,7 +151,9 @@ Name | Type | Description  | Notes
 
 > NotificationChannelResponse GetNotificationChannel(ctx, id).Execute()
 
-Get a notification channel
+Get a notification channel by ID
+
+
 
 ### Example
 
@@ -162,7 +168,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Channel UUID
+	id := "01912ecb-4654-7890-a1b2-c3d4e5f60002" // string | Unique notification channel UUID
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -182,7 +188,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Channel UUID | 
+**id** | **string** | Unique notification channel UUID | 
 
 ### Other Parameters
 
@@ -215,7 +221,9 @@ Name | Type | Description  | Notes
 
 > ListNotificationChannels200Response ListNotificationChannels(ctx).Execute()
 
-List all notification channels
+List notification channels
+
+
 
 ### Example
 
@@ -274,7 +282,9 @@ Other parameters are passed through a pointer to a apiListNotificationChannelsRe
 
 > TestNotificationChannel200Response TestNotificationChannel(ctx, id).TestNotificationChannelRequest(testNotificationChannelRequest).Execute()
 
-Send a test message via the notification channel
+Send a test notification message
+
+
 
 ### Example
 
@@ -289,7 +299,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Channel UUID
+	id := "01912ecb-4654-7890-a1b2-c3d4e5f60002" // string | Unique notification channel UUID to test
 	testNotificationChannelRequest := *openapiclient.NewTestNotificationChannelRequest() // TestNotificationChannelRequest | 
 
 	configuration := openapiclient.NewConfiguration()
@@ -310,7 +320,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Channel UUID | 
+**id** | **string** | Unique notification channel UUID to test | 
 
 ### Other Parameters
 
@@ -346,6 +356,8 @@ Name | Type | Description  | Notes
 
 Update a notification channel
 
+
+
 ### Example
 
 ```go
@@ -359,7 +371,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Channel UUID
+	id := "01912ecb-4654-7890-a1b2-c3d4e5f60002" // string | Unique notification channel UUID to update
 	updateNotificationChannelRequest := *openapiclient.NewUpdateNotificationChannelRequest() // UpdateNotificationChannelRequest | 
 
 	configuration := openapiclient.NewConfiguration()
@@ -378,7 +390,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Channel UUID | 
+**id** | **string** | Unique notification channel UUID to update | 
 
 ### Other Parameters
 

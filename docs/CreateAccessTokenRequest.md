@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Name** | **string** | A label for the access token | 
-**ExpiresAt** | **time.Time** | Expiration date in ISO 8601 format | 
+**Name** | **string** | Friendly human-readable label to identify the token purpose | 
+**ExpiresAt** | **time.Time** | Expiration timestamp in ISO 8601 UTC format (e.g. 2026-12-31T23:59:59Z) | 
 
 ## Methods
 

@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Value** | **string** |  | 
-**SortOrder** | Pointer to **int32** |  | [optional] 
+**Value** | **string** | Updated display value / label for this list item. | 
+**SortOrder** | Pointer to **int32** | Updated display sorting rank (lower numbers appear first). | [optional] [default to 0]
 
 ## Methods
 

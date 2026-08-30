@@ -14,9 +14,11 @@ Method | HTTP request | Description
 
 ## CreateDashboard
 
-> CreateAttributeItem201Response CreateDashboard(ctx).CreateDashboardRequest(createDashboardRequest).Execute()
+> CreateDashboard201Response CreateDashboard(ctx).CreateDashboardRequest(createDashboardRequest).Execute()
 
 Create a new dashboard
+
+
 
 ### Example
 
@@ -31,7 +33,7 @@ import (
 )
 
 func main() {
-	createDashboardRequest := *openapiclient.NewCreateDashboardRequest("My Dashboard") // CreateDashboardRequest | 
+	createDashboardRequest := *openapiclient.NewCreateDashboardRequest("Infrastructure & Operations Hub") // CreateDashboardRequest | Dashboard creation payload
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -40,7 +42,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `DashboardsAPI.CreateDashboard``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `CreateDashboard`: CreateAttributeItem201Response
+	// response from `CreateDashboard`: CreateDashboard201Response
 	fmt.Fprintf(os.Stdout, "Response from `DashboardsAPI.CreateDashboard`: %v\n", resp)
 }
 ```
@@ -56,11 +58,11 @@ Other parameters are passed through a pointer to a apiCreateDashboardRequest str
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **createDashboardRequest** | [**CreateDashboardRequest**](CreateDashboardRequest.md) |  | 
+ **createDashboardRequest** | [**CreateDashboardRequest**](CreateDashboardRequest.md) | Dashboard creation payload | 
 
 ### Return type
 
-[**CreateAttributeItem201Response**](CreateAttributeItem201Response.md)
+[**CreateDashboard201Response**](CreateDashboard201Response.md)
 
 ### Authorization
 
@@ -82,6 +84,8 @@ Name | Type | Description  | Notes
 
 Delete a dashboard
 
+
+
 ### Example
 
 ```go
@@ -95,7 +99,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Dashboard ID
+	id := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6b" // string | Dashboard unique identifier (UUID) to delete
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -113,7 +117,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Dashboard ID | 
+**id** | **string** | Dashboard unique identifier (UUID) to delete | 
 
 ### Other Parameters
 
@@ -135,7 +139,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -147,6 +151,8 @@ Name | Type | Description  | Notes
 > DashboardResponse GetDashboard(ctx, id).Execute()
 
 Get a dashboard by ID
+
+
 
 ### Example
 
@@ -161,7 +167,7 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Dashboard ID
+	id := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6b" // string | Dashboard unique identifier (UUID)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -181,7 +187,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Dashboard ID | 
+**id** | **string** | Dashboard unique identifier (UUID) | 
 
 ### Other Parameters
 
@@ -215,6 +221,8 @@ Name | Type | Description  | Notes
 > ListDashboards200Response ListDashboards(ctx).Execute()
 
 List all dashboards
+
+
 
 ### Example
 
@@ -275,6 +283,8 @@ Other parameters are passed through a pointer to a apiListDashboardsRequest stru
 
 Update a dashboard
 
+
+
 ### Example
 
 ```go
@@ -288,8 +298,8 @@ import (
 )
 
 func main() {
-	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string | Dashboard ID
-	updateDashboardRequest := *openapiclient.NewUpdateDashboardRequest() // UpdateDashboardRequest | 
+	id := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6b" // string | Dashboard unique identifier (UUID) to update
+	updateDashboardRequest := *openapiclient.NewUpdateDashboardRequest() // UpdateDashboardRequest | Dashboard update payload
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -307,7 +317,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **string** | Dashboard ID | 
+**id** | **string** | Dashboard unique identifier (UUID) to update | 
 
 ### Other Parameters
 
@@ -317,7 +327,7 @@ Other parameters are passed through a pointer to a apiUpdateDashboardRequest str
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **updateDashboardRequest** | [**UpdateDashboardRequest**](UpdateDashboardRequest.md) |  | 
+ **updateDashboardRequest** | [**UpdateDashboardRequest**](UpdateDashboardRequest.md) | Dashboard update payload | 
 
 ### Return type
 

@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Title** | Pointer to **string** |  | [optional] 
-**Config** | Pointer to **map[string]interface{}** | Block-specific configuration | [optional] 
+**Title** | Pointer to **NullableString** | Updated display title for the widget card header | [optional] 
+**Config** | Pointer to [**NullableUpdateDashboardBlockRequestConfig**](UpdateDashboardBlockRequestConfig.md) |  | [optional] 
 
 ## Methods
 
@@ -51,22 +51,32 @@ SetTitle sets Title field to given value.
 
 HasTitle returns a boolean if a field has been set.
 
+### SetTitleNil
+
+`func (o *UpdateDashboardBlockRequest) SetTitleNil(b bool)`
+
+ SetTitleNil sets the value for Title to be an explicit nil
+
+### UnsetTitle
+`func (o *UpdateDashboardBlockRequest) UnsetTitle()`
+
+UnsetTitle ensures that no value is present for Title, not even an explicit nil
 ### GetConfig
 
-`func (o *UpdateDashboardBlockRequest) GetConfig() map[string]interface{}`
+`func (o *UpdateDashboardBlockRequest) GetConfig() UpdateDashboardBlockRequestConfig`
 
 GetConfig returns the Config field if non-nil, zero value otherwise.
 
 ### GetConfigOk
 
-`func (o *UpdateDashboardBlockRequest) GetConfigOk() (*map[string]interface{}, bool)`
+`func (o *UpdateDashboardBlockRequest) GetConfigOk() (*UpdateDashboardBlockRequestConfig, bool)`
 
 GetConfigOk returns a tuple with the Config field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetConfig
 
-`func (o *UpdateDashboardBlockRequest) SetConfig(v map[string]interface{})`
+`func (o *UpdateDashboardBlockRequest) SetConfig(v UpdateDashboardBlockRequestConfig)`
 
 SetConfig sets Config field to given value.
 
@@ -76,6 +86,16 @@ SetConfig sets Config field to given value.
 
 HasConfig returns a boolean if a field has been set.
 
+### SetConfigNil
+
+`func (o *UpdateDashboardBlockRequest) SetConfigNil(b bool)`
+
+ SetConfigNil sets the value for Config to be an explicit nil
+
+### UnsetConfig
+`func (o *UpdateDashboardBlockRequest) UnsetConfig()`
+
+UnsetConfig ensures that no value is present for Config, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
