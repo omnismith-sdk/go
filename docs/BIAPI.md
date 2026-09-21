@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 ## GetBiSchema
 
-> BiSchemaResponse GetBiSchema(ctx).Execute()
+> BiSchemaResponse GetBiSchema(ctx).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Get BI schema catalog
 
@@ -31,10 +31,11 @@ import (
 )
 
 func main() {
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.BIAPI.GetBiSchema(context.Background()).Execute()
+	resp, r, err := apiClient.BIAPI.GetBiSchema(context.Background()).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `BIAPI.GetBiSchema``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -46,12 +47,16 @@ func main() {
 
 ### Path Parameters
 
-This endpoint does not need any parameter.
+
 
 ### Other Parameters
 
 Other parameters are passed through a pointer to a apiGetBiSchemaRequest struct via the builder pattern
 
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -73,7 +78,7 @@ Other parameters are passed through a pointer to a apiGetBiSchemaRequest struct 
 
 ## ListBiTemplateRows
 
-> BiTemplateRowsResponse ListBiTemplateRows(ctx, templateId).BiListTemplateRowsRequest(biListTemplateRowsRequest).Limit(limit).Offset(offset).SortField(sortField).SortDirection(sortDirection).Execute()
+> BiTemplateRowsResponse ListBiTemplateRows(ctx, templateId).BiListTemplateRowsRequest(biListTemplateRowsRequest).XOmnismithProjectId(xOmnismithProjectId).Limit(limit).Offset(offset).SortField(sortField).SortDirection(sortDirection).Execute()
 
 List flattened template rows for BI integration
 
@@ -94,6 +99,7 @@ import (
 func main() {
 	templateId := "018b2f1b-8c1a-75b3-8000-7f0000010001" // string | Unique identifier (UUID) of the template schema to query
 	biListTemplateRowsRequest := *openapiclient.NewBiListTemplateRowsRequest() // BiListTemplateRowsRequest | 
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 	limit := int32(50) // int32 | Maximum number of rows to return per page (1-100) (optional) (default to 50)
 	offset := int32(0) // int32 | Zero-based pagination offset (optional) (default to 0)
 	sortField := "created_at" // string | Attribute UUID, slug, or standard field (id, created_at, updated_at, deleted_at) to sort by (optional)
@@ -101,7 +107,7 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.BIAPI.ListBiTemplateRows(context.Background(), templateId).BiListTemplateRowsRequest(biListTemplateRowsRequest).Limit(limit).Offset(offset).SortField(sortField).SortDirection(sortDirection).Execute()
+	resp, r, err := apiClient.BIAPI.ListBiTemplateRows(context.Background(), templateId).BiListTemplateRowsRequest(biListTemplateRowsRequest).XOmnismithProjectId(xOmnismithProjectId).Limit(limit).Offset(offset).SortField(sortField).SortDirection(sortDirection).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `BIAPI.ListBiTemplateRows``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -128,6 +134,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
  **biListTemplateRowsRequest** | [**BiListTemplateRowsRequest**](BiListTemplateRowsRequest.md) |  | 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
  **limit** | **int32** | Maximum number of rows to return per page (1-100) | [default to 50]
  **offset** | **int32** | Zero-based pagination offset | [default to 0]
  **sortField** | **string** | Attribute UUID, slug, or standard field (id, created_at, updated_at, deleted_at) to sort by | 
@@ -153,7 +160,7 @@ Name | Type | Description  | Notes
 
 ## ListBiTemplateTimeSeries
 
-> BiTimeSeriesResponse ListBiTemplateTimeSeries(ctx, templateId).AttributeIds(attributeIds).Start(start).End(end).BiListTemplateRowsRequest(biListTemplateRowsRequest).AggregateFunc(aggregateFunc).BucketWidth(bucketWidth).Execute()
+> BiTimeSeriesResponse ListBiTemplateTimeSeries(ctx, templateId).AttributeIds(attributeIds).Start(start).End(end).BiListTemplateRowsRequest(biListTemplateRowsRequest).XOmnismithProjectId(xOmnismithProjectId).AggregateFunc(aggregateFunc).BucketWidth(bucketWidth).Execute()
 
 List aggregated time-series rows for BI integration
 
@@ -177,12 +184,13 @@ func main() {
 	start := int32(1774396800) // int32 | Start timestamp as Unix epoch in seconds
 	end := int32(1774483200) // int32 | End timestamp as Unix epoch in seconds
 	biListTemplateRowsRequest := *openapiclient.NewBiListTemplateRowsRequest() // BiListTemplateRowsRequest | 
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 	aggregateFunc := "avg" // string | Aggregation function applied within each time bucket (optional) (default to "avg")
 	bucketWidth := "1 hour" // string | Time bucket width interval (e.g. 1 minute, 5 minutes, 1 hour, 1 day) (optional) (default to "1 hour")
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.BIAPI.ListBiTemplateTimeSeries(context.Background(), templateId).AttributeIds(attributeIds).Start(start).End(end).BiListTemplateRowsRequest(biListTemplateRowsRequest).AggregateFunc(aggregateFunc).BucketWidth(bucketWidth).Execute()
+	resp, r, err := apiClient.BIAPI.ListBiTemplateTimeSeries(context.Background(), templateId).AttributeIds(attributeIds).Start(start).End(end).BiListTemplateRowsRequest(biListTemplateRowsRequest).XOmnismithProjectId(xOmnismithProjectId).AggregateFunc(aggregateFunc).BucketWidth(bucketWidth).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `BIAPI.ListBiTemplateTimeSeries``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -212,6 +220,7 @@ Name | Type | Description  | Notes
  **start** | **int32** | Start timestamp as Unix epoch in seconds | 
  **end** | **int32** | End timestamp as Unix epoch in seconds | 
  **biListTemplateRowsRequest** | [**BiListTemplateRowsRequest**](BiListTemplateRowsRequest.md) |  | 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
  **aggregateFunc** | **string** | Aggregation function applied within each time bucket | [default to &quot;avg&quot;]
  **bucketWidth** | **string** | Time bucket width interval (e.g. 1 minute, 5 minutes, 1 hour, 1 day) | [default to &quot;1 hour&quot;]
 

@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **Title** | Pointer to **string** | Blueprint display title | [optional] 
 **Description** | Pointer to **string** | Detailed markdown description of the blueprint | [optional] 
 **Metadata** | Pointer to [**MarketplaceBlueprintDetailResponseMetadata**](MarketplaceBlueprintDetailResponseMetadata.md) |  | [optional] 
-**Blueprint** | Pointer to **map[string]interface{}** | JSONB serialized blueprint payload containing templates, attributes, and optional demo entities | [optional] 
+**Blueprint** | Pointer to **map[string]interface{}** | JSONB serialized blueprint payload containing templates, attributes, list items, the rules and actions of those templates, and optional demo entities | [optional] 
 **IsFeatured** | Pointer to **bool** | Whether the blueprint is featured in the marketplace | [optional] 
 **CreatedAt** | Pointer to **time.Time** | Publish timestamp | [optional] 
 **UpdatedAt** | Pointer to **time.Time** | Last update timestamp | [optional] 

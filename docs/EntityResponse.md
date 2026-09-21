@@ -9,7 +9,10 @@ Name | Type | Description | Notes
 **TemplateSlug** | Pointer to **NullableString** | Human-readable slug of the template schema | [optional] 
 **CreatedAt** | Pointer to **time.Time** | Record creation timestamp in ISO 8601 format | [optional] 
 **UpdatedAt** | Pointer to **time.Time** | Last modification timestamp in ISO 8601 format | [optional] 
-**AttributeValues** | Pointer to [**map[string]EntityAttributeValue**](EntityAttributeValue.md) | Dictionary of attribute values keyed by attribute UUID or attribute slug (controlled by the attribute_key query parameter) | [optional] 
+**AttributeValues** | Pointer to [**EntityResponseAttributeValues**](EntityResponseAttributeValues.md) |  | [optional] 
+**ListItemIds** | Pointer to **map[string]string** | Compact mode only: list option ids behind the labels shown in &#x60;attribute_values&#x60;, keyed like &#x60;attribute_values&#x60;. Use these ids when writing the attribute or filtering by it — writes and filters take ids, not labels. Absent when &#x60;verbose&#x3D;true&#x60; (the items carry &#x60;value&#x60;). | [optional] 
+**ReferenceEntityIds** | Pointer to **map[string]string** | Compact mode only: referenced entity ids behind the labels shown in &#x60;attribute_values&#x60;, keyed like &#x60;attribute_values&#x60;. Pass one to &#x60;GET /entities/{id}&#x60; to load the referenced record, or use it when writing or filtering the attribute. Absent when &#x60;verbose&#x3D;true&#x60;. | [optional] 
+**FileIds** | Pointer to **map[string]string** | Compact mode only: file attachment ids behind the filenames shown in &#x60;attribute_values&#x60;, keyed like &#x60;attribute_values&#x60;. Absent when &#x60;verbose&#x3D;true&#x60;. | [optional] 
 
 ## Methods
 
@@ -167,20 +170,20 @@ HasUpdatedAt returns a boolean if a field has been set.
 
 ### GetAttributeValues
 
-`func (o *EntityResponse) GetAttributeValues() map[string]EntityAttributeValue`
+`func (o *EntityResponse) GetAttributeValues() EntityResponseAttributeValues`
 
 GetAttributeValues returns the AttributeValues field if non-nil, zero value otherwise.
 
 ### GetAttributeValuesOk
 
-`func (o *EntityResponse) GetAttributeValuesOk() (*map[string]EntityAttributeValue, bool)`
+`func (o *EntityResponse) GetAttributeValuesOk() (*EntityResponseAttributeValues, bool)`
 
 GetAttributeValuesOk returns a tuple with the AttributeValues field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetAttributeValues
 
-`func (o *EntityResponse) SetAttributeValues(v map[string]EntityAttributeValue)`
+`func (o *EntityResponse) SetAttributeValues(v EntityResponseAttributeValues)`
 
 SetAttributeValues sets AttributeValues field to given value.
 
@@ -189,6 +192,81 @@ SetAttributeValues sets AttributeValues field to given value.
 `func (o *EntityResponse) HasAttributeValues() bool`
 
 HasAttributeValues returns a boolean if a field has been set.
+
+### GetListItemIds
+
+`func (o *EntityResponse) GetListItemIds() map[string]string`
+
+GetListItemIds returns the ListItemIds field if non-nil, zero value otherwise.
+
+### GetListItemIdsOk
+
+`func (o *EntityResponse) GetListItemIdsOk() (*map[string]string, bool)`
+
+GetListItemIdsOk returns a tuple with the ListItemIds field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetListItemIds
+
+`func (o *EntityResponse) SetListItemIds(v map[string]string)`
+
+SetListItemIds sets ListItemIds field to given value.
+
+### HasListItemIds
+
+`func (o *EntityResponse) HasListItemIds() bool`
+
+HasListItemIds returns a boolean if a field has been set.
+
+### GetReferenceEntityIds
+
+`func (o *EntityResponse) GetReferenceEntityIds() map[string]string`
+
+GetReferenceEntityIds returns the ReferenceEntityIds field if non-nil, zero value otherwise.
+
+### GetReferenceEntityIdsOk
+
+`func (o *EntityResponse) GetReferenceEntityIdsOk() (*map[string]string, bool)`
+
+GetReferenceEntityIdsOk returns a tuple with the ReferenceEntityIds field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetReferenceEntityIds
+
+`func (o *EntityResponse) SetReferenceEntityIds(v map[string]string)`
+
+SetReferenceEntityIds sets ReferenceEntityIds field to given value.
+
+### HasReferenceEntityIds
+
+`func (o *EntityResponse) HasReferenceEntityIds() bool`
+
+HasReferenceEntityIds returns a boolean if a field has been set.
+
+### GetFileIds
+
+`func (o *EntityResponse) GetFileIds() map[string]string`
+
+GetFileIds returns the FileIds field if non-nil, zero value otherwise.
+
+### GetFileIdsOk
+
+`func (o *EntityResponse) GetFileIdsOk() (*map[string]string, bool)`
+
+GetFileIdsOk returns a tuple with the FileIds field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetFileIds
+
+`func (o *EntityResponse) SetFileIds(v map[string]string)`
+
+SetFileIds sets FileIds field to given value.
+
+### HasFileIds
+
+`func (o *EntityResponse) HasFileIds() bool`
+
+HasFileIds returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

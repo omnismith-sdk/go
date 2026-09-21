@@ -13,7 +13,7 @@ Method | HTTP request | Description
 [**ListProjectUsers**](ProjectsAPI.md#ListProjectUsers) | **Get** /projects/{id}/users | List users in project
 [**ListProjects**](ProjectsAPI.md#ListProjects) | **Get** /projects | List all projects
 [**RemoveUserFromProject**](ProjectsAPI.md#RemoveUserFromProject) | **Delete** /projects/{id}/users/{userId} | Remove user from project
-[**UpdateProject**](ProjectsAPI.md#UpdateProject) | **Put** /projects/{id} | Update a project
+[**UpdateProject**](ProjectsAPI.md#UpdateProject) | **Put** /projects/{id} | Update project metadata
 
 
 
@@ -635,7 +635,7 @@ Name | Type | Description  | Notes
 
 > UpdateProject(ctx, id).UpdateProjectRequest(updateProjectRequest).Execute()
 
-Update a project
+Update project metadata
 
 
 
@@ -653,7 +653,7 @@ import (
 
 func main() {
 	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | Project ID
-	updateProjectRequest := *openapiclient.NewUpdateProjectRequest("My Project") // UpdateProjectRequest | 
+	updateProjectRequest := *openapiclient.NewUpdateProjectRequest() // UpdateProjectRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)

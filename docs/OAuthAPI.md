@@ -35,7 +35,7 @@ import (
 )
 
 func main() {
-	approveOAuthAuthorizationRequest := *openapiclient.NewApproveOAuthAuthorizationRequest("omni_client_0195a8f2c3e471238000000000000001", "https://claude.ai/api/mcp/oauth_callback", "0195a8f2-c3e4-7123-8000-000000000001", "E9Melhoa2OwvFrGMTJguCH5SZXgk6uKUaz312M20O48") // ApproveOAuthAuthorizationRequest | 
+	approveOAuthAuthorizationRequest := *openapiclient.NewApproveOAuthAuthorizationRequest("omni_client_0195a8f2c3e471238000000000000001", "https://claude.ai/api/mcp/oauth_callback", []string{"ProjectIds_example"}, "E9Melhoa2OwvFrGMTJguCH5SZXgk6uKUaz312M20O48") // ApproveOAuthAuthorizationRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)

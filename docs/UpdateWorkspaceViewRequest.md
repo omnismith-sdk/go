@@ -5,12 +5,12 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Name** | Pointer to **NullableString** | Updated display label for the view pane tab or header | [optional] 
-**Filters** | Pointer to **[]map[string]interface{}** | Updated dynamic filtering rules applied to entities in this view | [optional] 
+**Filters** | Pointer to **[]map[string]interface{}** | Updated dynamic filtering rules applied to entities in this view. Attribute field can be specified by attribute UUID or attribute slug (e.g. [{\&quot;field\&quot;: \&quot;platform\&quot;, \&quot;operator\&quot;: \&quot;eq\&quot;, \&quot;value\&quot;: \&quot;&lt;list_item_id_or_slug&gt;\&quot;, \&quot;is_active\&quot;: true}]). | [optional] 
 **SearchString** | Pointer to **NullableString** | Updated search query string applied to entities in this view | [optional] 
 **SearchMode** | Pointer to **NullableString** | Updated search execution mode (keyword or semantic) | [optional] 
 **Sort** | Pointer to [**NullableUpdateWorkspaceViewRequestSort**](UpdateWorkspaceViewRequestSort.md) |  | [optional] 
 **DisplayMode** | Pointer to **NullableString** | Updated presentation layout mode (table or grid) | [optional] 
-**DisplayedColumns** | Pointer to **[]string** | Updated list of attribute slugs or UUIDs to display as columns | [optional] 
+**DisplayedColumns** | Pointer to **[]string** | Updated list of attribute UUIDs or slugs to display as columns in table mode (e.g. [\&quot;title\&quot;, \&quot;platform\&quot;, \&quot;status\&quot;, \&quot;scheduled_date\&quot;]) | [optional] 
 **PaneOrder** | Pointer to **NullableInt32** | Updated display sequence index within the workspace layout | [optional] 
 
 ## Methods

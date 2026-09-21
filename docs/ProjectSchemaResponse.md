@@ -4,16 +4,16 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Attributes** | Pointer to [**[]AttributeResponse**](AttributeResponse.md) | All active attributes in the project schema | [optional] 
-**Templates** | Pointer to [**[]TemplateResponse**](TemplateResponse.md) | All active templates and their attribute layout configurations | [optional] 
-**ListItems** | Pointer to [**[]ListItemResponse**](ListItemResponse.md) | All selectable choice items for List-type attributes | [optional] 
-**ReferenceConfigs** | Pointer to [**[]ReferenceConfigResponse**](ReferenceConfigResponse.md) | All entity relationship configurations for Reference-type attributes | [optional] 
+**ProjectId** | Pointer to **NullableString** | Unique identifier of the active project | [optional] 
+**ProjectName** | Pointer to **NullableString** | Human-readable name of the active project | [optional] 
+**Templates** | [**[]TemplateOverviewResponse**](TemplateOverviewResponse.md) | All active templates with bound attributes, business rules, and executable actions | 
+**Attributes** | [**[]AttributeOverviewResponse**](AttributeOverviewResponse.md) | All active attributes with semantic types, list options, and foreign entity references | 
 
 ## Methods
 
 ### NewProjectSchemaResponse
 
-`func NewProjectSchemaResponse() *ProjectSchemaResponse`
+`func NewProjectSchemaResponse(templates []TemplateOverviewResponse, attributes []AttributeOverviewResponse, ) *ProjectSchemaResponse`
 
 NewProjectSchemaResponse instantiates a new ProjectSchemaResponse object
 This constructor will assign default values to properties that have it defined,
@@ -28,105 +28,115 @@ NewProjectSchemaResponseWithDefaults instantiates a new ProjectSchemaResponse ob
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetAttributes
+### GetProjectId
 
-`func (o *ProjectSchemaResponse) GetAttributes() []AttributeResponse`
+`func (o *ProjectSchemaResponse) GetProjectId() string`
 
-GetAttributes returns the Attributes field if non-nil, zero value otherwise.
+GetProjectId returns the ProjectId field if non-nil, zero value otherwise.
 
-### GetAttributesOk
+### GetProjectIdOk
 
-`func (o *ProjectSchemaResponse) GetAttributesOk() (*[]AttributeResponse, bool)`
+`func (o *ProjectSchemaResponse) GetProjectIdOk() (*string, bool)`
 
-GetAttributesOk returns a tuple with the Attributes field if it's non-nil, zero value otherwise
+GetProjectIdOk returns a tuple with the ProjectId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetAttributes
+### SetProjectId
 
-`func (o *ProjectSchemaResponse) SetAttributes(v []AttributeResponse)`
+`func (o *ProjectSchemaResponse) SetProjectId(v string)`
 
-SetAttributes sets Attributes field to given value.
+SetProjectId sets ProjectId field to given value.
 
-### HasAttributes
+### HasProjectId
 
-`func (o *ProjectSchemaResponse) HasAttributes() bool`
+`func (o *ProjectSchemaResponse) HasProjectId() bool`
 
-HasAttributes returns a boolean if a field has been set.
+HasProjectId returns a boolean if a field has been set.
 
+### SetProjectIdNil
+
+`func (o *ProjectSchemaResponse) SetProjectIdNil(b bool)`
+
+ SetProjectIdNil sets the value for ProjectId to be an explicit nil
+
+### UnsetProjectId
+`func (o *ProjectSchemaResponse) UnsetProjectId()`
+
+UnsetProjectId ensures that no value is present for ProjectId, not even an explicit nil
+### GetProjectName
+
+`func (o *ProjectSchemaResponse) GetProjectName() string`
+
+GetProjectName returns the ProjectName field if non-nil, zero value otherwise.
+
+### GetProjectNameOk
+
+`func (o *ProjectSchemaResponse) GetProjectNameOk() (*string, bool)`
+
+GetProjectNameOk returns a tuple with the ProjectName field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetProjectName
+
+`func (o *ProjectSchemaResponse) SetProjectName(v string)`
+
+SetProjectName sets ProjectName field to given value.
+
+### HasProjectName
+
+`func (o *ProjectSchemaResponse) HasProjectName() bool`
+
+HasProjectName returns a boolean if a field has been set.
+
+### SetProjectNameNil
+
+`func (o *ProjectSchemaResponse) SetProjectNameNil(b bool)`
+
+ SetProjectNameNil sets the value for ProjectName to be an explicit nil
+
+### UnsetProjectName
+`func (o *ProjectSchemaResponse) UnsetProjectName()`
+
+UnsetProjectName ensures that no value is present for ProjectName, not even an explicit nil
 ### GetTemplates
 
-`func (o *ProjectSchemaResponse) GetTemplates() []TemplateResponse`
+`func (o *ProjectSchemaResponse) GetTemplates() []TemplateOverviewResponse`
 
 GetTemplates returns the Templates field if non-nil, zero value otherwise.
 
 ### GetTemplatesOk
 
-`func (o *ProjectSchemaResponse) GetTemplatesOk() (*[]TemplateResponse, bool)`
+`func (o *ProjectSchemaResponse) GetTemplatesOk() (*[]TemplateOverviewResponse, bool)`
 
 GetTemplatesOk returns a tuple with the Templates field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetTemplates
 
-`func (o *ProjectSchemaResponse) SetTemplates(v []TemplateResponse)`
+`func (o *ProjectSchemaResponse) SetTemplates(v []TemplateOverviewResponse)`
 
 SetTemplates sets Templates field to given value.
 
-### HasTemplates
 
-`func (o *ProjectSchemaResponse) HasTemplates() bool`
+### GetAttributes
 
-HasTemplates returns a boolean if a field has been set.
+`func (o *ProjectSchemaResponse) GetAttributes() []AttributeOverviewResponse`
 
-### GetListItems
+GetAttributes returns the Attributes field if non-nil, zero value otherwise.
 
-`func (o *ProjectSchemaResponse) GetListItems() []ListItemResponse`
+### GetAttributesOk
 
-GetListItems returns the ListItems field if non-nil, zero value otherwise.
+`func (o *ProjectSchemaResponse) GetAttributesOk() (*[]AttributeOverviewResponse, bool)`
 
-### GetListItemsOk
-
-`func (o *ProjectSchemaResponse) GetListItemsOk() (*[]ListItemResponse, bool)`
-
-GetListItemsOk returns a tuple with the ListItems field if it's non-nil, zero value otherwise
+GetAttributesOk returns a tuple with the Attributes field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetListItems
+### SetAttributes
 
-`func (o *ProjectSchemaResponse) SetListItems(v []ListItemResponse)`
+`func (o *ProjectSchemaResponse) SetAttributes(v []AttributeOverviewResponse)`
 
-SetListItems sets ListItems field to given value.
+SetAttributes sets Attributes field to given value.
 
-### HasListItems
-
-`func (o *ProjectSchemaResponse) HasListItems() bool`
-
-HasListItems returns a boolean if a field has been set.
-
-### GetReferenceConfigs
-
-`func (o *ProjectSchemaResponse) GetReferenceConfigs() []ReferenceConfigResponse`
-
-GetReferenceConfigs returns the ReferenceConfigs field if non-nil, zero value otherwise.
-
-### GetReferenceConfigsOk
-
-`func (o *ProjectSchemaResponse) GetReferenceConfigsOk() (*[]ReferenceConfigResponse, bool)`
-
-GetReferenceConfigsOk returns a tuple with the ReferenceConfigs field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetReferenceConfigs
-
-`func (o *ProjectSchemaResponse) SetReferenceConfigs(v []ReferenceConfigResponse)`
-
-SetReferenceConfigs sets ReferenceConfigs field to given value.
-
-### HasReferenceConfigs
-
-`func (o *ProjectSchemaResponse) HasReferenceConfigs() bool`
-
-HasReferenceConfigs returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

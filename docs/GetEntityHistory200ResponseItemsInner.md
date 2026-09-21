@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **Value** | Pointer to **string** | New serialized attribute value | [optional] 
 **EntityId** | Pointer to **string** | Target entity UUID | [optional] 
 **AuthorEmail** | Pointer to **NullableString** | Actor email who performed the change | [optional] 
+**ActionSlug** | Pointer to **NullableString** | Slug of the entity action that produced this change, when the write was an action execution rather than a plain update | [optional] 
 
 ## Methods
 
@@ -200,6 +201,41 @@ HasAuthorEmail returns a boolean if a field has been set.
 `func (o *GetEntityHistory200ResponseItemsInner) UnsetAuthorEmail()`
 
 UnsetAuthorEmail ensures that no value is present for AuthorEmail, not even an explicit nil
+### GetActionSlug
+
+`func (o *GetEntityHistory200ResponseItemsInner) GetActionSlug() string`
+
+GetActionSlug returns the ActionSlug field if non-nil, zero value otherwise.
+
+### GetActionSlugOk
+
+`func (o *GetEntityHistory200ResponseItemsInner) GetActionSlugOk() (*string, bool)`
+
+GetActionSlugOk returns a tuple with the ActionSlug field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetActionSlug
+
+`func (o *GetEntityHistory200ResponseItemsInner) SetActionSlug(v string)`
+
+SetActionSlug sets ActionSlug field to given value.
+
+### HasActionSlug
+
+`func (o *GetEntityHistory200ResponseItemsInner) HasActionSlug() bool`
+
+HasActionSlug returns a boolean if a field has been set.
+
+### SetActionSlugNil
+
+`func (o *GetEntityHistory200ResponseItemsInner) SetActionSlugNil(b bool)`
+
+ SetActionSlugNil sets the value for ActionSlug to be an explicit nil
+
+### UnsetActionSlug
+`func (o *GetEntityHistory200ResponseItemsInner) UnsetActionSlug()`
+
+UnsetActionSlug ensures that no value is present for ActionSlug, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

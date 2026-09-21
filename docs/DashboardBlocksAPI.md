@@ -15,7 +15,7 @@ Method | HTTP request | Description
 
 ## CreateDashboardBlock
 
-> CreateDashboardBlock201Response CreateDashboardBlock(ctx, dashboardId).CreateDashboardBlockRequest(createDashboardBlockRequest).Execute()
+> CreateDashboardBlock201Response CreateDashboardBlock(ctx, dashboardId).CreateDashboardBlockRequest(createDashboardBlockRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Create a new block in a dashboard
 
@@ -36,10 +36,11 @@ import (
 func main() {
 	dashboardId := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6b" // string | Target dashboard unique identifier (UUID)
 	createDashboardBlockRequest := *openapiclient.NewCreateDashboardBlockRequest("chart", "CPU Utilization — Time Series") // CreateDashboardBlockRequest | Dashboard block creation payload
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.DashboardBlocksAPI.CreateDashboardBlock(context.Background(), dashboardId).CreateDashboardBlockRequest(createDashboardBlockRequest).Execute()
+	resp, r, err := apiClient.DashboardBlocksAPI.CreateDashboardBlock(context.Background(), dashboardId).CreateDashboardBlockRequest(createDashboardBlockRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `DashboardBlocksAPI.CreateDashboardBlock``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -66,6 +67,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
  **createDashboardBlockRequest** | [**CreateDashboardBlockRequest**](CreateDashboardBlockRequest.md) | Dashboard block creation payload | 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -87,7 +89,7 @@ Name | Type | Description  | Notes
 
 ## DeleteDashboardBlock
 
-> DeleteDashboardBlock(ctx, dashboardId, blockId).Execute()
+> DeleteDashboardBlock(ctx, dashboardId, blockId).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Delete a dashboard block
 
@@ -108,10 +110,11 @@ import (
 func main() {
 	dashboardId := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6b" // string | Parent dashboard unique identifier (UUID)
 	blockId := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6c" // string | Dashboard block unique identifier (UUID) to delete
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	r, err := apiClient.DashboardBlocksAPI.DeleteDashboardBlock(context.Background(), dashboardId, blockId).Execute()
+	r, err := apiClient.DashboardBlocksAPI.DeleteDashboardBlock(context.Background(), dashboardId, blockId).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `DashboardBlocksAPI.DeleteDashboardBlock``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -137,6 +140,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -158,7 +162,7 @@ Name | Type | Description  | Notes
 
 ## GetDashboardBlock
 
-> DashboardBlockResponse GetDashboardBlock(ctx, dashboardId, blockId).Execute()
+> DashboardBlockResponse GetDashboardBlock(ctx, dashboardId, blockId).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Get a dashboard block by ID
 
@@ -179,10 +183,11 @@ import (
 func main() {
 	dashboardId := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6b" // string | Parent dashboard unique identifier (UUID)
 	blockId := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6c" // string | Dashboard block unique identifier (UUID)
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.DashboardBlocksAPI.GetDashboardBlock(context.Background(), dashboardId, blockId).Execute()
+	resp, r, err := apiClient.DashboardBlocksAPI.GetDashboardBlock(context.Background(), dashboardId, blockId).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `DashboardBlocksAPI.GetDashboardBlock``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -210,6 +215,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -231,7 +237,7 @@ Name | Type | Description  | Notes
 
 ## ListDashboardBlocks
 
-> ListDashboardBlocks200Response ListDashboardBlocks(ctx, dashboardId).Execute()
+> ListDashboardBlocks200Response ListDashboardBlocks(ctx, dashboardId).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 List all blocks in a dashboard
 
@@ -251,10 +257,11 @@ import (
 
 func main() {
 	dashboardId := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6b" // string | Parent dashboard unique identifier (UUID)
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.DashboardBlocksAPI.ListDashboardBlocks(context.Background(), dashboardId).Execute()
+	resp, r, err := apiClient.DashboardBlocksAPI.ListDashboardBlocks(context.Background(), dashboardId).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `DashboardBlocksAPI.ListDashboardBlocks``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -280,6 +287,7 @@ Other parameters are passed through a pointer to a apiListDashboardBlocksRequest
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -301,7 +309,7 @@ Name | Type | Description  | Notes
 
 ## ResolveDashboardBlock
 
-> ResolvedBlockResponse ResolveDashboardBlock(ctx, dashboardId, blockId).Execute()
+> ResolvedBlockResponse ResolveDashboardBlock(ctx, dashboardId, blockId).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Resolve a dashboard block to its computed data
 
@@ -322,10 +330,11 @@ import (
 func main() {
 	dashboardId := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6b" // string | Parent dashboard unique identifier (UUID)
 	blockId := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6c" // string | Dashboard block unique identifier (UUID) to resolve and compute
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.DashboardBlocksAPI.ResolveDashboardBlock(context.Background(), dashboardId, blockId).Execute()
+	resp, r, err := apiClient.DashboardBlocksAPI.ResolveDashboardBlock(context.Background(), dashboardId, blockId).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `DashboardBlocksAPI.ResolveDashboardBlock``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -353,6 +362,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -374,7 +384,7 @@ Name | Type | Description  | Notes
 
 ## UpdateDashboardBlock
 
-> UpdateDashboardBlock(ctx, dashboardId, blockId).UpdateDashboardBlockRequest(updateDashboardBlockRequest).Execute()
+> UpdateDashboardBlock(ctx, dashboardId, blockId).UpdateDashboardBlockRequest(updateDashboardBlockRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Update a dashboard block
 
@@ -396,10 +406,11 @@ func main() {
 	dashboardId := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6b" // string | Parent dashboard unique identifier (UUID)
 	blockId := "0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6c" // string | Dashboard block unique identifier (UUID) to update
 	updateDashboardBlockRequest := *openapiclient.NewUpdateDashboardBlockRequest() // UpdateDashboardBlockRequest | Dashboard block update payload
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	r, err := apiClient.DashboardBlocksAPI.UpdateDashboardBlock(context.Background(), dashboardId, blockId).UpdateDashboardBlockRequest(updateDashboardBlockRequest).Execute()
+	r, err := apiClient.DashboardBlocksAPI.UpdateDashboardBlock(context.Background(), dashboardId, blockId).UpdateDashboardBlockRequest(updateDashboardBlockRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `DashboardBlocksAPI.UpdateDashboardBlock``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -426,6 +437,7 @@ Name | Type | Description  | Notes
 
 
  **updateDashboardBlockRequest** | [**UpdateDashboardBlockRequest**](UpdateDashboardBlockRequest.md) | Dashboard block update payload | 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 

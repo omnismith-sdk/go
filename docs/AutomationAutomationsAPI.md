@@ -16,7 +16,7 @@ Method | HTTP request | Description
 
 ## CreateAutomation
 
-> CreateAutomation201Response CreateAutomation(ctx).CreateAutomationRequest(createAutomationRequest).Execute()
+> CreateAutomation201Response CreateAutomation(ctx).CreateAutomationRequest(createAutomationRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Create an automation rule
 
@@ -36,10 +36,11 @@ import (
 
 func main() {
 	createAutomationRequest := *openapiclient.NewCreateAutomationRequest("Notify on status change", *openapiclient.NewCreateAutomationRequestTrigger("on_attribute_changed"), []openapiclient.CreateAutomationRequestConditionsInner{*openapiclient.NewCreateAutomationRequestConditionsInner("01912ecb-4654-7890-a1b2-c3d4e5f60077", "eq", "current")}, []openapiclient.CreateAutomationRequestActionsInner{*openapiclient.NewCreateAutomationRequestActionsInner("telegram", map[string]interface{}(123))}) // CreateAutomationRequest | 
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AutomationAutomationsAPI.CreateAutomation(context.Background()).CreateAutomationRequest(createAutomationRequest).Execute()
+	resp, r, err := apiClient.AutomationAutomationsAPI.CreateAutomation(context.Background()).CreateAutomationRequest(createAutomationRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AutomationAutomationsAPI.CreateAutomation``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -61,6 +62,7 @@ Other parameters are passed through a pointer to a apiCreateAutomationRequest st
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **createAutomationRequest** | [**CreateAutomationRequest**](CreateAutomationRequest.md) |  | 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -82,7 +84,7 @@ Name | Type | Description  | Notes
 
 ## DeleteAutomation
 
-> DeleteAutomation(ctx, id).Execute()
+> DeleteAutomation(ctx, id).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Delete an automation
 
@@ -102,10 +104,11 @@ import (
 
 func main() {
 	id := "01912ecb-4654-7890-a1b2-c3d4e5f60001" // string | Unique automation UUID to delete
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	r, err := apiClient.AutomationAutomationsAPI.DeleteAutomation(context.Background(), id).Execute()
+	r, err := apiClient.AutomationAutomationsAPI.DeleteAutomation(context.Background(), id).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AutomationAutomationsAPI.DeleteAutomation``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -129,6 +132,7 @@ Other parameters are passed through a pointer to a apiDeleteAutomationRequest st
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -141,7 +145,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -150,7 +154,7 @@ Name | Type | Description  | Notes
 
 ## GetAutomation
 
-> AutomationResponse GetAutomation(ctx, id).Execute()
+> AutomationResponse GetAutomation(ctx, id).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Get an automation by ID
 
@@ -170,10 +174,11 @@ import (
 
 func main() {
 	id := "01912ecb-4654-7890-a1b2-c3d4e5f60001" // string | Unique automation UUID
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AutomationAutomationsAPI.GetAutomation(context.Background(), id).Execute()
+	resp, r, err := apiClient.AutomationAutomationsAPI.GetAutomation(context.Background(), id).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AutomationAutomationsAPI.GetAutomation``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -199,6 +204,7 @@ Other parameters are passed through a pointer to a apiGetAutomationRequest struc
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -220,7 +226,7 @@ Name | Type | Description  | Notes
 
 ## ListAutomationExecutions
 
-> ListAutomationExecutions200Response ListAutomationExecutions(ctx, id).Limit(limit).Offset(offset).Status(status).Execute()
+> ListAutomationExecutions200Response ListAutomationExecutions(ctx, id).XOmnismithProjectId(xOmnismithProjectId).Limit(limit).Offset(offset).Status(status).Execute()
 
 List automation execution logs
 
@@ -240,13 +246,14 @@ import (
 
 func main() {
 	id := "01912ecb-4654-7890-a1b2-c3d4e5f60001" // string | Automation UUID to fetch execution history for
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 	limit := int32(20) // int32 | Maximum number of execution log entries to return per page (optional) (default to 20)
 	offset := int32(0) // int32 | Number of execution log records to skip for pagination (optional) (default to 0)
 	status := "success" // string | Filter execution logs by execution outcome status (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AutomationAutomationsAPI.ListAutomationExecutions(context.Background(), id).Limit(limit).Offset(offset).Status(status).Execute()
+	resp, r, err := apiClient.AutomationAutomationsAPI.ListAutomationExecutions(context.Background(), id).XOmnismithProjectId(xOmnismithProjectId).Limit(limit).Offset(offset).Status(status).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AutomationAutomationsAPI.ListAutomationExecutions``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -272,6 +279,7 @@ Other parameters are passed through a pointer to a apiListAutomationExecutionsRe
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
  **limit** | **int32** | Maximum number of execution log entries to return per page | [default to 20]
  **offset** | **int32** | Number of execution log records to skip for pagination | [default to 0]
  **status** | **string** | Filter execution logs by execution outcome status | 
@@ -296,7 +304,7 @@ Name | Type | Description  | Notes
 
 ## ListAutomations
 
-> []AutomationResponse ListAutomations(ctx).TemplateId(templateId).IsEnabled(isEnabled).Execute()
+> []AutomationResponse ListAutomations(ctx).XOmnismithProjectId(xOmnismithProjectId).TemplateId(templateId).IsEnabled(isEnabled).Execute()
 
 List project automations
 
@@ -315,12 +323,13 @@ import (
 )
 
 func main() {
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 	templateId := "01912ecb-4654-7890-a1b2-c3d4e5f60088" // string | Filter automations scoped to a specific entity template UUID (optional)
 	isEnabled := true // bool | Filter automations by active enabled status (true for active rules, false for paused rules) (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AutomationAutomationsAPI.ListAutomations(context.Background()).TemplateId(templateId).IsEnabled(isEnabled).Execute()
+	resp, r, err := apiClient.AutomationAutomationsAPI.ListAutomations(context.Background()).XOmnismithProjectId(xOmnismithProjectId).TemplateId(templateId).IsEnabled(isEnabled).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AutomationAutomationsAPI.ListAutomations``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -341,6 +350,7 @@ Other parameters are passed through a pointer to a apiListAutomationsRequest str
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
  **templateId** | **string** | Filter automations scoped to a specific entity template UUID | 
  **isEnabled** | **bool** | Filter automations by active enabled status (true for active rules, false for paused rules) | 
 
@@ -364,7 +374,7 @@ Name | Type | Description  | Notes
 
 ## ToggleAutomation
 
-> AutomationResponse ToggleAutomation(ctx, id).ToggleAutomationRequest(toggleAutomationRequest).Execute()
+> AutomationResponse ToggleAutomation(ctx, id).ToggleAutomationRequest(toggleAutomationRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Toggle automation enabled status
 
@@ -385,10 +395,11 @@ import (
 func main() {
 	id := "01912ecb-4654-7890-a1b2-c3d4e5f60001" // string | Unique automation UUID to toggle
 	toggleAutomationRequest := *openapiclient.NewToggleAutomationRequest(true) // ToggleAutomationRequest | 
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AutomationAutomationsAPI.ToggleAutomation(context.Background(), id).ToggleAutomationRequest(toggleAutomationRequest).Execute()
+	resp, r, err := apiClient.AutomationAutomationsAPI.ToggleAutomation(context.Background(), id).ToggleAutomationRequest(toggleAutomationRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AutomationAutomationsAPI.ToggleAutomation``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -415,6 +426,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
  **toggleAutomationRequest** | [**ToggleAutomationRequest**](ToggleAutomationRequest.md) |  | 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -436,7 +448,7 @@ Name | Type | Description  | Notes
 
 ## UpdateAutomation
 
-> UpdateAutomation(ctx, id).UpdateAutomationRequest(updateAutomationRequest).Execute()
+> UpdateAutomation(ctx, id).UpdateAutomationRequest(updateAutomationRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Update an automation
 
@@ -457,10 +469,11 @@ import (
 func main() {
 	id := "01912ecb-4654-7890-a1b2-c3d4e5f60001" // string | Unique automation UUID to update
 	updateAutomationRequest := *openapiclient.NewUpdateAutomationRequest() // UpdateAutomationRequest | 
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	r, err := apiClient.AutomationAutomationsAPI.UpdateAutomation(context.Background(), id).UpdateAutomationRequest(updateAutomationRequest).Execute()
+	r, err := apiClient.AutomationAutomationsAPI.UpdateAutomation(context.Background(), id).UpdateAutomationRequest(updateAutomationRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AutomationAutomationsAPI.UpdateAutomation``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -485,6 +498,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
  **updateAutomationRequest** | [**UpdateAutomationRequest**](UpdateAutomationRequest.md) |  | 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 

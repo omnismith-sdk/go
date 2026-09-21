@@ -5,8 +5,9 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **GlobalSearch** | Pointer to **NullableString** | Full-text query string searched across all string and text dimension attributes of the template | [optional] 
-**Filters** | Pointer to [**[]SearchEntitiesRequestFiltersInner**](SearchEntitiesRequestFiltersInner.md) | List of structured attribute and metadata filter conditions | [optional] 
-**AttributeKey** | Pointer to **NullableString** | Format for attribute_values dictionary keys: \&quot;id\&quot; for UUIDs or \&quot;slug\&quot; for attribute slugs | [optional] 
+**FilterGroups** | Pointer to [**[][]EntityFilter**]([]EntityFilter.md) | Filter groups: clauses inside a group are AND-ed, groups are OR-ed. &#x60;[]&#x60; applies no filter, &#x60;[[a, b]]&#x60; is &#x60;a AND b&#x60;, &#x60;[[a], [b, c]]&#x60; is &#x60;a OR (b AND c)&#x60;. | [optional] 
+**Verbose** | Pointer to **bool** | When true, each record&#39;s attribute_values is an array of EntityAttributeValue items (attribute id, slug, raw value, resolved custom_value, reference_entity_id). When false (default), attribute_values is a compact object mapping attribute slug to display value, with the ids behind list, reference and file labels in list_item_ids, reference_entity_ids and file_ids. | [optional] [default to false]
+**Fields** | Pointer to **[]string** | Optional list of attribute slugs, attribute UUIDs, or root fields to project (e.g. [\&quot;title\&quot;, \&quot;status\&quot;]). When specified, database queries only hydrate the requested attributes, drastically reducing response payload size and execution latency. If omitted, all attributes defined on the template are returned. | [optional] 
 
 ## Methods
 
@@ -62,66 +63,91 @@ HasGlobalSearch returns a boolean if a field has been set.
 `func (o *SearchEntitiesRequest) UnsetGlobalSearch()`
 
 UnsetGlobalSearch ensures that no value is present for GlobalSearch, not even an explicit nil
-### GetFilters
+### GetFilterGroups
 
-`func (o *SearchEntitiesRequest) GetFilters() []SearchEntitiesRequestFiltersInner`
+`func (o *SearchEntitiesRequest) GetFilterGroups() [][]EntityFilter`
 
-GetFilters returns the Filters field if non-nil, zero value otherwise.
+GetFilterGroups returns the FilterGroups field if non-nil, zero value otherwise.
 
-### GetFiltersOk
+### GetFilterGroupsOk
 
-`func (o *SearchEntitiesRequest) GetFiltersOk() (*[]SearchEntitiesRequestFiltersInner, bool)`
+`func (o *SearchEntitiesRequest) GetFilterGroupsOk() (*[][]EntityFilter, bool)`
 
-GetFiltersOk returns a tuple with the Filters field if it's non-nil, zero value otherwise
+GetFilterGroupsOk returns a tuple with the FilterGroups field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetFilters
+### SetFilterGroups
 
-`func (o *SearchEntitiesRequest) SetFilters(v []SearchEntitiesRequestFiltersInner)`
+`func (o *SearchEntitiesRequest) SetFilterGroups(v [][]EntityFilter)`
 
-SetFilters sets Filters field to given value.
+SetFilterGroups sets FilterGroups field to given value.
 
-### HasFilters
+### HasFilterGroups
 
-`func (o *SearchEntitiesRequest) HasFilters() bool`
+`func (o *SearchEntitiesRequest) HasFilterGroups() bool`
 
-HasFilters returns a boolean if a field has been set.
+HasFilterGroups returns a boolean if a field has been set.
 
-### GetAttributeKey
+### GetVerbose
 
-`func (o *SearchEntitiesRequest) GetAttributeKey() string`
+`func (o *SearchEntitiesRequest) GetVerbose() bool`
 
-GetAttributeKey returns the AttributeKey field if non-nil, zero value otherwise.
+GetVerbose returns the Verbose field if non-nil, zero value otherwise.
 
-### GetAttributeKeyOk
+### GetVerboseOk
 
-`func (o *SearchEntitiesRequest) GetAttributeKeyOk() (*string, bool)`
+`func (o *SearchEntitiesRequest) GetVerboseOk() (*bool, bool)`
 
-GetAttributeKeyOk returns a tuple with the AttributeKey field if it's non-nil, zero value otherwise
+GetVerboseOk returns a tuple with the Verbose field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetAttributeKey
+### SetVerbose
 
-`func (o *SearchEntitiesRequest) SetAttributeKey(v string)`
+`func (o *SearchEntitiesRequest) SetVerbose(v bool)`
 
-SetAttributeKey sets AttributeKey field to given value.
+SetVerbose sets Verbose field to given value.
 
-### HasAttributeKey
+### HasVerbose
 
-`func (o *SearchEntitiesRequest) HasAttributeKey() bool`
+`func (o *SearchEntitiesRequest) HasVerbose() bool`
 
-HasAttributeKey returns a boolean if a field has been set.
+HasVerbose returns a boolean if a field has been set.
 
-### SetAttributeKeyNil
+### GetFields
 
-`func (o *SearchEntitiesRequest) SetAttributeKeyNil(b bool)`
+`func (o *SearchEntitiesRequest) GetFields() []string`
 
- SetAttributeKeyNil sets the value for AttributeKey to be an explicit nil
+GetFields returns the Fields field if non-nil, zero value otherwise.
 
-### UnsetAttributeKey
-`func (o *SearchEntitiesRequest) UnsetAttributeKey()`
+### GetFieldsOk
 
-UnsetAttributeKey ensures that no value is present for AttributeKey, not even an explicit nil
+`func (o *SearchEntitiesRequest) GetFieldsOk() (*[]string, bool)`
+
+GetFieldsOk returns a tuple with the Fields field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetFields
+
+`func (o *SearchEntitiesRequest) SetFields(v []string)`
+
+SetFields sets Fields field to given value.
+
+### HasFields
+
+`func (o *SearchEntitiesRequest) HasFields() bool`
+
+HasFields returns a boolean if a field has been set.
+
+### SetFieldsNil
+
+`func (o *SearchEntitiesRequest) SetFieldsNil(b bool)`
+
+ SetFieldsNil sets the value for Fields to be an explicit nil
+
+### UnsetFields
+`func (o *SearchEntitiesRequest) UnsetFields()`
+
+UnsetFields ensures that no value is present for Fields, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

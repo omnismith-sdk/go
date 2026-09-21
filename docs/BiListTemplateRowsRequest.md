@@ -5,7 +5,8 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **GlobalSearch** | Pointer to **NullableString** | Full-text query string searched across all string and text dimension attributes of the template | [optional] 
-**Filters** | Pointer to [**[]BiListTemplateRowsRequestFiltersInner**](BiListTemplateRowsRequestFiltersInner.md) | List of structured attribute and metadata filter conditions | [optional] 
+**FilterGroups** | Pointer to [**[][]EntityFilter**]([]EntityFilter.md) | Filter groups: clauses inside a group are AND-ed, groups are OR-ed. &#x60;[]&#x60; applies no filter, &#x60;[[a, b]]&#x60; is &#x60;a AND b&#x60;, &#x60;[[a], [b, c]]&#x60; is &#x60;a OR (b AND c)&#x60;. | [optional] 
+**Fields** | Pointer to **[]string** | Optional list of attribute slugs, UUIDs, or standard fields to project (e.g. [\&quot;price\&quot;, \&quot;sku\&quot;]). Excludes non-requested dynamic attributes from column metadata and row outputs, skipping unnecessary attribute hydration and reducing tabular payload size. | [optional] 
 
 ## Methods
 
@@ -61,31 +62,66 @@ HasGlobalSearch returns a boolean if a field has been set.
 `func (o *BiListTemplateRowsRequest) UnsetGlobalSearch()`
 
 UnsetGlobalSearch ensures that no value is present for GlobalSearch, not even an explicit nil
-### GetFilters
+### GetFilterGroups
 
-`func (o *BiListTemplateRowsRequest) GetFilters() []BiListTemplateRowsRequestFiltersInner`
+`func (o *BiListTemplateRowsRequest) GetFilterGroups() [][]EntityFilter`
 
-GetFilters returns the Filters field if non-nil, zero value otherwise.
+GetFilterGroups returns the FilterGroups field if non-nil, zero value otherwise.
 
-### GetFiltersOk
+### GetFilterGroupsOk
 
-`func (o *BiListTemplateRowsRequest) GetFiltersOk() (*[]BiListTemplateRowsRequestFiltersInner, bool)`
+`func (o *BiListTemplateRowsRequest) GetFilterGroupsOk() (*[][]EntityFilter, bool)`
 
-GetFiltersOk returns a tuple with the Filters field if it's non-nil, zero value otherwise
+GetFilterGroupsOk returns a tuple with the FilterGroups field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetFilters
+### SetFilterGroups
 
-`func (o *BiListTemplateRowsRequest) SetFilters(v []BiListTemplateRowsRequestFiltersInner)`
+`func (o *BiListTemplateRowsRequest) SetFilterGroups(v [][]EntityFilter)`
 
-SetFilters sets Filters field to given value.
+SetFilterGroups sets FilterGroups field to given value.
 
-### HasFilters
+### HasFilterGroups
 
-`func (o *BiListTemplateRowsRequest) HasFilters() bool`
+`func (o *BiListTemplateRowsRequest) HasFilterGroups() bool`
 
-HasFilters returns a boolean if a field has been set.
+HasFilterGroups returns a boolean if a field has been set.
 
+### GetFields
+
+`func (o *BiListTemplateRowsRequest) GetFields() []string`
+
+GetFields returns the Fields field if non-nil, zero value otherwise.
+
+### GetFieldsOk
+
+`func (o *BiListTemplateRowsRequest) GetFieldsOk() (*[]string, bool)`
+
+GetFieldsOk returns a tuple with the Fields field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetFields
+
+`func (o *BiListTemplateRowsRequest) SetFields(v []string)`
+
+SetFields sets Fields field to given value.
+
+### HasFields
+
+`func (o *BiListTemplateRowsRequest) HasFields() bool`
+
+HasFields returns a boolean if a field has been set.
+
+### SetFieldsNil
+
+`func (o *BiListTemplateRowsRequest) SetFieldsNil(b bool)`
+
+ SetFieldsNil sets the value for Fields to be an explicit nil
+
+### UnsetFields
+`func (o *BiListTemplateRowsRequest) UnsetFields()`
+
+UnsetFields ensures that no value is present for Fields, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

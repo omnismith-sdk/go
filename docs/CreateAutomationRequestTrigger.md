@@ -4,9 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Type** | **string** | Trigger event type | 
+**Type** | **string** | Trigger event type. &#x60;on_action_executed&#x60; fires when the named entity action runs on a record, whether or not the write changed anything. | 
 **TemplateId** | Pointer to **NullableString** | Template UUID to listen for events on | [optional] 
 **AttributeId** | Pointer to **NullableString** | Attribute UUID for attribute change triggers | [optional] 
+**ActionId** | Pointer to **NullableString** | Entity action UUID; required for &#x60;on_action_executed&#x60;, must be null otherwise | [optional] 
 
 ## Methods
 
@@ -117,6 +118,41 @@ HasAttributeId returns a boolean if a field has been set.
 `func (o *CreateAutomationRequestTrigger) UnsetAttributeId()`
 
 UnsetAttributeId ensures that no value is present for AttributeId, not even an explicit nil
+### GetActionId
+
+`func (o *CreateAutomationRequestTrigger) GetActionId() string`
+
+GetActionId returns the ActionId field if non-nil, zero value otherwise.
+
+### GetActionIdOk
+
+`func (o *CreateAutomationRequestTrigger) GetActionIdOk() (*string, bool)`
+
+GetActionIdOk returns a tuple with the ActionId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetActionId
+
+`func (o *CreateAutomationRequestTrigger) SetActionId(v string)`
+
+SetActionId sets ActionId field to given value.
+
+### HasActionId
+
+`func (o *CreateAutomationRequestTrigger) HasActionId() bool`
+
+HasActionId returns a boolean if a field has been set.
+
+### SetActionIdNil
+
+`func (o *CreateAutomationRequestTrigger) SetActionIdNil(b bool)`
+
+ SetActionIdNil sets the value for ActionId to be an explicit nil
+
+### UnsetActionId
+`func (o *CreateAutomationRequestTrigger) UnsetActionId()`
+
+UnsetActionId ensures that no value is present for ActionId, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

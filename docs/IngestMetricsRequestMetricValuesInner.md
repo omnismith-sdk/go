@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **AttributeId** | Pointer to **NullableString** | Target metric attribute UUID (provide either attribute_id or attribute_slug) | [optional] 
 **AttributeSlug** | Pointer to **NullableString** | Target metric attribute slug (provide either attribute_id or attribute_slug) | [optional] 
 **Value** | Pointer to **string** | Numeric observation value formatted as a string | [optional] 
-**UpdatedAt** | Pointer to **NullableTime** | Observation timestamp in ISO 8601 or YYYY-MM-DD HH:MM:SS format. Defaults to current UTC time when omitted. | [optional] 
+**UpdatedAt** | Pointer to **NullableTime** | Observation timestamp: RFC 3339 with an explicit offset (&#x60;Z&#x60; or &#x60;±HH:MM&#x60;). Defaults to now when omitted. | [optional] 
 
 ## Methods
 

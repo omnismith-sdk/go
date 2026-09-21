@@ -23,7 +23,7 @@ Method | HTTP request | Description
 
 ## CreateAttribute
 
-> CreateAttribute201Response CreateAttribute(ctx).CreateAttributeRequest(createAttributeRequest).Execute()
+> CreateAttribute201Response CreateAttribute(ctx).CreateAttributeRequest(createAttributeRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Create a new attribute
 
@@ -43,10 +43,11 @@ import (
 
 func main() {
 	createAttributeRequest := *openapiclient.NewCreateAttributeRequest("Product Color", int32(0), int32(0)) // CreateAttributeRequest | 
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AttributesAPI.CreateAttribute(context.Background()).CreateAttributeRequest(createAttributeRequest).Execute()
+	resp, r, err := apiClient.AttributesAPI.CreateAttribute(context.Background()).CreateAttributeRequest(createAttributeRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AttributesAPI.CreateAttribute``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -68,6 +69,7 @@ Other parameters are passed through a pointer to a apiCreateAttributeRequest str
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **createAttributeRequest** | [**CreateAttributeRequest**](CreateAttributeRequest.md) |  | 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -89,7 +91,7 @@ Name | Type | Description  | Notes
 
 ## CreateAttributeItem
 
-> CreateAttributeItem201Response CreateAttributeItem(ctx, id).AddListItemRequest(addListItemRequest).Execute()
+> CreateAttributeItem201Response CreateAttributeItem(ctx, id).AddListItemRequest(addListItemRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Add a list item to an attribute
 
@@ -110,10 +112,11 @@ import (
 func main() {
 	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the List-type attribute
 	addListItemRequest := *openapiclient.NewAddListItemRequest("Green") // AddListItemRequest | 
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AttributesAPI.CreateAttributeItem(context.Background(), id).AddListItemRequest(addListItemRequest).Execute()
+	resp, r, err := apiClient.AttributesAPI.CreateAttributeItem(context.Background(), id).AddListItemRequest(addListItemRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AttributesAPI.CreateAttributeItem``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -140,6 +143,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
  **addListItemRequest** | [**AddListItemRequest**](AddListItemRequest.md) |  | 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -161,7 +165,7 @@ Name | Type | Description  | Notes
 
 ## DeleteAttribute
 
-> DeleteAttribute(ctx, id).Execute()
+> DeleteAttribute(ctx, id).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Delete an attribute
 
@@ -181,10 +185,11 @@ import (
 
 func main() {
 	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the attribute to delete
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	r, err := apiClient.AttributesAPI.DeleteAttribute(context.Background(), id).Execute()
+	r, err := apiClient.AttributesAPI.DeleteAttribute(context.Background(), id).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AttributesAPI.DeleteAttribute``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -208,6 +213,7 @@ Other parameters are passed through a pointer to a apiDeleteAttributeRequest str
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -229,7 +235,7 @@ Name | Type | Description  | Notes
 
 ## DeleteAttributeItem
 
-> DeleteAttributeItem(ctx, id, itemId).Execute()
+> DeleteAttributeItem(ctx, id, itemId).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Remove a list item from an attribute
 
@@ -250,10 +256,11 @@ import (
 func main() {
 	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the parent List attribute
 	itemId := "019a6b2c-8c3a-7c2e-8b3f-6c8a1a2b3c4d" // string | UUID of the list item to delete
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	r, err := apiClient.AttributesAPI.DeleteAttributeItem(context.Background(), id, itemId).Execute()
+	r, err := apiClient.AttributesAPI.DeleteAttributeItem(context.Background(), id, itemId).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AttributesAPI.DeleteAttributeItem``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -279,6 +286,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -300,7 +308,7 @@ Name | Type | Description  | Notes
 
 ## DeleteAttributeReferenceConfig
 
-> DeleteAttributeReferenceConfig(ctx, id).Execute()
+> DeleteAttributeReferenceConfig(ctx, id).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Delete reference configuration for an attribute
 
@@ -320,10 +328,11 @@ import (
 
 func main() {
 	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the Reference attribute
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	r, err := apiClient.AttributesAPI.DeleteAttributeReferenceConfig(context.Background(), id).Execute()
+	r, err := apiClient.AttributesAPI.DeleteAttributeReferenceConfig(context.Background(), id).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AttributesAPI.DeleteAttributeReferenceConfig``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -347,6 +356,7 @@ Other parameters are passed through a pointer to a apiDeleteAttributeReferenceCo
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -368,7 +378,7 @@ Name | Type | Description  | Notes
 
 ## GetAttribute
 
-> AttributeResponse GetAttribute(ctx, id).Execute()
+> AttributeResponse GetAttribute(ctx, id).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Get an attribute by ID
 
@@ -388,10 +398,11 @@ import (
 
 func main() {
 	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the attribute to fetch
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AttributesAPI.GetAttribute(context.Background(), id).Execute()
+	resp, r, err := apiClient.AttributesAPI.GetAttribute(context.Background(), id).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AttributesAPI.GetAttribute``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -417,6 +428,7 @@ Other parameters are passed through a pointer to a apiGetAttributeRequest struct
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -438,7 +450,7 @@ Name | Type | Description  | Notes
 
 ## GetAttributeReferenceConfig
 
-> ReferenceConfigResponse GetAttributeReferenceConfig(ctx, id).Execute()
+> ReferenceConfigResponse GetAttributeReferenceConfig(ctx, id).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Get reference configuration for an attribute
 
@@ -458,10 +470,11 @@ import (
 
 func main() {
 	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the Reference attribute
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AttributesAPI.GetAttributeReferenceConfig(context.Background(), id).Execute()
+	resp, r, err := apiClient.AttributesAPI.GetAttributeReferenceConfig(context.Background(), id).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AttributesAPI.GetAttributeReferenceConfig``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -487,6 +500,7 @@ Other parameters are passed through a pointer to a apiGetAttributeReferenceConfi
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -508,7 +522,7 @@ Name | Type | Description  | Notes
 
 ## ListAttributeItems
 
-> ListAttributeItems200Response ListAttributeItems(ctx, id).Execute()
+> ListAttributeItems200Response ListAttributeItems(ctx, id).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 List items of an attribute
 
@@ -528,10 +542,11 @@ import (
 
 func main() {
 	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the List-type attribute
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AttributesAPI.ListAttributeItems(context.Background(), id).Execute()
+	resp, r, err := apiClient.AttributesAPI.ListAttributeItems(context.Background(), id).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AttributesAPI.ListAttributeItems``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -557,6 +572,7 @@ Other parameters are passed through a pointer to a apiListAttributeItemsRequest 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -578,7 +594,7 @@ Name | Type | Description  | Notes
 
 ## ListAttributes
 
-> ListAttributes200Response ListAttributes(ctx).Execute()
+> ListAttributes200Response ListAttributes(ctx).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 List all attributes
 
@@ -597,10 +613,11 @@ import (
 )
 
 func main() {
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AttributesAPI.ListAttributes(context.Background()).Execute()
+	resp, r, err := apiClient.AttributesAPI.ListAttributes(context.Background()).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AttributesAPI.ListAttributes``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -612,12 +629,16 @@ func main() {
 
 ### Path Parameters
 
-This endpoint does not need any parameter.
+
 
 ### Other Parameters
 
 Other parameters are passed through a pointer to a apiListAttributesRequest struct via the builder pattern
 
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -639,7 +660,7 @@ Other parameters are passed through a pointer to a apiListAttributesRequest stru
 
 ## PatchAttribute
 
-> PatchAttribute(ctx, id).PatchAttributeRequest(patchAttributeRequest).Execute()
+> PatchAttribute(ctx, id).PatchAttributeRequest(patchAttributeRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Patch an attribute (granular partial update)
 
@@ -660,10 +681,11 @@ import (
 func main() {
 	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the attribute to patch
 	patchAttributeRequest := *openapiclient.NewPatchAttributeRequest() // PatchAttributeRequest | 
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	r, err := apiClient.AttributesAPI.PatchAttribute(context.Background(), id).PatchAttributeRequest(patchAttributeRequest).Execute()
+	r, err := apiClient.AttributesAPI.PatchAttribute(context.Background(), id).PatchAttributeRequest(patchAttributeRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AttributesAPI.PatchAttribute``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -688,6 +710,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
  **patchAttributeRequest** | [**PatchAttributeRequest**](PatchAttributeRequest.md) |  | 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -709,7 +732,7 @@ Name | Type | Description  | Notes
 
 ## SetAttributeItems
 
-> SetAttributeItems(ctx, id).SetListItemsRequest(setListItemsRequest).Execute()
+> SetAttributeItems(ctx, id).SetListItemsRequest(setListItemsRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Set list items for an attribute (replaces all existing items)
 
@@ -730,10 +753,11 @@ import (
 func main() {
 	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the List-type attribute
 	setListItemsRequest := *openapiclient.NewSetListItemsRequest([]openapiclient.ListItemInput{*openapiclient.NewListItemInput("Red")}) // SetListItemsRequest | 
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	r, err := apiClient.AttributesAPI.SetAttributeItems(context.Background(), id).SetListItemsRequest(setListItemsRequest).Execute()
+	r, err := apiClient.AttributesAPI.SetAttributeItems(context.Background(), id).SetListItemsRequest(setListItemsRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AttributesAPI.SetAttributeItems``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -758,6 +782,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
  **setListItemsRequest** | [**SetListItemsRequest**](SetListItemsRequest.md) |  | 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -779,7 +804,7 @@ Name | Type | Description  | Notes
 
 ## SetAttributeReferenceConfig
 
-> SetAttributeReferenceConfig(ctx, id).SetReferenceConfigRequest(setReferenceConfigRequest).Execute()
+> SetAttributeReferenceConfig(ctx, id).SetReferenceConfigRequest(setReferenceConfigRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Set or update reference configuration for an attribute
 
@@ -800,10 +825,11 @@ import (
 func main() {
 	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the Reference attribute
 	setReferenceConfigRequest := *openapiclient.NewSetReferenceConfigRequest("018b2f1b-8c1a-75b3-8000-7f0000010002", "018b2f1b-8c1a-75b3-8000-7f0000010003") // SetReferenceConfigRequest | 
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	r, err := apiClient.AttributesAPI.SetAttributeReferenceConfig(context.Background(), id).SetReferenceConfigRequest(setReferenceConfigRequest).Execute()
+	r, err := apiClient.AttributesAPI.SetAttributeReferenceConfig(context.Background(), id).SetReferenceConfigRequest(setReferenceConfigRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AttributesAPI.SetAttributeReferenceConfig``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -828,6 +854,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
  **setReferenceConfigRequest** | [**SetReferenceConfigRequest**](SetReferenceConfigRequest.md) |  | 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -849,7 +876,7 @@ Name | Type | Description  | Notes
 
 ## UpdateAttribute
 
-> UpdateAttribute(ctx, id).UpdateAttributeRequest(updateAttributeRequest).Execute()
+> UpdateAttribute(ctx, id).UpdateAttributeRequest(updateAttributeRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Update an attribute (full replacement)
 
@@ -870,10 +897,11 @@ import (
 func main() {
 	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the attribute to update
 	updateAttributeRequest := *openapiclient.NewUpdateAttributeRequest("Product Color Variant") // UpdateAttributeRequest | 
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	r, err := apiClient.AttributesAPI.UpdateAttribute(context.Background(), id).UpdateAttributeRequest(updateAttributeRequest).Execute()
+	r, err := apiClient.AttributesAPI.UpdateAttribute(context.Background(), id).UpdateAttributeRequest(updateAttributeRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AttributesAPI.UpdateAttribute``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -898,6 +926,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
  **updateAttributeRequest** | [**UpdateAttributeRequest**](UpdateAttributeRequest.md) |  | 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -919,7 +948,7 @@ Name | Type | Description  | Notes
 
 ## UpdateAttributeItem
 
-> UpdateAttributeItem(ctx, id, itemId).UpdateListItemRequest(updateListItemRequest).Execute()
+> UpdateAttributeItem(ctx, id, itemId).UpdateListItemRequest(updateListItemRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Update a list item of an attribute
 
@@ -941,10 +970,11 @@ func main() {
 	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | UUID of the parent List attribute
 	itemId := "019a6b2c-8c3a-7c2e-8b3f-6c8a1a2b3c4d" // string | UUID of the list item to update
 	updateListItemRequest := *openapiclient.NewUpdateListItemRequest("Blue") // UpdateListItemRequest | 
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	r, err := apiClient.AttributesAPI.UpdateAttributeItem(context.Background(), id, itemId).UpdateListItemRequest(updateListItemRequest).Execute()
+	r, err := apiClient.AttributesAPI.UpdateAttributeItem(context.Background(), id, itemId).UpdateListItemRequest(updateListItemRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AttributesAPI.UpdateAttributeItem``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -971,6 +1001,7 @@ Name | Type | Description  | Notes
 
 
  **updateListItemRequest** | [**UpdateListItemRequest**](UpdateListItemRequest.md) |  | 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 

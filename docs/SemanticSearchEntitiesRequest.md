@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **TemplateId** | Pointer to **NullableString** | Optional template UUID or template slug to scope the search to | [optional] 
 **Limit** | Pointer to **int32** | Maximum number of semantic results to return (1-50, default: 10) | [optional] [default to 10]
 **Threshold** | Pointer to **float32** | Minimum cosine similarity threshold (0.0 to 1.0, default: 0.5) | [optional] [default to 0.5]
-**AttributeKey** | Pointer to **string** | Format for attribute_values dictionary keys: \&quot;id\&quot; for attribute UUIDs or \&quot;slug\&quot; for human-readable attribute slugs | [optional] [default to "id"]
+**Verbose** | Pointer to **bool** | When true, each nested entity&#39;s attribute_values is an array of EntityAttributeValue items (attribute id, slug, raw value, resolved custom_value, reference_entity_id). When false (default), attribute_values is a compact object mapping attribute slug to display value, with the ids behind list, reference and file labels in list_item_ids, reference_entity_ids and file_ids. | [optional] [default to false]
 
 ## Methods
 
@@ -134,30 +134,30 @@ SetThreshold sets Threshold field to given value.
 
 HasThreshold returns a boolean if a field has been set.
 
-### GetAttributeKey
+### GetVerbose
 
-`func (o *SemanticSearchEntitiesRequest) GetAttributeKey() string`
+`func (o *SemanticSearchEntitiesRequest) GetVerbose() bool`
 
-GetAttributeKey returns the AttributeKey field if non-nil, zero value otherwise.
+GetVerbose returns the Verbose field if non-nil, zero value otherwise.
 
-### GetAttributeKeyOk
+### GetVerboseOk
 
-`func (o *SemanticSearchEntitiesRequest) GetAttributeKeyOk() (*string, bool)`
+`func (o *SemanticSearchEntitiesRequest) GetVerboseOk() (*bool, bool)`
 
-GetAttributeKeyOk returns a tuple with the AttributeKey field if it's non-nil, zero value otherwise
+GetVerboseOk returns a tuple with the Verbose field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetAttributeKey
+### SetVerbose
 
-`func (o *SemanticSearchEntitiesRequest) SetAttributeKey(v string)`
+`func (o *SemanticSearchEntitiesRequest) SetVerbose(v bool)`
 
-SetAttributeKey sets AttributeKey field to given value.
+SetVerbose sets Verbose field to given value.
 
-### HasAttributeKey
+### HasVerbose
 
-`func (o *SemanticSearchEntitiesRequest) HasAttributeKey() bool`
+`func (o *SemanticSearchEntitiesRequest) HasVerbose() bool`
 
-HasAttributeKey returns a boolean if a field has been set.
+HasVerbose returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

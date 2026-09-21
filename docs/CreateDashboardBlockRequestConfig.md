@@ -19,6 +19,8 @@ Name | Type | Description | Notes
 **Limit** | Pointer to **int32** | Maximum number of rows to return for list table blocks (default: 10). | [optional] [default to 10]
 **Sort** | Pointer to **map[string]interface{}** | Sort configuration object for list table blocks (e.g. {\&quot;created_at\&quot;: \&quot;desc\&quot;}). | [optional] 
 **VisibleAttributes** | Pointer to **[]string** | Ordered list of attribute UUIDs (or \&quot;created_at\&quot;, \&quot;updated_at\&quot;) to display as columns in list table blocks. | [optional] 
+**GroupBy** | Pointer to **[]string** | Attribute slugs or UUIDs to group by, at most 3 (required for aggregate blocks). Lists, references, strings, numbers, booleans and dates can be keys; metrics, markdown, files and images cannot. Empty groups the whole filtered set into one row. | [optional] 
+**Aggregations** | Pointer to [**[]CreateDashboardBlockRequestConfigAggregationsInner**](CreateDashboardBlockRequestConfigAggregationsInner.md) | Reduces computed per group for aggregate blocks, reported back in this order (1-10 entries; defaults to a single &#x60;count&#x60; when omitted). &#x60;count&#x60; takes no field; &#x60;sum&#x60; and &#x60;avg&#x60; need a number attribute; &#x60;min&#x60; and &#x60;max&#x60; accept number, date and datetime attributes. | [optional] 
 **Filters** | Pointer to [**[]CreateDashboardBlockRequestConfigFiltersInner**](CreateDashboardBlockRequestConfigFiltersInner.md) | Optional entity filtering conditions applied to block data. | [optional] 
 **X** | Pointer to **int32** | Horizontal grid column position (0 to 11 on the 12-column grid canvas). | [optional] [default to 0]
 **Y** | Pointer to **int32** | Vertical grid row position (0 to N, 0-indexed). | [optional] [default to 0]
@@ -478,6 +480,56 @@ SetVisibleAttributes sets VisibleAttributes field to given value.
 `func (o *CreateDashboardBlockRequestConfig) HasVisibleAttributes() bool`
 
 HasVisibleAttributes returns a boolean if a field has been set.
+
+### GetGroupBy
+
+`func (o *CreateDashboardBlockRequestConfig) GetGroupBy() []string`
+
+GetGroupBy returns the GroupBy field if non-nil, zero value otherwise.
+
+### GetGroupByOk
+
+`func (o *CreateDashboardBlockRequestConfig) GetGroupByOk() (*[]string, bool)`
+
+GetGroupByOk returns a tuple with the GroupBy field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetGroupBy
+
+`func (o *CreateDashboardBlockRequestConfig) SetGroupBy(v []string)`
+
+SetGroupBy sets GroupBy field to given value.
+
+### HasGroupBy
+
+`func (o *CreateDashboardBlockRequestConfig) HasGroupBy() bool`
+
+HasGroupBy returns a boolean if a field has been set.
+
+### GetAggregations
+
+`func (o *CreateDashboardBlockRequestConfig) GetAggregations() []CreateDashboardBlockRequestConfigAggregationsInner`
+
+GetAggregations returns the Aggregations field if non-nil, zero value otherwise.
+
+### GetAggregationsOk
+
+`func (o *CreateDashboardBlockRequestConfig) GetAggregationsOk() (*[]CreateDashboardBlockRequestConfigAggregationsInner, bool)`
+
+GetAggregationsOk returns a tuple with the Aggregations field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAggregations
+
+`func (o *CreateDashboardBlockRequestConfig) SetAggregations(v []CreateDashboardBlockRequestConfigAggregationsInner)`
+
+SetAggregations sets Aggregations field to given value.
+
+### HasAggregations
+
+`func (o *CreateDashboardBlockRequestConfig) HasAggregations() bool`
+
+HasAggregations returns a boolean if a field has been set.
 
 ### GetFilters
 

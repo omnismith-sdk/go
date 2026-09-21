@@ -16,6 +16,9 @@ Name | Type | Description | Notes
 **Series** | Pointer to [**[]ResolvedChartBlockResponseSeriesInner**](ResolvedChartBlockResponseSeriesInner.md) | Time-series data grouped per entity | [optional] 
 **Items** | Pointer to [**[]ResolvedListBlockResponseItemsInner**](ResolvedListBlockResponseItemsInner.md) | List of matching entity records with hydrated attributes | [optional] 
 **TotalCount** | Pointer to **int32** | Total number of items matching filters | [optional] 
+**Limit** | Pointer to **int32** | Maximum number of groups returned, as configured on the block | [optional] 
+**Truncated** | Pointer to **bool** | Whether more groups exist beyond &#x60;limit&#x60; | [optional] 
+**Groups** | Pointer to [**[]ResolvedAggregateBlockResponseGroupsInner**](ResolvedAggregateBlockResponseGroupsInner.md) | One row per group, in the order configured on the block | [optional] 
 
 ## Methods
 
@@ -335,6 +338,81 @@ SetTotalCount sets TotalCount field to given value.
 `func (o *ResolvedBlockResponse) HasTotalCount() bool`
 
 HasTotalCount returns a boolean if a field has been set.
+
+### GetLimit
+
+`func (o *ResolvedBlockResponse) GetLimit() int32`
+
+GetLimit returns the Limit field if non-nil, zero value otherwise.
+
+### GetLimitOk
+
+`func (o *ResolvedBlockResponse) GetLimitOk() (*int32, bool)`
+
+GetLimitOk returns a tuple with the Limit field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetLimit
+
+`func (o *ResolvedBlockResponse) SetLimit(v int32)`
+
+SetLimit sets Limit field to given value.
+
+### HasLimit
+
+`func (o *ResolvedBlockResponse) HasLimit() bool`
+
+HasLimit returns a boolean if a field has been set.
+
+### GetTruncated
+
+`func (o *ResolvedBlockResponse) GetTruncated() bool`
+
+GetTruncated returns the Truncated field if non-nil, zero value otherwise.
+
+### GetTruncatedOk
+
+`func (o *ResolvedBlockResponse) GetTruncatedOk() (*bool, bool)`
+
+GetTruncatedOk returns a tuple with the Truncated field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTruncated
+
+`func (o *ResolvedBlockResponse) SetTruncated(v bool)`
+
+SetTruncated sets Truncated field to given value.
+
+### HasTruncated
+
+`func (o *ResolvedBlockResponse) HasTruncated() bool`
+
+HasTruncated returns a boolean if a field has been set.
+
+### GetGroups
+
+`func (o *ResolvedBlockResponse) GetGroups() []ResolvedAggregateBlockResponseGroupsInner`
+
+GetGroups returns the Groups field if non-nil, zero value otherwise.
+
+### GetGroupsOk
+
+`func (o *ResolvedBlockResponse) GetGroupsOk() (*[]ResolvedAggregateBlockResponseGroupsInner, bool)`
+
+GetGroupsOk returns a tuple with the Groups field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetGroups
+
+`func (o *ResolvedBlockResponse) SetGroups(v []ResolvedAggregateBlockResponseGroupsInner)`
+
+SetGroups sets Groups field to given value.
+
+### HasGroups
+
+`func (o *ResolvedBlockResponse) HasGroups() bool`
+
+HasGroups returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

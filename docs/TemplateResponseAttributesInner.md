@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **AttributeId** | **string** | Attribute UUID | 
-**DefaultValue** | Pointer to **NullableString** | Per-template default value for newly created entities (or null) | [optional] 
+**DefaultValue** | Pointer to **NullableString** | Per-template default value for newly created entities (or null). For List attributes, stores the list item UUID. | [optional] 
 
 ## Methods
 

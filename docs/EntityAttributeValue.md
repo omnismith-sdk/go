@@ -4,17 +4,17 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Value** | Pointer to **string** | Raw serialized attribute value (string, numeric string, ISO date, or UUID) | [optional] 
-**CustomValue** | Pointer to **NullableString** | Resolved display label or custom representation (for list options, reference entities, or formatted values) | [optional] 
-**ReferenceEntityId** | Pointer to **NullableString** | Target entity UUID when the attribute kind is reference | [optional] 
-**AttributeId** | Pointer to **NullableString** | Canonical attribute definition UUID | [optional] 
-**AttributeSlug** | Pointer to **NullableString** | Human-readable attribute slug identifier | [optional] 
+**Id** | **string** | Canonical attribute definition UUID | 
+**Slug** | **NullableString** | Human-readable attribute slug identifier; null when the attribute has no slug | 
+**Value** | **string** | Raw serialized attribute value (string, numeric string, ISO date, or UUID); empty string when unset | 
+**CustomValue** | **NullableString** | Resolved display label (list option label, referenced entity display value, original filename) or the raw value for scalars | 
+**ReferenceEntityId** | **NullableString** | Target entity UUID when the attribute kind is reference | 
 
 ## Methods
 
 ### NewEntityAttributeValue
 
-`func NewEntityAttributeValue() *EntityAttributeValue`
+`func NewEntityAttributeValue(id string, slug NullableString, value string, customValue NullableString, referenceEntityId NullableString, ) *EntityAttributeValue`
 
 NewEntityAttributeValue instantiates a new EntityAttributeValue object
 This constructor will assign default values to properties that have it defined,
@@ -29,6 +29,56 @@ NewEntityAttributeValueWithDefaults instantiates a new EntityAttributeValue obje
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
+### GetId
+
+`func (o *EntityAttributeValue) GetId() string`
+
+GetId returns the Id field if non-nil, zero value otherwise.
+
+### GetIdOk
+
+`func (o *EntityAttributeValue) GetIdOk() (*string, bool)`
+
+GetIdOk returns a tuple with the Id field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetId
+
+`func (o *EntityAttributeValue) SetId(v string)`
+
+SetId sets Id field to given value.
+
+
+### GetSlug
+
+`func (o *EntityAttributeValue) GetSlug() string`
+
+GetSlug returns the Slug field if non-nil, zero value otherwise.
+
+### GetSlugOk
+
+`func (o *EntityAttributeValue) GetSlugOk() (*string, bool)`
+
+GetSlugOk returns a tuple with the Slug field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSlug
+
+`func (o *EntityAttributeValue) SetSlug(v string)`
+
+SetSlug sets Slug field to given value.
+
+
+### SetSlugNil
+
+`func (o *EntityAttributeValue) SetSlugNil(b bool)`
+
+ SetSlugNil sets the value for Slug to be an explicit nil
+
+### UnsetSlug
+`func (o *EntityAttributeValue) UnsetSlug()`
+
+UnsetSlug ensures that no value is present for Slug, not even an explicit nil
 ### GetValue
 
 `func (o *EntityAttributeValue) GetValue() string`
@@ -48,11 +98,6 @@ and a boolean to check if the value has been set.
 
 SetValue sets Value field to given value.
 
-### HasValue
-
-`func (o *EntityAttributeValue) HasValue() bool`
-
-HasValue returns a boolean if a field has been set.
 
 ### GetCustomValue
 
@@ -73,11 +118,6 @@ and a boolean to check if the value has been set.
 
 SetCustomValue sets CustomValue field to given value.
 
-### HasCustomValue
-
-`func (o *EntityAttributeValue) HasCustomValue() bool`
-
-HasCustomValue returns a boolean if a field has been set.
 
 ### SetCustomValueNil
 
@@ -108,11 +148,6 @@ and a boolean to check if the value has been set.
 
 SetReferenceEntityId sets ReferenceEntityId field to given value.
 
-### HasReferenceEntityId
-
-`func (o *EntityAttributeValue) HasReferenceEntityId() bool`
-
-HasReferenceEntityId returns a boolean if a field has been set.
 
 ### SetReferenceEntityIdNil
 
@@ -124,76 +159,6 @@ HasReferenceEntityId returns a boolean if a field has been set.
 `func (o *EntityAttributeValue) UnsetReferenceEntityId()`
 
 UnsetReferenceEntityId ensures that no value is present for ReferenceEntityId, not even an explicit nil
-### GetAttributeId
-
-`func (o *EntityAttributeValue) GetAttributeId() string`
-
-GetAttributeId returns the AttributeId field if non-nil, zero value otherwise.
-
-### GetAttributeIdOk
-
-`func (o *EntityAttributeValue) GetAttributeIdOk() (*string, bool)`
-
-GetAttributeIdOk returns a tuple with the AttributeId field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetAttributeId
-
-`func (o *EntityAttributeValue) SetAttributeId(v string)`
-
-SetAttributeId sets AttributeId field to given value.
-
-### HasAttributeId
-
-`func (o *EntityAttributeValue) HasAttributeId() bool`
-
-HasAttributeId returns a boolean if a field has been set.
-
-### SetAttributeIdNil
-
-`func (o *EntityAttributeValue) SetAttributeIdNil(b bool)`
-
- SetAttributeIdNil sets the value for AttributeId to be an explicit nil
-
-### UnsetAttributeId
-`func (o *EntityAttributeValue) UnsetAttributeId()`
-
-UnsetAttributeId ensures that no value is present for AttributeId, not even an explicit nil
-### GetAttributeSlug
-
-`func (o *EntityAttributeValue) GetAttributeSlug() string`
-
-GetAttributeSlug returns the AttributeSlug field if non-nil, zero value otherwise.
-
-### GetAttributeSlugOk
-
-`func (o *EntityAttributeValue) GetAttributeSlugOk() (*string, bool)`
-
-GetAttributeSlugOk returns a tuple with the AttributeSlug field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetAttributeSlug
-
-`func (o *EntityAttributeValue) SetAttributeSlug(v string)`
-
-SetAttributeSlug sets AttributeSlug field to given value.
-
-### HasAttributeSlug
-
-`func (o *EntityAttributeValue) HasAttributeSlug() bool`
-
-HasAttributeSlug returns a boolean if a field has been set.
-
-### SetAttributeSlugNil
-
-`func (o *EntityAttributeValue) SetAttributeSlugNil(b bool)`
-
- SetAttributeSlugNil sets the value for AttributeSlug to be an explicit nil
-
-### UnsetAttributeSlug
-`func (o *EntityAttributeValue) UnsetAttributeSlug()`
-
-UnsetAttributeSlug ensures that no value is present for AttributeSlug, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

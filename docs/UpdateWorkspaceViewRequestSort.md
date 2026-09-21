@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Active** | Pointer to **string** | Attribute key or column to sort by | [optional] 
+**Active** | Pointer to **string** | Attribute key (UUID or slug) or system column to sort by | [optional] 
 **Direction** | Pointer to **string** | Sort direction | [optional] 
 
 ## Methods

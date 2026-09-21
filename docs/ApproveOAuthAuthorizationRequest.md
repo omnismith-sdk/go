@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **ClientId** | **string** | Client identifier | 
 **RedirectUri** | **string** | Redirection URI to return the authorization code | 
-**ProjectId** | **string** | Selected Project UUID that client will be authorized to access | 
+**ProjectIds** | **[]string** | Every project UUID the client is granted. The first is the project the credential acts on until it selects another, and the set bounds what it can ever reach. There is no wildcard: a grant names its projects explicitly, so it cannot silently widen as the user creates more. | 
 **CodeChallenge** | **string** | PKCE code challenge string (RFC 7636) | 
 **CodeChallengeMethod** | Pointer to **string** | PKCE challenge transformation method | [optional] 
 **Scopes** | Pointer to **[]string** | Authorized scope strings | [optional] 
@@ -16,7 +16,7 @@ Name | Type | Description | Notes
 
 ### NewApproveOAuthAuthorizationRequest
 
-`func NewApproveOAuthAuthorizationRequest(clientId string, redirectUri string, projectId string, codeChallenge string, ) *ApproveOAuthAuthorizationRequest`
+`func NewApproveOAuthAuthorizationRequest(clientId string, redirectUri string, projectIds []string, codeChallenge string, ) *ApproveOAuthAuthorizationRequest`
 
 NewApproveOAuthAuthorizationRequest instantiates a new ApproveOAuthAuthorizationRequest object
 This constructor will assign default values to properties that have it defined,
@@ -71,24 +71,24 @@ and a boolean to check if the value has been set.
 SetRedirectUri sets RedirectUri field to given value.
 
 
-### GetProjectId
+### GetProjectIds
 
-`func (o *ApproveOAuthAuthorizationRequest) GetProjectId() string`
+`func (o *ApproveOAuthAuthorizationRequest) GetProjectIds() []string`
 
-GetProjectId returns the ProjectId field if non-nil, zero value otherwise.
+GetProjectIds returns the ProjectIds field if non-nil, zero value otherwise.
 
-### GetProjectIdOk
+### GetProjectIdsOk
 
-`func (o *ApproveOAuthAuthorizationRequest) GetProjectIdOk() (*string, bool)`
+`func (o *ApproveOAuthAuthorizationRequest) GetProjectIdsOk() (*[]string, bool)`
 
-GetProjectIdOk returns a tuple with the ProjectId field if it's non-nil, zero value otherwise
+GetProjectIdsOk returns a tuple with the ProjectIds field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetProjectId
+### SetProjectIds
 
-`func (o *ApproveOAuthAuthorizationRequest) SetProjectId(v string)`
+`func (o *ApproveOAuthAuthorizationRequest) SetProjectIds(v []string)`
 
-SetProjectId sets ProjectId field to given value.
+SetProjectIds sets ProjectIds field to given value.
 
 
 ### GetCodeChallenge

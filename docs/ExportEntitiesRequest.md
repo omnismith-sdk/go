@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **GlobalSearch** | Pointer to **NullableString** | Full-text search query string across all string dimension attributes | [optional] 
-**Filters** | Pointer to [**[]ExportEntitiesRequestFiltersInner**](ExportEntitiesRequestFiltersInner.md) | List of structured attribute and metadata filter conditions | [optional] 
+**FilterGroups** | Pointer to [**[][]EntityFilter**]([]EntityFilter.md) | Filter groups: clauses inside a group are AND-ed, groups are OR-ed. &#x60;[]&#x60; applies no filter, &#x60;[[a, b]]&#x60; is &#x60;a AND b&#x60;, &#x60;[[a], [b, c]]&#x60; is &#x60;a OR (b AND c)&#x60;. | [optional] 
 
 ## Methods
 
@@ -61,30 +61,30 @@ HasGlobalSearch returns a boolean if a field has been set.
 `func (o *ExportEntitiesRequest) UnsetGlobalSearch()`
 
 UnsetGlobalSearch ensures that no value is present for GlobalSearch, not even an explicit nil
-### GetFilters
+### GetFilterGroups
 
-`func (o *ExportEntitiesRequest) GetFilters() []ExportEntitiesRequestFiltersInner`
+`func (o *ExportEntitiesRequest) GetFilterGroups() [][]EntityFilter`
 
-GetFilters returns the Filters field if non-nil, zero value otherwise.
+GetFilterGroups returns the FilterGroups field if non-nil, zero value otherwise.
 
-### GetFiltersOk
+### GetFilterGroupsOk
 
-`func (o *ExportEntitiesRequest) GetFiltersOk() (*[]ExportEntitiesRequestFiltersInner, bool)`
+`func (o *ExportEntitiesRequest) GetFilterGroupsOk() (*[][]EntityFilter, bool)`
 
-GetFiltersOk returns a tuple with the Filters field if it's non-nil, zero value otherwise
+GetFilterGroupsOk returns a tuple with the FilterGroups field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetFilters
+### SetFilterGroups
 
-`func (o *ExportEntitiesRequest) SetFilters(v []ExportEntitiesRequestFiltersInner)`
+`func (o *ExportEntitiesRequest) SetFilterGroups(v [][]EntityFilter)`
 
-SetFilters sets Filters field to given value.
+SetFilterGroups sets FilterGroups field to given value.
 
-### HasFilters
+### HasFilterGroups
 
-`func (o *ExportEntitiesRequest) HasFilters() bool`
+`func (o *ExportEntitiesRequest) HasFilterGroups() bool`
 
-HasFilters returns a boolean if a field has been set.
+HasFilterGroups returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

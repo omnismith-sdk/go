@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**TemplateId** | **string** | Target template ID defining entity schema bound to this view pane | 
-**Name** | **string** | Display label for the view pane tab or header | 
-**Filters** | Pointer to **[]map[string]interface{}** | Dynamic filtering rules applied to entities rendered in this view pane | [optional] 
+**TemplateId** | **string** | Target template UUID or slug defining entity schema bound to this view pane | 
+**Name** | **string** | Display label for the view pane tab or header (e.g. \&quot;Telegram Channel Hub\&quot;, \&quot;All Pipeline\&quot;) | 
+**Filters** | Pointer to **[]map[string]interface{}** | Dynamic filtering rules applied to entities rendered in this view pane. Attribute field can be specified by attribute UUID or attribute slug (e.g. [{\&quot;field\&quot;: \&quot;platform\&quot;, \&quot;operator\&quot;: \&quot;eq\&quot;, \&quot;value\&quot;: \&quot;&lt;list_item_id_or_slug&gt;\&quot;, \&quot;is_active\&quot;: true}]). | [optional] 
 **SearchString** | Pointer to **NullableString** | Initial search query string applied to entities in this view | [optional] 
 **SearchMode** | Pointer to **string** | Search execution mode (keyword text search or semantic vector similarity search) | [optional] [default to "keyword"]
 **Sort** | Pointer to [**NullableCreateWorkspaceViewRequestSort**](CreateWorkspaceViewRequestSort.md) |  | [optional] 
 **DisplayMode** | Pointer to **string** | Presentation layout type for entity records (table or card grid) | [optional] [default to "table"]
-**DisplayedColumns** | Pointer to **[]string** | List of attribute slugs or UUIDs to display as columns in table mode | [optional] 
+**DisplayedColumns** | Pointer to **[]string** | List of attribute UUIDs or slugs to display as columns in table mode (e.g. [\&quot;title\&quot;, \&quot;platform\&quot;, \&quot;status\&quot;, \&quot;scheduled_date\&quot;]) | [optional] 
 **PaneOrder** | Pointer to **NullableInt32** | Display sequence index of this pane within the workspace layout | [optional] 
 
 ## Methods

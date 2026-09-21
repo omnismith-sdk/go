@@ -4,22 +4,21 @@ All URIs are relative to *https://api.omnismith.io/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**GetMyPermissions**](AuthAPI.md#GetMyPermissions) | **Get** /auth/me/permissions | Get current user role permissions
+[**GetMyPermissions**](AuthAPI.md#GetMyPermissions) | **Get** /auth/me/permissions | Discover authenticated caller permissions and capabilities
 [**GoogleLogin**](AuthAPI.md#GoogleLogin) | **Post** /auth/google-login | Authenticate or register with Google Sign-In
 [**GoogleLoginRedirect**](AuthAPI.md#GoogleLoginRedirect) | **Post** /auth/google-login-redirect | Google OAuth callback redirect handler
 [**ListSessions**](AuthAPI.md#ListSessions) | **Get** /auth/sessions | List active and historical user sessions
 [**Login**](AuthAPI.md#Login) | **Post** /auth/login | Authenticate user with email and password
 [**RefreshToken**](AuthAPI.md#RefreshToken) | **Post** /auth/refresh | Rotate refresh token and issue new access token
 [**RevokeSession**](AuthAPI.md#RevokeSession) | **Delete** /auth/sessions/{id} | Revoke an active login session
-[**SwitchProject**](AuthAPI.md#SwitchProject) | **Post** /auth/switch-project | Switch active project context
 
 
 
 ## GetMyPermissions
 
-> GetMyPermissions200Response GetMyPermissions(ctx).Execute()
+> GetMyPermissions200Response GetMyPermissions(ctx).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
-Get current user role permissions
+Discover authenticated caller permissions and capabilities
 
 
 
@@ -36,10 +35,11 @@ import (
 )
 
 func main() {
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AuthAPI.GetMyPermissions(context.Background()).Execute()
+	resp, r, err := apiClient.AuthAPI.GetMyPermissions(context.Background()).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AuthAPI.GetMyPermissions``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -51,12 +51,16 @@ func main() {
 
 ### Path Parameters
 
-This endpoint does not need any parameter.
+
 
 ### Other Parameters
 
 Other parameters are passed through a pointer to a apiGetMyPermissionsRequest struct via the builder pattern
 
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -462,72 +466,6 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## SwitchProject
-
-> SwitchProject200Response SwitchProject(ctx).SwitchProjectRequest(switchProjectRequest).Execute()
-
-Switch active project context
-
-
-
-### Example
-
-```go
-package main
-
-import (
-	"context"
-	"fmt"
-	"os"
-	openapiclient "github.com/omnismith-sdk/go"
-)
-
-func main() {
-	switchProjectRequest := *openapiclient.NewSwitchProjectRequest("018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7a") // SwitchProjectRequest | 
-
-	configuration := openapiclient.NewConfiguration()
-	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AuthAPI.SwitchProject(context.Background()).SwitchProjectRequest(switchProjectRequest).Execute()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AuthAPI.SwitchProject``: %v\n", err)
-		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-	}
-	// response from `SwitchProject`: SwitchProject200Response
-	fmt.Fprintf(os.Stdout, "Response from `AuthAPI.SwitchProject`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiSwitchProjectRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **switchProjectRequest** | [**SwitchProjectRequest**](SwitchProjectRequest.md) |  | 
-
-### Return type
-
-[**SwitchProject200Response**](SwitchProject200Response.md)
-
-### Authorization
-
-[bearerAuth](../README.md#bearerAuth)
-
-### HTTP request headers
-
-- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)

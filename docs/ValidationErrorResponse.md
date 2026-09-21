@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **Status** | **int32** |  | 
 **Errors** | **map[string][]string** | Map of field names to array of error messages | 
 **Detail** | Pointer to **NullableString** |  | [optional] 
+**Violations** | Pointer to [**[]ValidationErrorResponseViolationsInner**](ValidationErrorResponseViolationsInner.md) | Present when a template&#39;s business rules refused an entity write: one entry per failing constraint, keyed the same way as &#x60;errors&#x60; (&#x60;attributes.&lt;slug&gt;&#x60;) and naming the rule behind it. &#x60;errors&#x60; carries the same messages, so clients that only read &#x60;errors&#x60; keep working. | [optional] 
 
 ## Methods
 
@@ -144,6 +145,31 @@ HasDetail returns a boolean if a field has been set.
 `func (o *ValidationErrorResponse) UnsetDetail()`
 
 UnsetDetail ensures that no value is present for Detail, not even an explicit nil
+### GetViolations
+
+`func (o *ValidationErrorResponse) GetViolations() []ValidationErrorResponseViolationsInner`
+
+GetViolations returns the Violations field if non-nil, zero value otherwise.
+
+### GetViolationsOk
+
+`func (o *ValidationErrorResponse) GetViolationsOk() (*[]ValidationErrorResponseViolationsInner, bool)`
+
+GetViolationsOk returns a tuple with the Violations field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetViolations
+
+`func (o *ValidationErrorResponse) SetViolations(v []ValidationErrorResponseViolationsInner)`
+
+SetViolations sets Violations field to given value.
+
+### HasViolations
+
+`func (o *ValidationErrorResponse) HasViolations() bool`
+
+HasViolations returns a boolean if a field has been set.
+
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

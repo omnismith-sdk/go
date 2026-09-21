@@ -4,16 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**TemplateId** | Pointer to **NullableString** | Template UUID to instantiate (mutually exclusive with template_slug) | [optional] 
-**AttributeValues** | Pointer to [**[]CreateEntityRequestAttributeValuesInner**](CreateEntityRequestAttributeValuesInner.md) | Initial attribute values for dimensions, lists, references, and initial metrics | [optional] 
+**Attributes** | [**map[string]EntityAttributesInputValue**](EntityAttributesInputValue.md) | Map of attribute slug or UUID → value. Keys may be mixed freely in one request; each attribute may appear once.  ### Values - **Plain scalar** — &#x60;\&quot;text\&quot;&#x60;, &#x60;42&#x60;, &#x60;129.99&#x60;, &#x60;true&#x60;, or &#x60;null&#x60;. Numbers and booleans are serialized for you (&#x60;42&#x60; → &#x60;\&quot;42\&quot;&#x60;, &#x60;true&#x60; → &#x60;\&quot;true\&quot;&#x60;); floats keep exactly the digits you sent. - **&#x60;null&#x60;** — clears the attribute. - **Backfill object** — &#x60;{ \&quot;value\&quot;: &lt;scalar|null&gt;, \&quot;updated_at\&quot;: \&quot;2026-09-12T12:23:52Z\&quot; }&#x60; records the value as observed at that moment (history import). &#x60;updated_at&#x60; must be RFC 3339 with an explicit offset (&#x60;Z&#x60; or &#x60;±HH:MM&#x60;); it defaults to now when omitted. - **Operation object** — &#x60;{ \&quot;op\&quot;: \&quot;increment\&quot;, \&quot;value\&quot;: 1 }&#x60; adds the number to the stored value instead of overwriting it: you never need to read the current value, and concurrent increments are serialized so none is lost. Allowed on **Number** attributes and **Metrics** only (a metric increment appends &#x60;latest + value&#x60; as a new observation); a never-set attribute counts as &#x60;0&#x60;; a negative &#x60;value&#x60; subtracts. &#x60;op&#x60; cannot be combined with &#x60;updated_at&#x60;. Not accepted on create. The change log records the resolved value, never the operand.  ### Value format by attribute type - **Text / Markdown**: UTF-8 string - **Number**: number or numeric string (&#x60;129.99&#x60;, &#x60;\&quot;42\&quot;&#x60;) - **Boolean**: &#x60;true&#x60; / &#x60;false&#x60; (or &#x60;\&quot;true\&quot;&#x60; / &#x60;\&quot;false\&quot;&#x60;, &#x60;\&quot;1\&quot;&#x60; / &#x60;\&quot;0\&quot;&#x60;) - **Date**: &#x60;YYYY-MM-DD&#x60;; **Datetime**: &#x60;YYYY-MM-DD HH:MM:SS&#x60; or ISO 8601 &#x60;YYYY-MM-DDTHH:MM:SSZ&#x60; - **File / Image**: UUID of a previously uploaded file asset - **List**: UUID of one of the attribute&#39;s list items - **Reference**: UUID of the referenced entity - **Metric**: numeric observation; appended to the time series (never overwritten)  ### Example &#x60;&#x60;&#x60;json {   \&quot;hostname\&quot;: \&quot;edge-fra-01\&quot;,   \&quot;cpu_cores\&quot;: 8,   \&quot;notes\&quot;: null,   \&quot;operational_status\&quot;: { \&quot;value\&quot;: \&quot;Active\&quot;, \&quot;updated_at\&quot;: \&quot;2026-09-12T12:23:52Z\&quot; },   \&quot;restart_count\&quot;: { \&quot;op\&quot;: \&quot;increment\&quot;, \&quot;value\&quot;: 1 } } &#x60;&#x60;&#x60; | 
 **Id** | Pointer to **NullableString** | Optional client-assigned UUIDv7 identifier for the entity record. If omitted, a UUIDv7 is automatically generated. | [optional] 
-**TemplateSlug** | Pointer to **NullableString** | Template slug identifier to instantiate (mutually exclusive with template_id) | [optional] 
 
 ## Methods
 
 ### NewCreateEntityRequest
 
-`func NewCreateEntityRequest() *CreateEntityRequest`
+`func NewCreateEntityRequest(attributes map[string]EntityAttributesInputValue, ) *CreateEntityRequest`
 
 NewCreateEntityRequest instantiates a new CreateEntityRequest object
 This constructor will assign default values to properties that have it defined,
@@ -28,65 +26,25 @@ NewCreateEntityRequestWithDefaults instantiates a new CreateEntityRequest object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetTemplateId
+### GetAttributes
 
-`func (o *CreateEntityRequest) GetTemplateId() string`
+`func (o *CreateEntityRequest) GetAttributes() map[string]EntityAttributesInputValue`
 
-GetTemplateId returns the TemplateId field if non-nil, zero value otherwise.
+GetAttributes returns the Attributes field if non-nil, zero value otherwise.
 
-### GetTemplateIdOk
+### GetAttributesOk
 
-`func (o *CreateEntityRequest) GetTemplateIdOk() (*string, bool)`
+`func (o *CreateEntityRequest) GetAttributesOk() (*map[string]EntityAttributesInputValue, bool)`
 
-GetTemplateIdOk returns a tuple with the TemplateId field if it's non-nil, zero value otherwise
+GetAttributesOk returns a tuple with the Attributes field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetTemplateId
+### SetAttributes
 
-`func (o *CreateEntityRequest) SetTemplateId(v string)`
+`func (o *CreateEntityRequest) SetAttributes(v map[string]EntityAttributesInputValue)`
 
-SetTemplateId sets TemplateId field to given value.
+SetAttributes sets Attributes field to given value.
 
-### HasTemplateId
-
-`func (o *CreateEntityRequest) HasTemplateId() bool`
-
-HasTemplateId returns a boolean if a field has been set.
-
-### SetTemplateIdNil
-
-`func (o *CreateEntityRequest) SetTemplateIdNil(b bool)`
-
- SetTemplateIdNil sets the value for TemplateId to be an explicit nil
-
-### UnsetTemplateId
-`func (o *CreateEntityRequest) UnsetTemplateId()`
-
-UnsetTemplateId ensures that no value is present for TemplateId, not even an explicit nil
-### GetAttributeValues
-
-`func (o *CreateEntityRequest) GetAttributeValues() []CreateEntityRequestAttributeValuesInner`
-
-GetAttributeValues returns the AttributeValues field if non-nil, zero value otherwise.
-
-### GetAttributeValuesOk
-
-`func (o *CreateEntityRequest) GetAttributeValuesOk() (*[]CreateEntityRequestAttributeValuesInner, bool)`
-
-GetAttributeValuesOk returns a tuple with the AttributeValues field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetAttributeValues
-
-`func (o *CreateEntityRequest) SetAttributeValues(v []CreateEntityRequestAttributeValuesInner)`
-
-SetAttributeValues sets AttributeValues field to given value.
-
-### HasAttributeValues
-
-`func (o *CreateEntityRequest) HasAttributeValues() bool`
-
-HasAttributeValues returns a boolean if a field has been set.
 
 ### GetId
 
@@ -123,41 +81,6 @@ HasId returns a boolean if a field has been set.
 `func (o *CreateEntityRequest) UnsetId()`
 
 UnsetId ensures that no value is present for Id, not even an explicit nil
-### GetTemplateSlug
-
-`func (o *CreateEntityRequest) GetTemplateSlug() string`
-
-GetTemplateSlug returns the TemplateSlug field if non-nil, zero value otherwise.
-
-### GetTemplateSlugOk
-
-`func (o *CreateEntityRequest) GetTemplateSlugOk() (*string, bool)`
-
-GetTemplateSlugOk returns a tuple with the TemplateSlug field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetTemplateSlug
-
-`func (o *CreateEntityRequest) SetTemplateSlug(v string)`
-
-SetTemplateSlug sets TemplateSlug field to given value.
-
-### HasTemplateSlug
-
-`func (o *CreateEntityRequest) HasTemplateSlug() bool`
-
-HasTemplateSlug returns a boolean if a field has been set.
-
-### SetTemplateSlugNil
-
-`func (o *CreateEntityRequest) SetTemplateSlugNil(b bool)`
-
- SetTemplateSlugNil sets the value for TemplateSlug to be an explicit nil
-
-### UnsetTemplateSlug
-`func (o *CreateEntityRequest) UnsetTemplateSlug()`
-
-UnsetTemplateSlug ensures that no value is present for TemplateSlug, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

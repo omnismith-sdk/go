@@ -19,6 +19,8 @@ Name | Type | Description | Notes
 **Limit** | Pointer to **NullableInt32** | Entity limit for list blocks | [optional] 
 **Sort** | Pointer to **map[string]interface{}** | Sort config object for list blocks | [optional] 
 **VisibleAttributes** | Pointer to **[]string** | List block visible attribute IDs | [optional] 
+**GroupBy** | Pointer to **[]string** | Aggregate block group-by fields, at most 3 | [optional] 
+**Aggregations** | Pointer to [**[]UpdateDashboardBlockRequestConfigAggregationsInner**](UpdateDashboardBlockRequestConfigAggregationsInner.md) | Aggregate block reduces (1-10 entries) | [optional] 
 **Filters** | Pointer to **[]map[string]interface{}** | Entity filter rules | [optional] 
 **X** | Pointer to **NullableInt32** | Horizontal grid column (0..11 on 12-column grid) | [optional] 
 **Y** | Pointer to **NullableInt32** | Vertical grid row (0..N) | [optional] 
@@ -569,6 +571,76 @@ HasVisibleAttributes returns a boolean if a field has been set.
 `func (o *UpdateDashboardBlockRequestConfig) UnsetVisibleAttributes()`
 
 UnsetVisibleAttributes ensures that no value is present for VisibleAttributes, not even an explicit nil
+### GetGroupBy
+
+`func (o *UpdateDashboardBlockRequestConfig) GetGroupBy() []string`
+
+GetGroupBy returns the GroupBy field if non-nil, zero value otherwise.
+
+### GetGroupByOk
+
+`func (o *UpdateDashboardBlockRequestConfig) GetGroupByOk() (*[]string, bool)`
+
+GetGroupByOk returns a tuple with the GroupBy field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetGroupBy
+
+`func (o *UpdateDashboardBlockRequestConfig) SetGroupBy(v []string)`
+
+SetGroupBy sets GroupBy field to given value.
+
+### HasGroupBy
+
+`func (o *UpdateDashboardBlockRequestConfig) HasGroupBy() bool`
+
+HasGroupBy returns a boolean if a field has been set.
+
+### SetGroupByNil
+
+`func (o *UpdateDashboardBlockRequestConfig) SetGroupByNil(b bool)`
+
+ SetGroupByNil sets the value for GroupBy to be an explicit nil
+
+### UnsetGroupBy
+`func (o *UpdateDashboardBlockRequestConfig) UnsetGroupBy()`
+
+UnsetGroupBy ensures that no value is present for GroupBy, not even an explicit nil
+### GetAggregations
+
+`func (o *UpdateDashboardBlockRequestConfig) GetAggregations() []UpdateDashboardBlockRequestConfigAggregationsInner`
+
+GetAggregations returns the Aggregations field if non-nil, zero value otherwise.
+
+### GetAggregationsOk
+
+`func (o *UpdateDashboardBlockRequestConfig) GetAggregationsOk() (*[]UpdateDashboardBlockRequestConfigAggregationsInner, bool)`
+
+GetAggregationsOk returns a tuple with the Aggregations field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAggregations
+
+`func (o *UpdateDashboardBlockRequestConfig) SetAggregations(v []UpdateDashboardBlockRequestConfigAggregationsInner)`
+
+SetAggregations sets Aggregations field to given value.
+
+### HasAggregations
+
+`func (o *UpdateDashboardBlockRequestConfig) HasAggregations() bool`
+
+HasAggregations returns a boolean if a field has been set.
+
+### SetAggregationsNil
+
+`func (o *UpdateDashboardBlockRequestConfig) SetAggregationsNil(b bool)`
+
+ SetAggregationsNil sets the value for Aggregations to be an explicit nil
+
+### UnsetAggregations
+`func (o *UpdateDashboardBlockRequestConfig) UnsetAggregations()`
+
+UnsetAggregations ensures that no value is present for Aggregations, not even an explicit nil
 ### GetFilters
 
 `func (o *UpdateDashboardBlockRequestConfig) GetFilters() []map[string]interface{}`

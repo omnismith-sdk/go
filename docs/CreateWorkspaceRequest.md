@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Name** | **string** | Human-readable display name of the workspace | 
-**Description** | Pointer to **string** | Detailed description of the workspace purpose and workflow | [optional] 
-**Layout** | Pointer to **string** | Multi-pane grid layout arrangement | [optional] [default to "split-v"]
+**Name** | **string** | Human-readable display name of the workspace (e.g. \&quot;Editorial &amp; Content Calendar\&quot;, \&quot;Guidelines &amp; Strategy\&quot;, \&quot;Media Studio\&quot;) | 
+**Description** | Pointer to **string** | Detailed description of the workspace purpose and operational domain | [optional] 
+**Layout** | Pointer to **string** | Multi-pane grid layout arrangement (single, split-v, split-h, quad) | [optional] [default to "single"]
 **IsDefault** | Pointer to **bool** | Whether this workspace serves as the default landing view for the project | [optional] [default to false]
-**InitialTemplateIds** | Pointer to **[]string** | Optional list of entity template IDs to automatically create and mount as initial view panes | [optional] 
+**InitialTemplateIds** | Pointer to **[]string** | Optional list of entity template UUIDs or slugs to automatically create and mount as initial view panes in this workspace | [optional] 
 
 ## Methods
 

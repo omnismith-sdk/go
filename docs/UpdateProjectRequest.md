@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Name** | **string** |  | 
-**Description** | Pointer to **NullableString** |  | [optional] 
+**Name** | Pointer to **NullableString** | Updated display name of the project | [optional] 
+**Description** | Pointer to **NullableString** | Updated description or context guidelines for the project. Pass null to clear. | [optional] 
 
 ## Methods
 
 ### NewUpdateProjectRequest
 
-`func NewUpdateProjectRequest(name string, ) *UpdateProjectRequest`
+`func NewUpdateProjectRequest() *UpdateProjectRequest`
 
 NewUpdateProjectRequest instantiates a new UpdateProjectRequest object
 This constructor will assign default values to properties that have it defined,
@@ -45,7 +45,22 @@ and a boolean to check if the value has been set.
 
 SetName sets Name field to given value.
 
+### HasName
 
+`func (o *UpdateProjectRequest) HasName() bool`
+
+HasName returns a boolean if a field has been set.
+
+### SetNameNil
+
+`func (o *UpdateProjectRequest) SetNameNil(b bool)`
+
+ SetNameNil sets the value for Name to be an explicit nil
+
+### UnsetName
+`func (o *UpdateProjectRequest) UnsetName()`
+
+UnsetName ensures that no value is present for Name, not even an explicit nil
 ### GetDescription
 
 `func (o *UpdateProjectRequest) GetDescription() string`

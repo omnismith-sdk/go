@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 ## DeleteFileAttachment
 
-> DeleteFileAttachment(ctx, id).Execute()
+> DeleteFileAttachment(ctx, id).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Delete a file attachment
 
@@ -34,10 +34,11 @@ import (
 
 func main() {
 	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | File attachment UUID to delete
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	r, err := apiClient.FileAttachmentAPI.DeleteFileAttachment(context.Background(), id).Execute()
+	r, err := apiClient.FileAttachmentAPI.DeleteFileAttachment(context.Background(), id).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `FileAttachmentAPI.DeleteFileAttachment``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -61,6 +62,7 @@ Other parameters are passed through a pointer to a apiDeleteFileAttachmentReques
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -73,7 +75,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -82,7 +84,7 @@ Name | Type | Description  | Notes
 
 ## DownloadFileAttachment
 
-> DownloadFileAttachment(ctx, id).Execute()
+> DownloadFileAttachment(ctx, id).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Download a file attachment
 
@@ -102,10 +104,11 @@ import (
 
 func main() {
 	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | Unique UUID identifier of the file attachment to download
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	r, err := apiClient.FileAttachmentAPI.DownloadFileAttachment(context.Background(), id).Execute()
+	r, err := apiClient.FileAttachmentAPI.DownloadFileAttachment(context.Background(), id).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `FileAttachmentAPI.DownloadFileAttachment``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -129,6 +132,7 @@ Other parameters are passed through a pointer to a apiDownloadFileAttachmentRequ
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -141,7 +145,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/octet-stream
+- **Accept**: application/octet-stream, application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -150,7 +154,7 @@ Name | Type | Description  | Notes
 
 ## GetFileAttachmentMetadata
 
-> FileAttachmentResponse GetFileAttachmentMetadata(ctx, id).Execute()
+> FileAttachmentResponse GetFileAttachmentMetadata(ctx, id).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
 Get file metadata without downloading content
 
@@ -170,10 +174,11 @@ import (
 
 func main() {
 	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | Unique UUID identifier of the file attachment
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.FileAttachmentAPI.GetFileAttachmentMetadata(context.Background(), id).Execute()
+	resp, r, err := apiClient.FileAttachmentAPI.GetFileAttachmentMetadata(context.Background(), id).XOmnismithProjectId(xOmnismithProjectId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `FileAttachmentAPI.GetFileAttachmentMetadata``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -199,6 +204,7 @@ Other parameters are passed through a pointer to a apiGetFileAttachmentMetadataR
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
 
 ### Return type
 
@@ -220,7 +226,7 @@ Name | Type | Description  | Notes
 
 ## GetFileAttachmentThumbnail
 
-> GetFileAttachmentThumbnail(ctx, id).Width(width).Height(height).Execute()
+> GetFileAttachmentThumbnail(ctx, id).XOmnismithProjectId(xOmnismithProjectId).Width(width).Height(height).Execute()
 
 Get image thumbnail
 
@@ -240,12 +246,13 @@ import (
 
 func main() {
 	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | Unique UUID identifier of the image file attachment
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 	width := int32(200) // int32 | Target thumbnail width in pixels (range 50 to 1000, default 200) (optional) (default to 200)
 	height := int32(200) // int32 | Target thumbnail height in pixels (range 50 to 1000, default 200) (optional) (default to 200)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	r, err := apiClient.FileAttachmentAPI.GetFileAttachmentThumbnail(context.Background(), id).Width(width).Height(height).Execute()
+	r, err := apiClient.FileAttachmentAPI.GetFileAttachmentThumbnail(context.Background(), id).XOmnismithProjectId(xOmnismithProjectId).Width(width).Height(height).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `FileAttachmentAPI.GetFileAttachmentThumbnail``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -269,6 +276,7 @@ Other parameters are passed through a pointer to a apiGetFileAttachmentThumbnail
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
  **width** | **int32** | Target thumbnail width in pixels (range 50 to 1000, default 200) | [default to 200]
  **height** | **int32** | Target thumbnail height in pixels (range 50 to 1000, default 200) | [default to 200]
 
@@ -283,7 +291,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: image/jpeg
+- **Accept**: image/jpeg, application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -292,7 +300,7 @@ Name | Type | Description  | Notes
 
 ## UploadFileAttachment
 
-> FileAttachmentResponse UploadFileAttachment(ctx).File(file).Id(id).Context(context).TtlHours(ttlHours).Execute()
+> FileAttachmentResponse UploadFileAttachment(ctx).File(file).XOmnismithProjectId(xOmnismithProjectId).Id(id).Context(context).TtlHours(ttlHours).Execute()
 
 Upload a file attachment
 
@@ -312,13 +320,14 @@ import (
 
 func main() {
 	file := os.NewFile(1234, "some_file") // *os.File | 
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 	id := "38400000-8cf0-11bd-b23e-10b96e4ef00d" // string |  (optional)
 	context := "context_example" // string |  (optional) (default to "entity")
 	ttlHours := int32(56) // int32 |  (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.FileAttachmentAPI.UploadFileAttachment(context.Background()).File(file).Id(id).Context(context).TtlHours(ttlHours).Execute()
+	resp, r, err := apiClient.FileAttachmentAPI.UploadFileAttachment(context.Background()).File(file).XOmnismithProjectId(xOmnismithProjectId).Id(id).Context(context).TtlHours(ttlHours).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `FileAttachmentAPI.UploadFileAttachment``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -340,6 +349,7 @@ Other parameters are passed through a pointer to a apiUploadFileAttachmentReques
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **file** | ***os.File** |  | 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
  **id** | **string** |  | 
  **context** | **string** |  | [default to &quot;entity&quot;]
  **ttlHours** | **int32** |  | 

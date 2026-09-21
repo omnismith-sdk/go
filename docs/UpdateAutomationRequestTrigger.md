@@ -4,9 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Type** | Pointer to **string** | Trigger event type | [optional] 
+**Type** | Pointer to **string** | Trigger event type. &#x60;on_action_executed&#x60; fires when the named entity action runs on a record, whether or not the write changed anything. | [optional] 
 **TemplateId** | Pointer to **NullableString** | Template UUID | [optional] 
 **AttributeId** | Pointer to **NullableString** | Attribute UUID for attribute change triggers | [optional] 
+**ActionId** | Pointer to **NullableString** | Entity action UUID; required for &#x60;on_action_executed&#x60;, must be null otherwise | [optional] 
 
 ## Methods
 
@@ -122,6 +123,41 @@ HasAttributeId returns a boolean if a field has been set.
 `func (o *UpdateAutomationRequestTrigger) UnsetAttributeId()`
 
 UnsetAttributeId ensures that no value is present for AttributeId, not even an explicit nil
+### GetActionId
+
+`func (o *UpdateAutomationRequestTrigger) GetActionId() string`
+
+GetActionId returns the ActionId field if non-nil, zero value otherwise.
+
+### GetActionIdOk
+
+`func (o *UpdateAutomationRequestTrigger) GetActionIdOk() (*string, bool)`
+
+GetActionIdOk returns a tuple with the ActionId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetActionId
+
+`func (o *UpdateAutomationRequestTrigger) SetActionId(v string)`
+
+SetActionId sets ActionId field to given value.
+
+### HasActionId
+
+`func (o *UpdateAutomationRequestTrigger) HasActionId() bool`
+
+HasActionId returns a boolean if a field has been set.
+
+### SetActionIdNil
+
+`func (o *UpdateAutomationRequestTrigger) SetActionIdNil(b bool)`
+
+ SetActionIdNil sets the value for ActionId to be an explicit nil
+
+### UnsetActionId
+`func (o *UpdateAutomationRequestTrigger) UnsetActionId()`
+
+UnsetActionId ensures that no value is present for ActionId, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

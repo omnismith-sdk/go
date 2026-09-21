@@ -7,7 +7,6 @@ Name | Type | Description | Notes
 **Id** | Pointer to **string** | Unique UUID identifier of the session | [optional] 
 **UserId** | Pointer to **string** | UUID of the authenticated user | [optional] 
 **Email** | Pointer to **string** | Email address of the session owner | [optional] 
-**RoleId** | Pointer to **string** | Active role UUID under this session | [optional] 
 **IpAddress** | Pointer to **NullableString** | Client IP address from which the session was established | [optional] 
 **UserAgent** | Pointer to **NullableString** | User-Agent header string of the client browser/application | [optional] 
 **CreatedAt** | Pointer to **time.Time** | Timestamp when the session was created | [optional] 
@@ -110,31 +109,6 @@ SetEmail sets Email field to given value.
 `func (o *SessionResponse) HasEmail() bool`
 
 HasEmail returns a boolean if a field has been set.
-
-### GetRoleId
-
-`func (o *SessionResponse) GetRoleId() string`
-
-GetRoleId returns the RoleId field if non-nil, zero value otherwise.
-
-### GetRoleIdOk
-
-`func (o *SessionResponse) GetRoleIdOk() (*string, bool)`
-
-GetRoleIdOk returns a tuple with the RoleId field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetRoleId
-
-`func (o *SessionResponse) SetRoleId(v string)`
-
-SetRoleId sets RoleId field to given value.
-
-### HasRoleId
-
-`func (o *SessionResponse) HasRoleId() bool`
-
-HasRoleId returns a boolean if a field has been set.
 
 ### GetIpAddress
 
