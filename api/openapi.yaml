@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   description: API Documentation for Omnismith
   title: Omnismith API
-  version: 1.0.14
+  version: 1.0.15
   x-logo:
     url: https://omnismith.io/logo.png
     backgroundColor: transparent
@@ -3342,6 +3342,7 @@ paths:
         name: start
         required: true
         schema:
+          format: int64
           type: integer
         style: form
       - description: End timestamp as Unix epoch in seconds
@@ -3351,6 +3352,7 @@ paths:
         name: end
         required: true
         schema:
+          format: int64
           type: integer
         style: form
       requestBody:
@@ -5799,6 +5801,7 @@ paths:
         name: start
         required: true
         schema:
+          format: int64
           type: integer
         style: form
       - description: End timestamp as Unix epoch in seconds
@@ -5808,6 +5811,7 @@ paths:
         name: end
         required: true
         schema:
+          format: int64
           type: integer
         style: form
       responses:
