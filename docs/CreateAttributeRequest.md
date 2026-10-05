@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **Description** | Pointer to **NullableString** | Optional descriptive summary of the attribute and its business purpose. | [optional] 
 **ReferenceConfig** | Pointer to [**NullableCreateAttributeRequestReferenceConfig**](CreateAttributeRequestReferenceConfig.md) |  | [optional] 
 **Id** | Pointer to **NullableString** | Optional explicit client-generated UUIDv7. If omitted, a UUIDv7 is automatically generated. | [optional] 
-**Slug** | Pointer to **NullableString** | Unique slug identifier within the project (letters, numbers, underscores). If omitted, generated automatically from name. | [optional] 
+**Slug** | Pointer to **NullableString** | Unique slug identifier within the project (letters, numbers, underscores). If omitted, generated automatically from name. Standard record field names (id, template_id, template_slug, created_at, updated_at, deleted_at, external_key) are reserved and rejected with 422. | [optional] 
 
 ## Methods
 

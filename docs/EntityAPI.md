@@ -6,12 +6,13 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**AggregateEntities**](EntityAPI.md#AggregateEntities) | **Post** /entities/aggregate/{template_id} | Count, sum, average, min or max entities, optionally grouped by attributes
 [**BatchExecuteEntityAction**](EntityAPI.md#BatchExecuteEntityAction) | **Post** /entities/batch/actions/{slug} | Execute an action on a selection of entities
-[**BatchWriteEntities**](EntityAPI.md#BatchWriteEntities) | **Post** /entities/batch | Apply a batch of mixed entity creates, updates, replaces, and deletes
+[**BatchWriteEntities**](EntityAPI.md#BatchWriteEntities) | **Post** /entities/batch | Apply a batch of mixed entity creates, updates, replaces, deletes, and upserts
 [**CreateEntity**](EntityAPI.md#CreateEntity) | **Post** /entities/template/{template} | Create a new dynamic entity
 [**DeleteEntity**](EntityAPI.md#DeleteEntity) | **Delete** /entities/{id} | Soft-delete an entity record
 [**ExecuteEntityAction**](EntityAPI.md#ExecuteEntityAction) | **Post** /entities/{id}/actions/{slug} | Execute an action on an entity
 [**ExportEntities**](EntityAPI.md#ExportEntities) | **Post** /entities/export/{template_id} | Export entities to structured CSV file
 [**GetEntity**](EntityAPI.md#GetEntity) | **Get** /entities/{id} | Get an entity record by ID
+[**GetEntityByKey**](EntityAPI.md#GetEntityByKey) | **Get** /entities/template/{template}/by-key | Get an entity record by its external key
 [**GetEntityChart**](EntityAPI.md#GetEntityChart) | **Get** /entities/{id}/chart | Get entity chart time-series data
 [**GetEntityHistory**](EntityAPI.md#GetEntityHistory) | **Get** /entities/{id}/history | Get entity dimension change history
 [**ImportEntities**](EntityAPI.md#ImportEntities) | **Post** /entities/import/{template_id} | Import entities from structured CSV file
@@ -21,6 +22,7 @@ Method | HTTP request | Description
 [**SearchEntities**](EntityAPI.md#SearchEntities) | **Post** /entities/search/{template_id} | Search entities with filtering, sorting, and pagination
 [**SemanticSearchEntities**](EntityAPI.md#SemanticSearchEntities) | **Post** /entities/semantic-search | Perform semantic vector similarity search on entities
 [**UpdateEntity**](EntityAPI.md#UpdateEntity) | **Patch** /entities/{id} | Update entity attribute values
+[**UpsertEntityByKey**](EntityAPI.md#UpsertEntityByKey) | **Put** /entities/template/{template}/by-key | Create or update an entity by its external key
 
 
 
@@ -176,7 +178,7 @@ Name | Type | Description  | Notes
 
 > BatchWriteEntitiesResponse BatchWriteEntities(ctx).BatchWriteEntitiesRequest(batchWriteEntitiesRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
 
-Apply a batch of mixed entity creates, updates, replaces, and deletes
+Apply a batch of mixed entity creates, updates, replaces, deletes, and upserts
 
 
 
@@ -485,7 +487,7 @@ func main() {
 	templateId := "018b2f1b-8c1a-75b3-8000-7f0000010001" // string | Unique identifier (UUID) of the template schema to export
 	exportEntitiesRequest := *openapiclient.NewExportEntitiesRequest() // ExportEntitiesRequest | 
 	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
-	sortField := "created_at" // string | Attribute UUID, attribute slug, or standard field (id, created_at, updated_at, deleted_at) to sort by (optional)
+	sortField := "created_at" // string | Attribute UUID, attribute slug, or standard field (id, created_at, updated_at, deleted_at, external_key) to sort by (optional)
 	sortDirection := "asc" // string | Sort direction: \"asc\" (ascending) or \"desc\" (descending) (optional) (default to "asc")
 
 	configuration := openapiclient.NewConfiguration()
@@ -518,7 +520,7 @@ Name | Type | Description  | Notes
 
  **exportEntitiesRequest** | [**ExportEntitiesRequest**](ExportEntitiesRequest.md) |  | 
  **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
- **sortField** | **string** | Attribute UUID, attribute slug, or standard field (id, created_at, updated_at, deleted_at) to sort by | 
+ **sortField** | **string** | Attribute UUID, attribute slug, or standard field (id, created_at, updated_at, deleted_at, external_key) to sort by | 
  **sortDirection** | **string** | Sort direction: \&quot;asc\&quot; (ascending) or \&quot;desc\&quot; (descending) | [default to &quot;asc&quot;]
 
 ### Return type
@@ -563,7 +565,7 @@ func main() {
 	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | Unique entity identifier (UUID)
 	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 	verbose := false // bool | When true, attribute_values is an array of EntityAttributeValue items with attribute id, slug, raw value, resolved custom_value and reference_entity_id. When false (default), attribute_values is a compact object mapping attribute slug to display value, with the ids behind list, reference and file labels in list_item_ids, reference_entity_ids and file_ids. (optional) (default to false)
-	fields := []string{"Inner_example"} // []string | Attribute slugs or UUIDs to project, e.g. [\"title\", \"status\"]. Standard fields (id, template_id, template_slug, created_at, updated_at) are always included and do not need to be listed. When specified, only the requested attributes are fetched and returned in attribute_values, avoiding database hydration for unneeded attributes and significantly reducing response payload size. If omitted, all attributes defined on the template are returned. (optional)
+	fields := []string{"Inner_example"} // []string | Attribute slugs or UUIDs to project, e.g. [\"title\", \"status\"]. Standard fields (id, template_id, template_slug, created_at, updated_at, external_key) are always included and do not need to be listed. When specified, only the requested attributes are fetched and returned in attribute_values, avoiding database hydration for unneeded attributes and significantly reducing response payload size. If omitted, all attributes defined on the template are returned. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -595,7 +597,85 @@ Name | Type | Description  | Notes
 
  **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
  **verbose** | **bool** | When true, attribute_values is an array of EntityAttributeValue items with attribute id, slug, raw value, resolved custom_value and reference_entity_id. When false (default), attribute_values is a compact object mapping attribute slug to display value, with the ids behind list, reference and file labels in list_item_ids, reference_entity_ids and file_ids. | [default to false]
- **fields** | **[]string** | Attribute slugs or UUIDs to project, e.g. [\&quot;title\&quot;, \&quot;status\&quot;]. Standard fields (id, template_id, template_slug, created_at, updated_at) are always included and do not need to be listed. When specified, only the requested attributes are fetched and returned in attribute_values, avoiding database hydration for unneeded attributes and significantly reducing response payload size. If omitted, all attributes defined on the template are returned. | 
+ **fields** | **[]string** | Attribute slugs or UUIDs to project, e.g. [\&quot;title\&quot;, \&quot;status\&quot;]. Standard fields (id, template_id, template_slug, created_at, updated_at, external_key) are always included and do not need to be listed. When specified, only the requested attributes are fetched and returned in attribute_values, avoiding database hydration for unneeded attributes and significantly reducing response payload size. If omitted, all attributes defined on the template are returned. | 
+
+### Return type
+
+[**EntityResponse**](EntityResponse.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetEntityByKey
+
+> EntityResponse GetEntityByKey(ctx, template).Key(key).XOmnismithProjectId(xOmnismithProjectId).Verbose(verbose).Fields(fields).Execute()
+
+Get an entity record by its external key
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/omnismith-sdk/go"
+)
+
+func main() {
+	template := "customer" // string | Template UUID or human-readable slug
+	key := "stripe:cus_NffrFeUfNV2Hib" // string | The external key, exactly as stored (case-sensitive). URL-encode it: keys may contain `/`, `:` and spaces.
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
+	verbose := false // bool | When true, attribute_values is an array of EntityAttributeValue items with attribute id, slug, raw value, resolved custom_value and reference_entity_id. When false (default), attribute_values is a compact object mapping attribute slug to display value, with the ids behind list, reference and file labels in list_item_ids, reference_entity_ids and file_ids. (optional) (default to false)
+	fields := []string{"Inner_example"} // []string | Attribute slugs or UUIDs to project, e.g. [\"title\", \"status\"]. Standard fields (id, template_id, template_slug, created_at, updated_at, external_key) are always included and do not need to be listed. If omitted, all attributes defined on the template are returned. (optional)
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.EntityAPI.GetEntityByKey(context.Background(), template).Key(key).XOmnismithProjectId(xOmnismithProjectId).Verbose(verbose).Fields(fields).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `EntityAPI.GetEntityByKey``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `GetEntityByKey`: EntityResponse
+	fmt.Fprintf(os.Stdout, "Response from `EntityAPI.GetEntityByKey`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**template** | **string** | Template UUID or human-readable slug | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetEntityByKeyRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **key** | **string** | The external key, exactly as stored (case-sensitive). URL-encode it: keys may contain &#x60;/&#x60;, &#x60;:&#x60; and spaces. | 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
+ **verbose** | **bool** | When true, attribute_values is an array of EntityAttributeValue items with attribute id, slug, raw value, resolved custom_value and reference_entity_id. When false (default), attribute_values is a compact object mapping attribute slug to display value, with the ids behind list, reference and file labels in list_item_ids, reference_entity_ids and file_ids. | [default to false]
+ **fields** | **[]string** | Attribute slugs or UUIDs to project, e.g. [\&quot;title\&quot;, \&quot;status\&quot;]. Standard fields (id, template_id, template_slug, created_at, updated_at, external_key) are always included and do not need to be listed. If omitted, all attributes defined on the template are returned. | 
 
 ### Return type
 
@@ -1104,7 +1184,7 @@ func main() {
 	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 	limit := int32(50) // int32 | Maximum number of entity records to return (1-100) (optional) (default to 50)
 	offset := int32(0) // int32 | Zero-based pagination offset (optional) (default to 0)
-	sortField := "created_at" // string | Attribute UUID, attribute slug, or standard field (id, created_at, updated_at, deleted_at) to sort by (optional)
+	sortField := "created_at" // string | Attribute UUID, attribute slug, or standard field (id, created_at, updated_at, deleted_at, external_key) to sort by (optional)
 	sortDirection := "desc" // string | Sort direction: \"asc\" (ascending) or \"desc\" (descending) (optional) (default to "asc")
 
 	configuration := openapiclient.NewConfiguration()
@@ -1139,7 +1219,7 @@ Name | Type | Description  | Notes
  **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
  **limit** | **int32** | Maximum number of entity records to return (1-100) | [default to 50]
  **offset** | **int32** | Zero-based pagination offset | [default to 0]
- **sortField** | **string** | Attribute UUID, attribute slug, or standard field (id, created_at, updated_at, deleted_at) to sort by | 
+ **sortField** | **string** | Attribute UUID, attribute slug, or standard field (id, created_at, updated_at, deleted_at, external_key) to sort by | 
  **sortDirection** | **string** | Sort direction: \&quot;asc\&quot; (ascending) or \&quot;desc\&quot; (descending) | [default to &quot;asc&quot;]
 
 ### Return type
@@ -1250,7 +1330,7 @@ import (
 
 func main() {
 	id := "018b2f1b-8c1a-75b3-8000-7f0000010000" // string | Unique entity identifier (UUID)
-	updateEntityRequest := *openapiclient.NewUpdateEntityRequest(map[string]EntityAttributesInputValue{"key": *openapiclient.NewEntityAttributesInputValue(float32(1), "Op_example")}) // UpdateEntityRequest | 
+	updateEntityRequest := *openapiclient.NewUpdateEntityRequest() // UpdateEntityRequest | 
 	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
@@ -1285,6 +1365,80 @@ Name | Type | Description  | Notes
 ### Return type
 
  (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## UpsertEntityByKey
+
+> UpsertEntityByKeyResponse UpsertEntityByKey(ctx, template).UpsertEntityByKeyRequest(upsertEntityByKeyRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
+
+Create or update an entity by its external key
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/omnismith-sdk/go"
+)
+
+func main() {
+	template := "customer" // string | Template UUID or human-readable slug
+	upsertEntityByKeyRequest := *openapiclient.NewUpsertEntityByKeyRequest("stripe:cus_NffrFeUfNV2Hib", map[string]EntityAttributesInputValue{"key": *openapiclient.NewEntityAttributesInputValue(float32(1), "Op_example")}) // UpsertEntityByKeyRequest | 
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.EntityAPI.UpsertEntityByKey(context.Background(), template).UpsertEntityByKeyRequest(upsertEntityByKeyRequest).XOmnismithProjectId(xOmnismithProjectId).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `EntityAPI.UpsertEntityByKey``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `UpsertEntityByKey`: UpsertEntityByKeyResponse
+	fmt.Fprintf(os.Stdout, "Response from `EntityAPI.UpsertEntityByKey`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**template** | **string** | Template UUID or human-readable slug | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiUpsertEntityByKeyRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **upsertEntityByKeyRequest** | [**UpsertEntityByKeyRequest**](UpsertEntityByKeyRequest.md) |  | 
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
+
+### Return type
+
+[**UpsertEntityByKeyResponse**](UpsertEntityByKeyResponse.md)
 
 ### Authorization
 

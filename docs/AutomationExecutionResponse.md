@@ -6,8 +6,9 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Id** | Pointer to **string** | Unique execution record UUID | [optional] 
 **AutomationId** | Pointer to **string** | Associated automation rule UUID | [optional] 
-**EntityId** | Pointer to **string** | UUID of the entity that triggered the execution | [optional] 
+**EntityId** | Pointer to **NullableString** | UUID of the entity the execution ran for; null for a run that has no record (a schedule without a template) | [optional] 
 **TriggeredAt** | Pointer to **time.Time** | Timestamp when the trigger event was evaluated | [optional] 
+**DueAt** | Pointer to **NullableTime** | When a time-based trigger was due; null for event-based triggers. &#x60;triggered_at - due_at&#x60; is how late the run fired. | [optional] 
 **CompletedAt** | Pointer to **NullableTime** | Timestamp when all actions completed execution | [optional] 
 **Status** | Pointer to **string** | Overall execution outcome status | [optional] 
 **ActionResults** | Pointer to [**[]AutomationExecutionResponseActionResultsInner**](AutomationExecutionResponseActionResultsInner.md) | Individual action execution outcomes | [optional] 
@@ -107,6 +108,16 @@ SetEntityId sets EntityId field to given value.
 
 HasEntityId returns a boolean if a field has been set.
 
+### SetEntityIdNil
+
+`func (o *AutomationExecutionResponse) SetEntityIdNil(b bool)`
+
+ SetEntityIdNil sets the value for EntityId to be an explicit nil
+
+### UnsetEntityId
+`func (o *AutomationExecutionResponse) UnsetEntityId()`
+
+UnsetEntityId ensures that no value is present for EntityId, not even an explicit nil
 ### GetTriggeredAt
 
 `func (o *AutomationExecutionResponse) GetTriggeredAt() time.Time`
@@ -132,6 +143,41 @@ SetTriggeredAt sets TriggeredAt field to given value.
 
 HasTriggeredAt returns a boolean if a field has been set.
 
+### GetDueAt
+
+`func (o *AutomationExecutionResponse) GetDueAt() time.Time`
+
+GetDueAt returns the DueAt field if non-nil, zero value otherwise.
+
+### GetDueAtOk
+
+`func (o *AutomationExecutionResponse) GetDueAtOk() (*time.Time, bool)`
+
+GetDueAtOk returns a tuple with the DueAt field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDueAt
+
+`func (o *AutomationExecutionResponse) SetDueAt(v time.Time)`
+
+SetDueAt sets DueAt field to given value.
+
+### HasDueAt
+
+`func (o *AutomationExecutionResponse) HasDueAt() bool`
+
+HasDueAt returns a boolean if a field has been set.
+
+### SetDueAtNil
+
+`func (o *AutomationExecutionResponse) SetDueAtNil(b bool)`
+
+ SetDueAtNil sets the value for DueAt to be an explicit nil
+
+### UnsetDueAt
+`func (o *AutomationExecutionResponse) UnsetDueAt()`
+
+UnsetDueAt ensures that no value is present for DueAt, not even an explicit nil
 ### GetCompletedAt
 
 `func (o *AutomationExecutionResponse) GetCompletedAt() time.Time`

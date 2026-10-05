@@ -6,8 +6,8 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Atomic** | Pointer to **bool** | Whether the batch ran as a single transaction. | [optional] 
 **Total** | Pointer to **int32** | Number of operations submitted. | [optional] 
-**Created** | Pointer to **int32** | Number of entities created. | [optional] 
-**Updated** | Pointer to **int32** | Number of entities updated. | [optional] 
+**Created** | Pointer to **int32** | Number of entities created, including upserts that created one. | [optional] 
+**Updated** | Pointer to **int32** | Number of entities updated, including upserts that updated one. | [optional] 
 **Replaced** | Pointer to **int32** | Number of entities replaced. | [optional] 
 **Deleted** | Pointer to **int32** | Number of entities soft-deleted. | [optional] 
 **Failed** | Pointer to **int32** | Number of operations that failed. Non-zero means the batch partially applied. | [optional] 

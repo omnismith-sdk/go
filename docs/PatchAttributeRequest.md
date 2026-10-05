@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **Description** | Pointer to **NullableString** | New descriptive text for the attribute. Pass null to clear. | [optional] 
 **ReferenceConfig** | Pointer to [**NullablePatchAttributeRequestReferenceConfig**](PatchAttributeRequestReferenceConfig.md) |  | [optional] 
 **DataType** | Pointer to **NullableInt32** | Target data type for lossless transition on Dimension (0) attributes: Number(1)-&gt;String(0), Boolean(2)-&gt;String(0), Date(4)&lt;-&gt;Datetime(3), Date/Datetime-&gt;String(0), String(0)&lt;-&gt;Markdown(7). | [optional] 
-**Slug** | Pointer to **NullableString** | New unique slug identifier within the project. | [optional] 
+**Slug** | Pointer to **NullableString** | New unique slug identifier within the project. Standard record field names (id, template_id, template_slug, created_at, updated_at, deleted_at, external_key) are reserved and rejected with 422. | [optional] 
 
 ## Methods
 

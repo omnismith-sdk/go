@@ -15,6 +15,7 @@ Name | Type | Description | Notes
 **DisplayMode** | Pointer to **string** | Presentation layout mode | [optional] 
 **DisplayedColumns** | Pointer to **[]string** | List of displayed attribute slugs or UUIDs for table view | [optional] 
 **PaneOrder** | Pointer to **int32** | Display sequence index of this pane within the workspace layout | [optional] 
+**GroupBy** | Pointer to **NullableString** | Attribute slug or UUID the records are grouped into sections by; null when the view is a flat list. \&quot;__restricted__\&quot; when the field is hidden from the caller&#39;s role. | [optional] 
 **CreatedAt** | Pointer to **time.Time** | ISO 8601 creation timestamp | [optional] 
 **UpdatedAt** | Pointer to **NullableTime** | ISO 8601 last update timestamp | [optional] 
 
@@ -322,6 +323,41 @@ SetPaneOrder sets PaneOrder field to given value.
 
 HasPaneOrder returns a boolean if a field has been set.
 
+### GetGroupBy
+
+`func (o *WorkspaceViewResponse) GetGroupBy() string`
+
+GetGroupBy returns the GroupBy field if non-nil, zero value otherwise.
+
+### GetGroupByOk
+
+`func (o *WorkspaceViewResponse) GetGroupByOk() (*string, bool)`
+
+GetGroupByOk returns a tuple with the GroupBy field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetGroupBy
+
+`func (o *WorkspaceViewResponse) SetGroupBy(v string)`
+
+SetGroupBy sets GroupBy field to given value.
+
+### HasGroupBy
+
+`func (o *WorkspaceViewResponse) HasGroupBy() bool`
+
+HasGroupBy returns a boolean if a field has been set.
+
+### SetGroupByNil
+
+`func (o *WorkspaceViewResponse) SetGroupByNil(b bool)`
+
+ SetGroupByNil sets the value for GroupBy to be an explicit nil
+
+### UnsetGroupBy
+`func (o *WorkspaceViewResponse) UnsetGroupBy()`
+
+UnsetGroupBy ensures that no value is present for GroupBy, not even an explicit nil
 ### GetCreatedAt
 
 `func (o *WorkspaceViewResponse) GetCreatedAt() time.Time`

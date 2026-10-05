@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Attributes** | Pointer to [**[]TemplateAttributeInput**](TemplateAttributeInput.md) | Structured list of template attributes with optional per-template default values. Preferred over flat attribute_ids. | [optional] 
 **Groups** | Pointer to [**[]TemplateGroupInput**](TemplateGroupInput.md) | Optional ordered attribute groups for organizing template fields into visual UI sections (1 or 2 columns). | [optional] 
+**PinnedMetricIds** | Pointer to **[]string** | Optional ordered list of metric attributes (UUIDs or slugs) summarised on the record details view, at most 8. Each must be a metric attribute of this template. When empty, the first metrics of the template are shown. | [optional] 
 **Name** | **string** | Human-readable name of the template. | 
 **Description** | Pointer to **NullableString** | Optional description of what entities conforming to this template represent. | [optional] 
 **Category** | Pointer to **NullableString** | Optional category tag for grouping templates in navigation. | [optional] 
@@ -82,6 +83,31 @@ SetGroups sets Groups field to given value.
 `func (o *CreateTemplateRequest) HasGroups() bool`
 
 HasGroups returns a boolean if a field has been set.
+
+### GetPinnedMetricIds
+
+`func (o *CreateTemplateRequest) GetPinnedMetricIds() []string`
+
+GetPinnedMetricIds returns the PinnedMetricIds field if non-nil, zero value otherwise.
+
+### GetPinnedMetricIdsOk
+
+`func (o *CreateTemplateRequest) GetPinnedMetricIdsOk() (*[]string, bool)`
+
+GetPinnedMetricIdsOk returns a tuple with the PinnedMetricIds field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPinnedMetricIds
+
+`func (o *CreateTemplateRequest) SetPinnedMetricIds(v []string)`
+
+SetPinnedMetricIds sets PinnedMetricIds field to given value.
+
+### HasPinnedMetricIds
+
+`func (o *CreateTemplateRequest) HasPinnedMetricIds() bool`
+
+HasPinnedMetricIds returns a boolean if a field has been set.
 
 ### GetName
 

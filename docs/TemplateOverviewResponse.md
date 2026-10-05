@@ -11,12 +11,13 @@ Name | Type | Description | Notes
 **Attributes** | [**[]TemplateAttributeOverviewResponse**](TemplateAttributeOverviewResponse.md) | Ordered list of attributes belonging to this template | 
 **Rules** | [**[]EntityRuleOverviewResponse**](EntityRuleOverviewResponse.md) | Business validation rules enforced for this template | 
 **Actions** | [**[]EntityActionOverviewResponse**](EntityActionOverviewResponse.md) | Executable workflow actions and transitions for records of this template | 
+**InboundEndpoints** | [**[]InboundEndpointOverviewResponse**](InboundEndpointOverviewResponse.md) | Public URLs through which outside systems write records into this template. Empty when the caller cannot view inbound endpoints. | 
 
 ## Methods
 
 ### NewTemplateOverviewResponse
 
-`func NewTemplateOverviewResponse(id string, name string, attributes []TemplateAttributeOverviewResponse, rules []EntityRuleOverviewResponse, actions []EntityActionOverviewResponse, ) *TemplateOverviewResponse`
+`func NewTemplateOverviewResponse(id string, name string, attributes []TemplateAttributeOverviewResponse, rules []EntityRuleOverviewResponse, actions []EntityActionOverviewResponse, inboundEndpoints []InboundEndpointOverviewResponse, ) *TemplateOverviewResponse`
 
 NewTemplateOverviewResponse instantiates a new TemplateOverviewResponse object
 This constructor will assign default values to properties that have it defined,
@@ -199,6 +200,26 @@ and a boolean to check if the value has been set.
 `func (o *TemplateOverviewResponse) SetActions(v []EntityActionOverviewResponse)`
 
 SetActions sets Actions field to given value.
+
+
+### GetInboundEndpoints
+
+`func (o *TemplateOverviewResponse) GetInboundEndpoints() []InboundEndpointOverviewResponse`
+
+GetInboundEndpoints returns the InboundEndpoints field if non-nil, zero value otherwise.
+
+### GetInboundEndpointsOk
+
+`func (o *TemplateOverviewResponse) GetInboundEndpointsOk() (*[]InboundEndpointOverviewResponse, bool)`
+
+GetInboundEndpointsOk returns a tuple with the InboundEndpoints field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetInboundEndpoints
+
+`func (o *TemplateOverviewResponse) SetInboundEndpoints(v []InboundEndpointOverviewResponse)`
+
+SetInboundEndpoints sets InboundEndpoints field to given value.
 
 
 

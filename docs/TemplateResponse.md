@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **AttributeIds** | Pointer to **[]string** | Flat list of associated attribute UUIDs | [optional] 
 **Attributes** | Pointer to [**[]TemplateResponseAttributesInner**](TemplateResponseAttributesInner.md) | Template attributes with their per-template default values. | [optional] 
 **Groups** | Pointer to [**[]TemplateGroupResponse**](TemplateGroupResponse.md) | Ordered attribute groups for organizing template fields into visual UI sections. | [optional] 
+**PinnedMetricIds** | Pointer to **[]string** | Ordered metric attribute UUIDs summarised on the record details view. Empty means the first metrics of the template are shown. | [optional] 
 **CreatedAt** | Pointer to **time.Time** | Creation timestamp | [optional] 
 **UpdatedAt** | Pointer to **time.Time** | Last update timestamp | [optional] 
 **DeletedAt** | Pointer to **NullableTime** | Deletion timestamp if soft-deleted | [optional] 
@@ -264,6 +265,31 @@ SetGroups sets Groups field to given value.
 `func (o *TemplateResponse) HasGroups() bool`
 
 HasGroups returns a boolean if a field has been set.
+
+### GetPinnedMetricIds
+
+`func (o *TemplateResponse) GetPinnedMetricIds() []string`
+
+GetPinnedMetricIds returns the PinnedMetricIds field if non-nil, zero value otherwise.
+
+### GetPinnedMetricIdsOk
+
+`func (o *TemplateResponse) GetPinnedMetricIdsOk() (*[]string, bool)`
+
+GetPinnedMetricIdsOk returns a tuple with the PinnedMetricIds field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPinnedMetricIds
+
+`func (o *TemplateResponse) SetPinnedMetricIds(v []string)`
+
+SetPinnedMetricIds sets PinnedMetricIds field to given value.
+
+### HasPinnedMetricIds
+
+`func (o *TemplateResponse) HasPinnedMetricIds() bool`
+
+HasPinnedMetricIds returns a boolean if a field has been set.
 
 ### GetCreatedAt
 

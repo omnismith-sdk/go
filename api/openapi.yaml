@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   description: API Documentation for Omnismith
   title: Omnismith API
-  version: 1.0.15
+  version: 1.0.16
   x-logo:
     url: https://omnismith.io/logo.png
     backgroundColor: transparent
@@ -47,6 +47,8 @@ tags:
   name: Feedback
 - description: FileAttachment
   name: FileAttachment
+- description: Inbound
+  name: Inbound
 - description: Marketplace
   name: Marketplace
 - description: OAuth
@@ -2660,6 +2662,104 @@ paths:
       summary: List automation execution logs
       tags:
       - Automation - Automations
+  /automation/timers:
+    get:
+      description: "Lists the pending timers of time-based automations, soonest first:\
+        \ the next slot of a `schedule` trigger, the moment a `date_reached` trigger\
+        \ fires for a record, the deadline of a `no_change_within` trigger. Use it\
+        \ to confirm that saving an automation or writing a record armed what you\
+        \ expected, and when it will fire. Pass `automation_id`, `entity_id` or both;\
+        \ at least one is required. A timer that has fired, been cancelled (record\
+        \ deleted, automation disabled or deleted) or been re-armed no longer appears\
+        \ under its old due time."
+      operationId: listAutomationTimers
+      parameters:
+      - description: "The project this call acts on. A credential proves identity\
+          \ and grants a set of projects; it never selects one, so every tenant-scoped\
+          \ call names its target here. The value must be one of the projects in the\
+          \ credential's `projects` claim and must still be reachable — a project\
+          \ the caller is not a member of, or one that has been deleted, is rejected\
+          \ with 403 rather than silently ignored. A project the caller *is* a member\
+          \ of but which the credential predates is also rejected with 403, carrying\
+          \ the code `stale_project_grant`; that one is answered by refreshing the\
+          \ credential once and retrying, and is the only 403 here worth retrying.\
+          \ Omitting the header is not an error: the caller is simply acting with\
+          \ no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`.\
+          \ Two clients holding the same credential may send different values at the\
+          \ same time."
+        example: 018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d
+        explode: false
+        in: header
+        name: X-Omnismith-Project-Id
+        required: false
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: Only timers of this automation
+        example: 01912ecb-4654-7890-a1b2-c3d4e5f60001
+        explode: true
+        in: query
+        name: automation_id
+        required: false
+        schema:
+          format: uuid
+          type: string
+        style: form
+      - description: Only timers about this record
+        example: 01912ecb-4654-7890-a1b2-c3d4e5f60099
+        explode: true
+        in: query
+        name: entity_id
+        required: false
+        schema:
+          format: uuid
+          type: string
+        style: form
+      - description: Maximum number of timers to return
+        example: 100
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 100
+          maximum: 500
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listAutomationTimers_200_response"
+          description: "Pending timers, soonest first"
+        "400":
+          description: "Neither automation_id nor entity_id was given, or a parameter\
+            \ is malformed"
+        "401":
+          description: Unauthorized
+        "403":
+          description: No permission to view automations
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "No project is selected. The caller is authenticated but the\
+            \ request is tenant-scoped, so a project must be selected before it can\
+            \ be answered. The response body carries `\"code\": \"no_project_selected\"\
+            `, which clients branch on to offer a project picker rather than an access-denied\
+            \ message."
+        "422":
+          description: "automation_id or entity_id is not a UUID, or limit is out\
+            \ of range"
+      security:
+      - bearerAuth: []
+      summary: List pending automation timers
+      tags:
+      - Automation - Automations
   /automation/push-devices:
     delete:
       description: "Removes an FCM push notification device token from the authenticated\
@@ -3089,8 +3189,8 @@ paths:
           [{"field": "priority", "operator": "eq", "value": "018b…0007"}]
         ]
         ```
-        - **`field`**: attribute slug or UUID, a standard field (`id`, `created_at`, `updated_at`), or a one-hop path `<reference>.<attribute>` that filters on an attribute of the referenced record (e.g. `customer.tier`). One hop only.
-        - **`operator`** and **`value`**: `eq`, `neq`, `gt`, `lt`, `like` (case-insensitive substring), `not-like` take a string; `in`, `not-in` take a non-empty list of strings; `between` takes `[lower, upper]` (inclusive; number, date, datetime attributes and `created_at` / `updated_at`); `empty`, `not-empty` take no value.
+        - **`field`**: attribute slug or UUID, a standard field (`id`, `created_at`, `updated_at`, `external_key`), or a one-hop path `<reference>.<attribute>` that filters on an attribute of the referenced record (e.g. `customer.tier`). One hop only.
+        - **`operator`** and **`value`**: `eq`, `neq`, `gt`, `lt`, `like` (case-insensitive substring), `not-like` take a string; `in`, `not-in` take a non-empty list of strings; `between` takes `[lower, upper]` (inclusive; number, date, datetime attributes and `created_at` / `updated_at`); `empty`, `not-empty` take no value. `external_key` accepts every operator except `gt`, `lt` and `between`.
         - List and reference attributes compare the stored id (from `list_item_ids` / `reference_entity_ids` or the schema), never the label.
         - Unknown fields, operators that do not fit the field, malformed values and paths that do not traverse a reference are refused with 400 naming the valid fields; a path into a template the caller may not view is 403.
 
@@ -4604,7 +4704,7 @@ paths:
 
         Each response group's `key` mirrors `group_by` in order (`value` is the stored value, `custom_value` is the list item label or the referenced record's display value; `null` groups the records that have no value for that attribute), and `aggregates` mirrors `aggregations` in order. Numbers come back as floats, dates as RFC 3339 strings, and `null` when no record in the group has a value. Metric attributes are rejected with a 400: they are time series, reduced over a time window with `get_entity_chart` instead — this endpoint reduces the current dimension values of records.
 
-        Groups are ordered by the first aggregation descending (nulls last), then by key. `limit` (1-100, default 50) caps the groups returned; `truncated: true` means more groups exist — narrow with `filter_groups` or group by fewer fields.
+        With `order: aggregate` (default) groups are ordered by the first aggregation descending (nulls last), then by key; with `order: key` they follow the key (list-item order for lists, ascending label or value otherwise) with the no-value group last. The `field` and `value` of any key entry can be passed back as `group_key` to `search_entities` to list exactly the records of that group. `limit` (1-100, default 50) caps the groups returned; `truncated: true` means more groups exist — narrow with `filter_groups` or group by fewer fields.
 
         Read-only. Applies the caller's template access and row scopes exactly as search does; restricted attributes are not valid fields.
       operationId: aggregateEntities
@@ -4652,8 +4752,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/aggregateEntities_200_response"
-          description: "Groups with their aggregates, ordered by the first aggregation\
-            \ descending"
+          description: "Groups with their aggregates, in the requested order"
         "400":
           content:
             application/json:
@@ -4821,10 +4920,11 @@ paths:
 
         Operations:
         Every entry names an `op` and carries exactly the fields for it — nothing more, nothing less:
-        - `create`  — `{ "op": "create", "template": "<slug|uuid>", "id"?: "<uuidv7>", "attributes": { ... } }` (`attributes` may be `{}`)
+        - `create`  — `{ "op": "create", "template": "<slug|uuid>", "id"?: "<uuidv7>", "external_key"?: "<key>", "attributes": { ... } }` (`attributes` may be `{}`)
         - `update`  — `{ "op": "update", "id": "<uuid>", "attributes": { ... } }` (non-empty; partial, like PATCH)
         - `replace` — `{ "op": "replace", "id": "<uuid>", "attributes": { ... } }` (like PUT: attributes absent from the map are cleared; `{}` clears all; metrics rejected)
         - `delete`  — `{ "op": "delete", "id": "<uuid>" }` (soft delete)
+        - `upsert`  — `{ "op": "upsert", "template": "<slug|uuid>", "external_key": "<key>", "attributes": { ... } }` (creates the record with the key, or partially updates the live record that holds it; `results[].created` says which)
 
         `id` always means the entity id; `template` always means the template slug or UUID. See `BatchOperationInput`'s `attributes` property for the accepted value shapes.
 
@@ -4833,7 +4933,7 @@ paths:
         Failure handling:
         By default (`atomic: false`) every operation is attempted, successes stand, and each failure is reported against its index with the same error body the single-entity endpoint would have returned. The response is `200` regardless of how many entries failed; read `failed` and the per-item `status`.
 
-        With `atomic: true` the whole batch runs in one transaction and the first failure rolls all of it back. That case answers with the failing operation's own error status and body plus `failed_index`, not with a results list. Atomic batches reject metric attribute values, because metric telemetry is published outside the transaction and cannot be rolled back.
+        With `atomic: true` the whole batch runs in one transaction and the first failure rolls all of it back. That case answers with the failing operation's own error status and body plus `failed_index`, not with a results list. Atomic batches reject metric attribute values, because metric telemetry is published outside the transaction and cannot be rolled back. An upsert that races a concurrent write of the same key fails an atomic batch with `409`; resubmit it.
 
         Quotas:
         Tier quotas are evaluated for the whole batch before any of it is applied, so a batch that would cross the limit is refused as a unit rather than applied halfway.
@@ -4923,13 +5023,16 @@ paths:
             \ message."
       security:
       - bearerAuth: []
-      summary: "Apply a batch of mixed entity creates, updates, replaces, and deletes"
+      summary: "Apply a batch of mixed entity creates, updates, replaces, deletes,\
+        \ and upserts"
       tags:
       - Entity
   /entities/template/{template}:
     post:
       description: |-
         Creates one entity of the template named in the path — `{template}` is the template's slug or UUID — and returns its id. Pass `id` to choose the entity's UUIDv7 yourself (cross-system keys); otherwise one is generated. An `id` that already exists — even a soft-deleted entity's — is rejected with `409` rather than overwritten: if a retry might be hitting this because an earlier call's response was lost, `GET /entities/{id}` first to check whether it already carries what you meant to write, rather than retrying blindly.
+
+        Pass `external_key` to record the id another system uses for this record. When you do not know whether the record exists yet, use `PUT /entities/template/{template}/by-key` (upsert) instead.
 
         See the `attributes` property for the accepted value shapes.
 
@@ -4939,7 +5042,7 @@ paths:
         - `400` — the body is not the documented shape (missing `attributes`, a list instead of an object, unknown fields, wrong types).
         - `422` — the shape is right but the content is not: unknown attribute, attribute not on the template, duplicate attribute, bad `updated_at`, a value that fails its attribute type, or an operation on an attribute that is not a number. `errors` names the exact field, e.g. `attributes.status`.
         - `404` — no template with that slug or UUID in this project.
-        - `409` — the given `id` already exists.
+        - `409` — the given `id` already exists, or another live record of the template holds `external_key`.
       operationId: createEntity
       parameters:
       - description: "The project this call acts on. A credential proves identity\
@@ -5021,8 +5124,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-          description: "The given `id` already exists (`type: error/conflict`), or\
-            \ no project is selected"
+          description: "The given `id` already exists or `external_key` is held by\
+            \ another live record (`type: error/conflict`), or no project is selected"
       security:
       - bearerAuth: []
       summary: Create a new dynamic entity
@@ -5151,9 +5254,9 @@ paths:
           type: boolean
         style: form
       - description: "Attribute slugs or UUIDs to project, e.g. [\"title\", \"status\"\
-          ]. Standard fields (id, template_id, template_slug, created_at, updated_at)\
-          \ are always included and do not need to be listed. When specified, only\
-          \ the requested attributes are fetched and returned in attribute_values,\
+          ]. Standard fields (id, template_id, template_slug, created_at, updated_at,\
+          \ external_key) are always included and do not need to be listed. When specified,\
+          \ only the requested attributes are fetched and returned in attribute_values,\
           \ avoiding database hydration for unneeded attributes and significantly\
           \ reducing response payload size. If omitted, all attributes defined on\
           \ the template are returned."
@@ -5213,12 +5316,15 @@ paths:
       description: |-
         Partial update: writes the attributes in the map and leaves every other attribute untouched. This is the default way to change an entity. See the `attributes` property for the accepted value shapes.
 
-        `attributes` is required and must not be empty. Dimension changes are appended to the entity's history (unchanged values cost nothing); metric attributes are appended to the entity's time series.
+        `attributes` is required and must not be empty, unless the request only changes `external_key`. Dimension changes are appended to the entity's history (unchanged values cost nothing); metric attributes are appended to the entity's time series.
+
+        `external_key` sets or changes the key another system uses for this record; `null` clears it; omitted leaves it unchanged.
 
         Errors:
         - `400` — the body is not the documented shape (missing `attributes`, a list instead of an object, unknown fields, wrong types).
         - `422` — the shape is right but the content is not: unknown attribute, attribute not on the template, duplicate attribute, bad `updated_at`, a value that fails its attribute type, or an operation on an attribute that is not a number. `errors` names the exact field, e.g. `attributes.status`.
         - `404` — no entity with that id.
+        - `409` — another live record of the template already holds `external_key`.
       operationId: updateEntity
       parameters:
       - description: "The project this call acts on. A credential proves identity\
@@ -5297,11 +5403,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-          description: "No project is selected. The caller is authenticated but the\
-            \ request is tenant-scoped, so a project must be selected before it can\
-            \ be answered. The response body carries `\"code\": \"no_project_selected\"\
-            `, which clients branch on to offer a project picker rather than an access-denied\
-            \ message."
+          description: "`external_key` is held by another live record (`type: error/conflict`),\
+            \ or no project is selected"
       security:
       - bearerAuth: []
       summary: Update entity attribute values
@@ -5553,7 +5656,7 @@ paths:
         ### Re-importable CSV Schema Format
         The generated CSV conforms to the Omnismith two-row metadata specification, making it directly compatible with `POST /entities/import/{template_id}`:
         - **Row 1**: Display column names and attribute aliases.
-        - **Row 2**: Metadata row prefixed with `#` containing attribute UUIDs and column IDs (e.g. `#id`, `#018b2f1b-8c1a...`).
+        - **Row 2**: Metadata row prefixed with `#` containing the standard columns `#id`, `#created_at`, `#updated_at`, `#external_key`, then attribute UUIDs (e.g. `#018b2f1b-8c1a...`).
         - **Row 3+**: Entity data records.
 
         Accepts the same `filter_groups` and `global_search` payload as `searchEntities`.
@@ -5570,8 +5673,8 @@ paths:
           [{"field": "priority", "operator": "eq", "value": "018b…0007"}]
         ]
         ```
-        - **`field`**: attribute slug or UUID, a standard field (`id`, `created_at`, `updated_at`), or a one-hop path `<reference>.<attribute>` that filters on an attribute of the referenced record (e.g. `customer.tier`). One hop only.
-        - **`operator`** and **`value`**: `eq`, `neq`, `gt`, `lt`, `like` (case-insensitive substring), `not-like` take a string; `in`, `not-in` take a non-empty list of strings; `between` takes `[lower, upper]` (inclusive; number, date, datetime attributes and `created_at` / `updated_at`); `empty`, `not-empty` take no value.
+        - **`field`**: attribute slug or UUID, a standard field (`id`, `created_at`, `updated_at`, `external_key`), or a one-hop path `<reference>.<attribute>` that filters on an attribute of the referenced record (e.g. `customer.tier`). One hop only.
+        - **`operator`** and **`value`**: `eq`, `neq`, `gt`, `lt`, `like` (case-insensitive substring), `not-like` take a string; `in`, `not-in` take a non-empty list of strings; `between` takes `[lower, upper]` (inclusive; number, date, datetime attributes and `created_at` / `updated_at`); `empty`, `not-empty` take no value. `external_key` accepts every operator except `gt`, `lt` and `between`.
         - List and reference attributes compare the stored id (from `list_item_ids` / `reference_entity_ids` or the schema), never the label.
         - Unknown fields, operators that do not fit the field, malformed values and paths that do not traverse a reference are refused with 400 naming the valid fields; a path into a template the caller may not view is 403.
 
@@ -5612,7 +5715,7 @@ paths:
           type: string
         style: simple
       - description: "Attribute UUID, attribute slug, or standard field (id, created_at,\
-          \ updated_at, deleted_at) to sort by"
+          \ updated_at, deleted_at, external_key) to sort by"
         example: created_at
         explode: true
         in: query
@@ -5700,6 +5803,237 @@ paths:
       security:
       - bearerAuth: []
       summary: Export entities to structured CSV file
+      tags:
+      - Entity
+  /entities/template/{template}/by-key:
+    get:
+      description: "Retrieves the live record of the template that holds the external\
+        \ key — the id another system uses for it. The response is the same as `GET\
+        \ /entities/{id}`, with the same `verbose` and `fields` options. `404` when\
+        \ no live record of the template holds the key."
+      operationId: getEntityByKey
+      parameters:
+      - description: "The project this call acts on. A credential proves identity\
+          \ and grants a set of projects; it never selects one, so every tenant-scoped\
+          \ call names its target here. The value must be one of the projects in the\
+          \ credential's `projects` claim and must still be reachable — a project\
+          \ the caller is not a member of, or one that has been deleted, is rejected\
+          \ with 403 rather than silently ignored. A project the caller *is* a member\
+          \ of but which the credential predates is also rejected with 403, carrying\
+          \ the code `stale_project_grant`; that one is answered by refreshing the\
+          \ credential once and retrying, and is the only 403 here worth retrying.\
+          \ Omitting the header is not an error: the caller is simply acting with\
+          \ no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`.\
+          \ Two clients holding the same credential may send different values at the\
+          \ same time."
+        example: 018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d
+        explode: false
+        in: header
+        name: X-Omnismith-Project-Id
+        required: false
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: Template UUID or human-readable slug
+        example: customer
+        explode: false
+        in: path
+        name: template
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: "The external key, exactly as stored (case-sensitive). URL-encode\
+          \ it: keys may contain `/`, `:` and spaces."
+        example: stripe:cus_NffrFeUfNV2Hib
+        explode: true
+        in: query
+        name: key
+        required: true
+        schema:
+          maxLength: 255
+          type: string
+        style: form
+      - description: "When true, attribute_values is an array of EntityAttributeValue\
+          \ items with attribute id, slug, raw value, resolved custom_value and reference_entity_id.\
+          \ When false (default), attribute_values is a compact object mapping attribute\
+          \ slug to display value, with the ids behind list, reference and file labels\
+          \ in list_item_ids, reference_entity_ids and file_ids."
+        example: false
+        explode: true
+        in: query
+        name: verbose
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      - description: "Attribute slugs or UUIDs to project, e.g. [\"title\", \"status\"\
+          ]. Standard fields (id, template_id, template_slug, created_at, updated_at,\
+          \ external_key) are always included and do not need to be listed. If omitted,\
+          \ all attributes defined on the template are returned."
+        example:
+        - title
+        - status
+        explode: false
+        in: query
+        name: fields
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EntityResponse"
+          description: Hydrated entity details
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "No project is selected. The caller is authenticated but the\
+            \ request is tenant-scoped, so a project must be selected before it can\
+            \ be answered. The response body carries `\"code\": \"no_project_selected\"\
+            `, which clients branch on to offer a project picker rather than an access-denied\
+            \ message."
+      security:
+      - bearerAuth: []
+      summary: Get an entity record by its external key
+      tags:
+      - Entity
+    put:
+      description: |-
+        Writes the record of the template that another system identifies by `external_key`: creates it with the key when no live record holds the key, otherwise updates the one that does. Use this for writes from an integration that knows its own ids (a customer, a device, an order) instead of searching first and then creating: sending the same key twice never creates two records.
+
+        On create, `attributes` is the initial state. On update it is a partial update, exactly like `PATCH /entities/{id}`: only the listed attributes change, and operation objects (`increment`) apply. Metric attributes are appended to the time series on either branch. Records are matched by key within the template only; a deleted record does not hold its key, so a later upsert creates a new record.
+
+        Errors:
+        - `400` — the body is not the documented shape (missing `attributes`, a list instead of an object, unknown fields, wrong types).
+        - `422` — the shape is right but the content is not: unknown attribute, attribute not on the template, duplicate attribute, bad `updated_at`, a value that fails its attribute type, or an operation on an attribute that is not a number. `errors` names the exact field, e.g. `attributes.status`.
+        - `404` — no template with that slug or UUID in this project.
+        - `409` — the key was taken by a concurrent write that could not be retried; send the request again.
+      operationId: upsertEntityByKey
+      parameters:
+      - description: "The project this call acts on. A credential proves identity\
+          \ and grants a set of projects; it never selects one, so every tenant-scoped\
+          \ call names its target here. The value must be one of the projects in the\
+          \ credential's `projects` claim and must still be reachable — a project\
+          \ the caller is not a member of, or one that has been deleted, is rejected\
+          \ with 403 rather than silently ignored. A project the caller *is* a member\
+          \ of but which the credential predates is also rejected with 403, carrying\
+          \ the code `stale_project_grant`; that one is answered by refreshing the\
+          \ credential once and retrying, and is the only 403 here worth retrying.\
+          \ Omitting the header is not an error: the caller is simply acting with\
+          \ no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`.\
+          \ Two clients holding the same credential may send different values at the\
+          \ same time."
+        example: 018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d
+        explode: false
+        in: header
+        name: X-Omnismith-Project-Id
+        required: false
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: Template UUID or human-readable slug
+        example: customer
+        explode: false
+        in: path
+        name: template
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpsertEntityByKeyRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpsertEntityByKeyResponse"
+          description: No live record held the key; a new one was created with it
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpsertEntityByKeyResponse"
+          description: The live record holding the key was updated
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Unauthorized
+        "402":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Tier quota exceeded
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "The key was taken by a concurrent write (`type: error/conflict`),\
+            \ or no project is selected"
+      security:
+      - bearerAuth: []
+      summary: Create or update an entity by its external key
       tags:
       - Entity
   /entities/{id}/chart:
@@ -6044,12 +6378,13 @@ paths:
 
         ### Upsert Semantics
         - **Update existing**: If a data row includes an `id` matching an existing entity UUID, that entity is updated.
-        - **Create new**: If the `id` column is empty, omitted, or contains a new UUID, a new entity record is created.
+        - **Match by external key**: A row with an `external_key` and no `id` updates the live record holding that key, or creates one with it. A row with both is matched by `id`, and the key is written to it. An empty `external_key` cell leaves the key unchanged.
+        - **Create new**: If the `id` column is empty, omitted, or contains a new UUID (and no key matches), a new entity record is created.
 
         ### Required 2-Row CSV Header Format
         The CSV file must follow the Omnismith two-row header format (identical to the output of `POST /entities/export/{template_id}`):
         - **Row 1 (Display Header)**: Human-readable attribute names or aliases (e.g. `ID`, `SKU`, `Price`, `Category`).
-        - **Row 2 (Metadata Marker)**: Canonical attribute identifiers prefixed by `#` (e.g. `#id`, `#018b2f1b-8c1a...`, `#018b2f1b-8c1b...`).
+        - **Row 2 (Metadata Marker)**: Canonical identifiers prefixed by `#`: `#id` first, then optionally `#created_at`, `#updated_at` and `#external_key`, then attribute UUIDs (e.g. `#018b2f1b-8c1a...`).
         - **Row 3+ (Data Rows)**: Serialized entity values conforming to the template's attribute data types.
 
         ### Attribute Value Validation
@@ -6394,7 +6729,7 @@ paths:
           type: integer
         style: form
       - description: "Attribute UUID, attribute slug, or standard field (id, created_at,\
-          \ updated_at, deleted_at) to sort by"
+          \ updated_at, deleted_at, external_key) to sort by"
         example: created_at
         explode: true
         in: query
@@ -8165,6 +8500,1227 @@ paths:
       summary: Upload a file attachment
       tags:
       - FileAttachment
+  /templates/{templateId}/inbound-endpoints/{id}/secrets:
+    post:
+      description: |-
+        Adds a second secret. Deliveries signed with either secret are accepted until the old one is removed with `deleteInboundEndpointSecret`. An endpoint holds at most two secrets. The body may be empty to have the secret generated.
+
+        The response carries the secret once and never again: give it to whoever configures the sender and do not store it anywhere else. Like updating the endpoint, this requires your own permission to create and edit records of the template.
+      operationId: addInboundEndpointSecret
+      parameters:
+      - description: "The project this call acts on. A credential proves identity\
+          \ and grants a set of projects; it never selects one, so every tenant-scoped\
+          \ call names its target here. The value must be one of the projects in the\
+          \ credential's `projects` claim and must still be reachable — a project\
+          \ the caller is not a member of, or one that has been deleted, is rejected\
+          \ with 403 rather than silently ignored. A project the caller *is* a member\
+          \ of but which the credential predates is also rejected with 403, carrying\
+          \ the code `stale_project_grant`; that one is answered by refreshing the\
+          \ credential once and retrying, and is the only 403 here worth retrying.\
+          \ Omitting the header is not an error: the caller is simply acting with\
+          \ no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`.\
+          \ Two clients holding the same credential may send different values at the\
+          \ same time."
+        example: 018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d
+        explode: false
+        in: header
+        name: X-Omnismith-Project-Id
+        required: false
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: UUID or slug of the template
+        example: customer
+        explode: false
+        in: path
+        name: templateId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Inbound endpoint UUID
+        example: 01a0f0e2-7c1a-7000-8000-000000000001
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddInboundEndpointSecretRequest"
+        required: false
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InboundSecretRevealed"
+          description: "The new secret, shown once"
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "No project is selected. The caller is authenticated but the\
+            \ request is tenant-scoped, so a project must be selected before it can\
+            \ be answered. The response body carries `\"code\": \"no_project_selected\"\
+            `, which clients branch on to offer a project picker rather than an access-denied\
+            \ message."
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Add a secret to an inbound endpoint (start a rotation)
+      tags:
+      - Inbound
+  /templates/{templateId}/inbound-endpoints:
+    get:
+      description: "Returns every inbound endpoint that writes records into the template,\
+        \ in creation order, each with its receive URL, signature, mapping and secret\
+        \ hints. Secret values are never returned. The schema overview (`get_schema_overview`)\
+        \ already lists each template's endpoints in brief."
+      operationId: listTemplateInboundEndpoints
+      parameters:
+      - description: "The project this call acts on. A credential proves identity\
+          \ and grants a set of projects; it never selects one, so every tenant-scoped\
+          \ call names its target here. The value must be one of the projects in the\
+          \ credential's `projects` claim and must still be reachable — a project\
+          \ the caller is not a member of, or one that has been deleted, is rejected\
+          \ with 403 rather than silently ignored. A project the caller *is* a member\
+          \ of but which the credential predates is also rejected with 403, carrying\
+          \ the code `stale_project_grant`; that one is answered by refreshing the\
+          \ credential once and retrying, and is the only 403 here worth retrying.\
+          \ Omitting the header is not an error: the caller is simply acting with\
+          \ no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`.\
+          \ Two clients holding the same credential may send different values at the\
+          \ same time."
+        example: 018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d
+        explode: false
+        in: header
+        name: X-Omnismith-Project-Id
+        required: false
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: UUID or slug of the template
+        example: customer
+        explode: false
+        in: path
+        name: templateId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listTemplateInboundEndpoints_200_response"
+          description: Inbound endpoints of the template
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "No project is selected. The caller is authenticated but the\
+            \ request is tenant-scoped, so a project must be selected before it can\
+            \ be answered. The response body carries `\"code\": \"no_project_selected\"\
+            `, which clients branch on to offer a project picker rather than an access-denied\
+            \ message."
+      security:
+      - bearerAuth: []
+      summary: List the inbound endpoints of a template
+      tags:
+      - Inbound
+    post:
+      description: |-
+        Creates a public URL through which an outside system (Stripe, GitHub, a form tool, a device) writes records into the template without an Omnismith credential. Pick the sender's `signature` preset and describe the `mapping` from the payload to the template's attributes.
+
+        The response carries the receive URL to configure in the sender and, once only, the secret the sender signs with. Hand both to the user, once, for pasting into the sender. Do not repeat the secret later and never store it in a record: it is never returned again, and a lost secret is replaced with `addInboundEndpointSecret` (the `add_inbound_endpoint_secret` tool).
+
+        To verify the feed: check the mapping on a sample event from the sender's documentation with `previewInboundMapping` (the `preview_inbound_mapping` tool), ask the user to send a test event, then read `listInboundDeliveries` (the `list_inbound_deliveries` tool).
+
+        An endpoint lets its sender create and edit the template's records, so creating one also requires your own permission to create and edit records of the template.
+      operationId: createTemplateInboundEndpoint
+      parameters:
+      - description: "The project this call acts on. A credential proves identity\
+          \ and grants a set of projects; it never selects one, so every tenant-scoped\
+          \ call names its target here. The value must be one of the projects in the\
+          \ credential's `projects` claim and must still be reachable — a project\
+          \ the caller is not a member of, or one that has been deleted, is rejected\
+          \ with 403 rather than silently ignored. A project the caller *is* a member\
+          \ of but which the credential predates is also rejected with 403, carrying\
+          \ the code `stale_project_grant`; that one is answered by refreshing the\
+          \ credential once and retrying, and is the only 403 here worth retrying.\
+          \ Omitting the header is not an error: the caller is simply acting with\
+          \ no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`.\
+          \ Two clients holding the same credential may send different values at the\
+          \ same time."
+        example: 018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d
+        explode: false
+        in: header
+        name: X-Omnismith-Project-Id
+        required: false
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: UUID or slug of the template
+        example: customer
+        explode: false
+        in: path
+        name: templateId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateInboundEndpointRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InboundEndpointCreatedResponse"
+          description: "Endpoint created, with its secret"
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "No project is selected. The caller is authenticated but the\
+            \ request is tenant-scoped, so a project must be selected before it can\
+            \ be answered. The response body carries `\"code\": \"no_project_selected\"\
+            `, which clients branch on to offer a project picker rather than an access-denied\
+            \ message."
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Create an inbound endpoint on a template
+      tags:
+      - Inbound
+  /templates/{templateId}/inbound-endpoints/{id}/secrets/{secretId}:
+    delete:
+      description: "Deliveries signed with this secret are rejected from now on. An\
+        \ endpoint keeps at least one secret, so the last one cannot be removed (422)."
+      operationId: deleteInboundEndpointSecret
+      parameters:
+      - description: "The project this call acts on. A credential proves identity\
+          \ and grants a set of projects; it never selects one, so every tenant-scoped\
+          \ call names its target here. The value must be one of the projects in the\
+          \ credential's `projects` claim and must still be reachable — a project\
+          \ the caller is not a member of, or one that has been deleted, is rejected\
+          \ with 403 rather than silently ignored. A project the caller *is* a member\
+          \ of but which the credential predates is also rejected with 403, carrying\
+          \ the code `stale_project_grant`; that one is answered by refreshing the\
+          \ credential once and retrying, and is the only 403 here worth retrying.\
+          \ Omitting the header is not an error: the caller is simply acting with\
+          \ no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`.\
+          \ Two clients holding the same credential may send different values at the\
+          \ same time."
+        example: 018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d
+        explode: false
+        in: header
+        name: X-Omnismith-Project-Id
+        required: false
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: UUID or slug of the template
+        example: customer
+        explode: false
+        in: path
+        name: templateId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Inbound endpoint UUID
+        example: 01a0f0e2-7c1a-7000-8000-000000000001
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: "Secret UUID, from the endpoint's `secrets`"
+        example: 01a0f0e2-7c1a-7000-8000-0000000000c1
+        explode: false
+        in: path
+        name: secretId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Secret removed
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "No project is selected. The caller is authenticated but the\
+            \ request is tenant-scoped, so a project must be selected before it can\
+            \ be answered. The response body carries `\"code\": \"no_project_selected\"\
+            `, which clients branch on to offer a project picker rather than an access-denied\
+            \ message."
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Remove a secret from an inbound endpoint (finish a rotation)
+      tags:
+      - Inbound
+  /templates/{templateId}/inbound-endpoints/{id}:
+    delete:
+      description: "Deletes the endpoint. Its URL answers 404 from then on, so the\
+        \ sender's deliveries stop being accepted. Records it wrote are not affected."
+      operationId: deleteTemplateInboundEndpoint
+      parameters:
+      - description: "The project this call acts on. A credential proves identity\
+          \ and grants a set of projects; it never selects one, so every tenant-scoped\
+          \ call names its target here. The value must be one of the projects in the\
+          \ credential's `projects` claim and must still be reachable — a project\
+          \ the caller is not a member of, or one that has been deleted, is rejected\
+          \ with 403 rather than silently ignored. A project the caller *is* a member\
+          \ of but which the credential predates is also rejected with 403, carrying\
+          \ the code `stale_project_grant`; that one is answered by refreshing the\
+          \ credential once and retrying, and is the only 403 here worth retrying.\
+          \ Omitting the header is not an error: the caller is simply acting with\
+          \ no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`.\
+          \ Two clients holding the same credential may send different values at the\
+          \ same time."
+        example: 018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d
+        explode: false
+        in: header
+        name: X-Omnismith-Project-Id
+        required: false
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: UUID or slug of the template
+        example: customer
+        explode: false
+        in: path
+        name: templateId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Inbound endpoint UUID
+        example: 01a0f0e2-7c1a-7000-8000-000000000001
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Endpoint deleted
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "No project is selected. The caller is authenticated but the\
+            \ request is tenant-scoped, so a project must be selected before it can\
+            \ be answered. The response body carries `\"code\": \"no_project_selected\"\
+            `, which clients branch on to offer a project picker rather than an access-denied\
+            \ message."
+      security:
+      - bearerAuth: []
+      summary: Delete an inbound endpoint
+      tags:
+      - Inbound
+    get:
+      description: Returns the endpoint with its receive URL. Secret values are never
+        returned; each secret shows only a hint.
+      operationId: getTemplateInboundEndpoint
+      parameters:
+      - description: "The project this call acts on. A credential proves identity\
+          \ and grants a set of projects; it never selects one, so every tenant-scoped\
+          \ call names its target here. The value must be one of the projects in the\
+          \ credential's `projects` claim and must still be reachable — a project\
+          \ the caller is not a member of, or one that has been deleted, is rejected\
+          \ with 403 rather than silently ignored. A project the caller *is* a member\
+          \ of but which the credential predates is also rejected with 403, carrying\
+          \ the code `stale_project_grant`; that one is answered by refreshing the\
+          \ credential once and retrying, and is the only 403 here worth retrying.\
+          \ Omitting the header is not an error: the caller is simply acting with\
+          \ no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`.\
+          \ Two clients holding the same credential may send different values at the\
+          \ same time."
+        example: 018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d
+        explode: false
+        in: header
+        name: X-Omnismith-Project-Id
+        required: false
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: UUID or slug of the template
+        example: customer
+        explode: false
+        in: path
+        name: templateId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Inbound endpoint UUID
+        example: 01a0f0e2-7c1a-7000-8000-000000000001
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InboundEndpointResponse"
+          description: The endpoint
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "No project is selected. The caller is authenticated but the\
+            \ request is tenant-scoped, so a project must be selected before it can\
+            \ be answered. The response body carries `\"code\": \"no_project_selected\"\
+            `, which clients branch on to offer a project picker rather than an access-denied\
+            \ message."
+      security:
+      - bearerAuth: []
+      summary: Get an inbound endpoint
+      tags:
+      - Inbound
+    patch:
+      description: |-
+        Partial update: send only the fields to change. `delivery_id_source: null` removes the delivery id source. Set `enabled: false` to stop accepting deliveries without deleting the endpoint. Secrets are changed with the secrets endpoints, never here.
+
+        Try a mapping change first with `previewInboundMapping` (the `preview_inbound_mapping` tool), which takes an unsaved `mapping`. After saving, recover the deliveries the old mapping rejected with `replayInboundDelivery` (the `replay_inbound_delivery` tool).
+
+        Like create, this requires your own permission to create and edit records of the template.
+      operationId: updateTemplateInboundEndpoint
+      parameters:
+      - description: "The project this call acts on. A credential proves identity\
+          \ and grants a set of projects; it never selects one, so every tenant-scoped\
+          \ call names its target here. The value must be one of the projects in the\
+          \ credential's `projects` claim and must still be reachable — a project\
+          \ the caller is not a member of, or one that has been deleted, is rejected\
+          \ with 403 rather than silently ignored. A project the caller *is* a member\
+          \ of but which the credential predates is also rejected with 403, carrying\
+          \ the code `stale_project_grant`; that one is answered by refreshing the\
+          \ credential once and retrying, and is the only 403 here worth retrying.\
+          \ Omitting the header is not an error: the caller is simply acting with\
+          \ no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`.\
+          \ Two clients holding the same credential may send different values at the\
+          \ same time."
+        example: 018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d
+        explode: false
+        in: header
+        name: X-Omnismith-Project-Id
+        required: false
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: UUID or slug of the template
+        example: customer
+        explode: false
+        in: path
+        name: templateId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Inbound endpoint UUID
+        example: 01a0f0e2-7c1a-7000-8000-000000000001
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateInboundEndpointRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InboundEndpointResponse"
+          description: The updated endpoint
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "No project is selected. The caller is authenticated but the\
+            \ request is tenant-scoped, so a project must be selected before it can\
+            \ be answered. The response body carries `\"code\": \"no_project_selected\"\
+            `, which clients branch on to offer a project picker rather than an access-denied\
+            \ message."
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Update an inbound endpoint
+      tags:
+      - Inbound
+  /templates/{templateId}/inbound-endpoints/{id}/deliveries/{deliveryId}:
+    get:
+      description: "One row of the delivery log with the stored body (at most 256\
+        \ KB), the allow-listed headers, and `error`: for a rejected or partial delivery,\
+        \ the per-record `items` and field `errors` it was answered with. `deliveryId`\
+        \ is the `log_id` the sender was answered with. The stored body can serve\
+        \ as the sample for `previewInboundMapping` (`delivery_id`)."
+      operationId: getInboundDelivery
+      parameters:
+      - description: "The project this call acts on. A credential proves identity\
+          \ and grants a set of projects; it never selects one, so every tenant-scoped\
+          \ call names its target here. The value must be one of the projects in the\
+          \ credential's `projects` claim and must still be reachable — a project\
+          \ the caller is not a member of, or one that has been deleted, is rejected\
+          \ with 403 rather than silently ignored. A project the caller *is* a member\
+          \ of but which the credential predates is also rejected with 403, carrying\
+          \ the code `stale_project_grant`; that one is answered by refreshing the\
+          \ credential once and retrying, and is the only 403 here worth retrying.\
+          \ Omitting the header is not an error: the caller is simply acting with\
+          \ no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`.\
+          \ Two clients holding the same credential may send different values at the\
+          \ same time."
+        example: 018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d
+        explode: false
+        in: header
+        name: X-Omnismith-Project-Id
+        required: false
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: UUID or slug of the template
+        example: customer
+        explode: false
+        in: path
+        name: templateId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Inbound endpoint UUID
+        example: 01a0f0e2-7c1a-7000-8000-000000000001
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: Delivery log row UUID
+        example: 01a0f0e2-7c1a-7000-8000-0000000000d1
+        explode: false
+        in: path
+        name: deliveryId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InboundDeliveryDetail"
+          description: The delivery
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "No project is selected. The caller is authenticated but the\
+            \ request is tenant-scoped, so a project must be selected before it can\
+            \ be answered. The response body carries `\"code\": \"no_project_selected\"\
+            `, which clients branch on to offer a project picker rather than an access-denied\
+            \ message."
+      security:
+      - bearerAuth: []
+      summary: Get one delivery an inbound endpoint received
+      tags:
+      - Inbound
+  /templates/{templateId}/inbound-endpoints/{id}/deliveries:
+    get:
+      description: |-
+        The endpoint's delivery log, newest first: every delivery that passed signature verification, and at most one signature failure per 10 seconds. Rows are kept for 7 days. Bodies are left out; read one delivery for its body and headers.
+
+        This is how a feed is verified after a test event. On `rejected` or `partial`, read the delivery with `getInboundDelivery` (the `get_inbound_delivery` tool) for its per-record errors, fix the mapping with `updateTemplateInboundEndpoint` (the `update_template_inbound_endpoint` tool), then recover it with `replayInboundDelivery` (the `replay_inbound_delivery` tool). A `401` row (`reason` `mismatch` or `missing_signature`) usually means the sender is configured with the wrong secret or header.
+      operationId: listInboundDeliveries
+      parameters:
+      - description: "The project this call acts on. A credential proves identity\
+          \ and grants a set of projects; it never selects one, so every tenant-scoped\
+          \ call names its target here. The value must be one of the projects in the\
+          \ credential's `projects` claim and must still be reachable — a project\
+          \ the caller is not a member of, or one that has been deleted, is rejected\
+          \ with 403 rather than silently ignored. A project the caller *is* a member\
+          \ of but which the credential predates is also rejected with 403, carrying\
+          \ the code `stale_project_grant`; that one is answered by refreshing the\
+          \ credential once and retrying, and is the only 403 here worth retrying.\
+          \ Omitting the header is not an error: the caller is simply acting with\
+          \ no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`.\
+          \ Two clients holding the same credential may send different values at the\
+          \ same time."
+        example: 018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d
+        explode: false
+        in: header
+        name: X-Omnismith-Project-Id
+        required: false
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: UUID or slug of the template
+        example: customer
+        explode: false
+        in: path
+        name: templateId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Inbound endpoint UUID
+        example: 01a0f0e2-7c1a-7000-8000-000000000001
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: Only deliveries with one of these outcomes; comma-separated
+        example:
+        - rejected
+        - failed
+        explode: false
+        in: query
+        name: outcome
+        required: false
+        schema:
+          items:
+            enum:
+            - processed
+            - partial
+            - skipped
+            - rejected
+            - failed
+            type: string
+          type: array
+        style: form
+      - description: Only deliveries received at or after this RFC 3339 time
+        example: 2026-10-01T00:00:00Z
+        explode: true
+        in: query
+        name: from
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: Only deliveries received at or before this RFC 3339 time
+        example: 2026-10-01T23:59:59Z
+        explode: true
+        in: query
+        name: to
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: Page size
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 20
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Number of deliveries to skip
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/listInboundDeliveries_200_response"
+          description: A page of the delivery log
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "No project is selected. The caller is authenticated but the\
+            \ request is tenant-scoped, so a project must be selected before it can\
+            \ be answered. The response body carries `\"code\": \"no_project_selected\"\
+            `, which clients branch on to offer a project picker rather than an access-denied\
+            \ message."
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: List the deliveries an inbound endpoint received
+      tags:
+      - Inbound
+  /templates/{templateId}/inbound-endpoints/{id}/preview:
+    post:
+      description: |-
+        A dry run: maps a sample payload with the endpoint's mapping, or with an unsaved `mapping` to try, and reports what each record would become. Nothing is written.
+
+        Use it before saving a mapping and before asking the sender for a test event: pass the sample event from the sender's documentation as `body`, or a delivery from the endpoint's log as `delivery_id`.
+
+        The answer says whether the `match` conditions hold, and per record: the external key, whether it would `create` or `update` a record (and which), the attribute values after list and reference resolution, in the write API's shape, and the error a real delivery would meet: mapping errors, type errors and rule violations, keyed as on receive (`items[i].attributes.<slug>`). A mapping that does not fit the template, or an `items` path that names no list, is answered with 422.
+      operationId: previewInboundMapping
+      parameters:
+      - description: "The project this call acts on. A credential proves identity\
+          \ and grants a set of projects; it never selects one, so every tenant-scoped\
+          \ call names its target here. The value must be one of the projects in the\
+          \ credential's `projects` claim and must still be reachable — a project\
+          \ the caller is not a member of, or one that has been deleted, is rejected\
+          \ with 403 rather than silently ignored. A project the caller *is* a member\
+          \ of but which the credential predates is also rejected with 403, carrying\
+          \ the code `stale_project_grant`; that one is answered by refreshing the\
+          \ credential once and retrying, and is the only 403 here worth retrying.\
+          \ Omitting the header is not an error: the caller is simply acting with\
+          \ no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`.\
+          \ Two clients holding the same credential may send different values at the\
+          \ same time."
+        example: 018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d
+        explode: false
+        in: header
+        name: X-Omnismith-Project-Id
+        required: false
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: UUID or slug of the template
+        example: customer
+        explode: false
+        in: path
+        name: templateId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Inbound endpoint UUID
+        example: 01a0f0e2-7c1a-7000-8000-000000000001
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PreviewInboundMappingRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/previewInboundMapping_200_response"
+          description: What the mapping would do
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "No project selected, or the stored delivery cannot serve as\
+            \ a sample (no stored body, or a truncated one)"
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+      security:
+      - bearerAuth: []
+      summary: Preview what an inbound mapping does with a sample payload
+      tags:
+      - Inbound
+  /inbound/{projectId}/{endpointId}:
+    post:
+      description: |-
+        The receive URL of an inbound endpoint, called by the sending system rather than by API clients. It takes no Omnismith credential: every delivery must carry a valid signature for the endpoint.
+
+        - `200` — `processed`: every record was written. `partial`: some records failed; `errors` and `items` say which, and a replay recovers them. `skipped`: nothing was processed, with `reason` `match` (the mapping's conditions did not hold), `no_items` (the items list was empty) or `duplicate` (the delivery id was already processed).
+        - `400` — the body is not a JSON object or array.
+        - `401` — the signature is missing or does not verify; `reason` says why.
+        - `404` — no enabled endpoint at this URL.
+        - `422` — no record could be written; `errors` are keyed `items[i].attributes.<slug>`, as the entity write API keys them.
+        - `409`, `429`, `5xx` — the delivery could not be written right now (a key conflict, a quota or rate limit); retry later.
+        - `413` — the body is over 1 MB.
+
+        Every answer after signature verification carries `log_id`, the delivery's row in the endpoint's delivery log.
+      operationId: receiveInboundDelivery
+      parameters:
+      - description: Project UUID
+        explode: false
+        in: path
+        name: projectId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: Inbound endpoint UUID
+        explode: false
+        in: path
+        name: endpointId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties: true
+              type: object
+        description: "The sender's JSON payload, unchanged. At most 1 MB."
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/receiveInboundDelivery_200_response"
+          description: Delivery accepted
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: External key conflict
+        "413":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Body over 1 MB
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+          description: Validation Error
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Quota or rate limit reached; retry later
+      security: []
+      summary: Receive a delivery from an outside system
+      tags:
+      - Inbound
+  /templates/{templateId}/inbound-endpoints/{id}/deliveries/{deliveryId}/replay:
+    post:
+      description: |-
+        Recovers a delivery after the mapping or the template was fixed: re-runs the endpoint's current mapping on the stored body and writes the records, attributed to the endpoint as on receive. The signature is not verified again (only verified deliveries are stored) and the duplicate check is skipped.
+
+        Only `rejected`, `failed` and `partial` deliveries are replayed; for a `partial` one, only the records that failed. A processed or skipped delivery, one that failed signature verification (nothing of it was stored), and one whose stored body was truncated are refused with 409.
+
+        The replay is a new row in the delivery log, returned here, with `replay_of` naming the replayed delivery and `replayed_by` the user who asked. Its `outcome` says whether the records were written now.
+      operationId: replayInboundDelivery
+      parameters:
+      - description: "The project this call acts on. A credential proves identity\
+          \ and grants a set of projects; it never selects one, so every tenant-scoped\
+          \ call names its target here. The value must be one of the projects in the\
+          \ credential's `projects` claim and must still be reachable — a project\
+          \ the caller is not a member of, or one that has been deleted, is rejected\
+          \ with 403 rather than silently ignored. A project the caller *is* a member\
+          \ of but which the credential predates is also rejected with 403, carrying\
+          \ the code `stale_project_grant`; that one is answered by refreshing the\
+          \ credential once and retrying, and is the only 403 here worth retrying.\
+          \ Omitting the header is not an error: the caller is simply acting with\
+          \ no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`.\
+          \ Two clients holding the same credential may send different values at the\
+          \ same time."
+        example: 018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d
+        explode: false
+        in: header
+        name: X-Omnismith-Project-Id
+        required: false
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: UUID or slug of the template
+        example: customer
+        explode: false
+        in: path
+        name: templateId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Inbound endpoint UUID
+        example: 01a0f0e2-7c1a-7000-8000-000000000001
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: The delivery log row to replay
+        example: 01a0f0e2-7c1a-7000-8000-0000000000d1
+        explode: false
+        in: path
+        name: deliveryId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InboundDeliverySummary"
+          description: The replay's own delivery log row
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Not Found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: "No project selected, or the delivery is not replayable"
+      security:
+      - bearerAuth: []
+      summary: Replay a stored inbound delivery through the current mapping
+      tags:
+      - Inbound
   /marketplace/blueprints/{id}:
     delete:
       description: Permanently removes a published blueprint from the marketplace
@@ -11899,7 +13455,9 @@ components:
           type: string
         slug:
           description: "Unique slug identifier within the project (letters, numbers,\
-            \ underscores). If omitted, generated automatically from name."
+            \ underscores). If omitted, generated automatically from name. Standard\
+            \ record field names (id, template_id, template_slug, created_at, updated_at,\
+            \ deleted_at, external_key) are reserved and rejected with 422."
           example: product_color
           nullable: true
           type: string
@@ -11989,7 +13547,9 @@ components:
           nullable: true
           type: integer
         slug:
-          description: New unique slug identifier within the project.
+          description: "New unique slug identifier within the project. Standard record\
+            \ field names (id, template_id, template_slug, created_at, updated_at,\
+            \ deleted_at, external_key) are reserved and rejected with 422."
           example: product_color
           nullable: true
           type: string
@@ -12137,7 +13697,9 @@ components:
           nullable: true
           type: integer
         slug:
-          description: Updated unique slug identifier within the project.
+          description: "Updated unique slug identifier within the project. Standard\
+            \ record field names (id, template_id, template_slug, created_at, updated_at,\
+            \ deleted_at, external_key) are reserved and rejected with 422."
           example: product_color_variant
           nullable: true
           type: string
@@ -12341,6 +13903,69 @@ components:
           type: string
       title: Session Response
       type: object
+    AutomationAction:
+      description: "One action an automation runs when its trigger fires and its conditions\
+        \ pass. Actions run in order; each succeeds or fails on its own, and the outcome\
+        \ is recorded per action on the execution."
+      example:
+        type: update_entity
+        config:
+          target:
+            kind: trigger_entity
+          values:
+            escalation_note: "No reply to {values.title} yet"
+            escalated_at: "{timestamp}"
+      properties:
+        type:
+          description: "What the action does. `telegram`, `webhook` and `push` notify\
+            \ through a notification channel. `update_entity`, `create_entity` and\
+            \ `run_entity_action` write records. `http_request` calls an API and can\
+            \ keep parts of its JSON response on the trigger record."
+          enum:
+          - telegram
+          - webhook
+          - push
+          - update_entity
+          - create_entity
+          - run_entity_action
+          - http_request
+          example: update_entity
+          type: string
+        config:
+          description: |-
+            Configuration by `type`. Every string marked *template* renders variables such as `{entity.id}`, `{entity.external_key}`, `{values.<attribute slug or id>}`, `{previous.<attribute>}`, `{values.<reference attribute>.<attribute of the referenced record>}`, `{automation.name}` and `{timestamp}`.
+
+            **Notifications**
+            - `telegram`: `{"channel_id": "<telegram channel id>", "chat_id": "<telegram chat id>", "message_template": "<template>"}`
+            - `webhook`: `{"channel_id": "<webhook channel id>", "method": "POST", "url_template": "<template, absolute or relative to the channel URL>", "headers": {"X-Source": "omnismith"}, "query_params": "<template>", "payload_template": "<JSON template>"}`; all but `channel_id` optional.
+            - `push`: `{"channel_id": "<push channel id>", "title_template": "<template>", "message_template": "<template>", "user_ids": ["<user id>"]}`
+            - Webhook and HTTP request targets on private, loopback or link-local networks (`localhost`, `10.0.0.0/8`, `192.168.0.0/16`, …, also after DNS resolution and redirects) are refused: the action fails with `Target resolves to a private network address`.
+
+            **HTTP request with response mapping**
+            - `http_request`: the `webhook` config (`channel_id`, `method`, `url_template`, `headers`, `query_params`, `payload_template`) plus `"timeout_seconds": <1-30, default 10>` and `"response_mapping": {"<attribute slug or id>": "<JSONPath>"}` (at most 50 entries). Paths use `$`, `.name`, `['name']` and `[index]`, e.g. `$.data.items[0].id`.
+            - A status outside 2xx, no response, or a response over 1 MB fails the action. With a mapping the response must be JSON and every path must resolve; otherwise the action fails and writes nothing. Mapped values are written to the trigger record in one update, as the automation and through the template's Rules, like `update_entity`: numbers and booleans as text, JSON `null` clears the attribute, an object or list is stored as JSON and only in a text or markdown attribute.
+            - A mapping needs a trigger with a `templateId`, and whoever saves the automation needs the rights to edit that template's records. Without a mapping the call needs no record.
+            - The execution records `details` per action: `status_code`, `written` (the mapped attributes) and `response_excerpt` (the first 2 KB of the body), also when the action fails.
+            - Example, enrich a new lead from its domain: `{"channel_id": "<enrichment API channel id>", "method": "GET", "url_template": "companies/{values.company_domain}", "timeout_seconds": 15, "response_mapping": {"company_size": "$.company.employees", "industry": "$.company.industry"}}`.
+
+            **Record writes.** They run as the automation (history and audit show `automation:{id}` as the author), go through the template's Rules, quotas and value validation like any other write, and are checked when the automation is saved: you need the rights to create and edit records of every template an action writes to, and every attribute, template and action named must exist. A write that is refused (a rule violation, a failed action precondition, an invalid value, a missing target record) fails that action and is recorded on the execution; the other actions still run. Writes made by an automation never fire automations triggered by created, updated, attribute-changed or action-executed events, so automations cannot chain or loop through their own writes; they do start other automations' time-based timers.
+            - `update_entity`: `{"target": <target>, "values": {"<attribute slug or id>": "<template>"}}`. Partial update of the target record. A value that renders to an empty string clears the attribute. Example: `{"target": {"kind": "trigger_entity"}, "values": {"escalation_note": "No reply to {values.title} yet", "escalated_at": "{timestamp}"}}`.
+            - `create_entity`: `{"template_id": "<template slug or id>", "values": {"<attribute slug or id>": "<template>"}, "external_key": "<optional template>"}`. Creates a record; a key that renders empty means no key, a key a live record already holds fails the action. Example: `{"template_id": "contract", "values": {"customer": "{values.customer.id}", "renewal_date": "{values.close_date}"}, "external_key": "deal:{entity.id}"}`.
+            - `run_entity_action`: `{"target": <target>, "action_slug": "<entity action slug>", "values": {"<field slug or id>": "<template>"}}`. Runs a named entity action on the target record, so its precondition, required fields and presets apply; `values` may only name the action's fields. Prefer it over `update_entity` for status changes that have an action. Example: `{"target": {"kind": "trigger_entity"}, "action_slug": "escalate", "values": {"reason": "No reply within 24 hours"}}`.
+            - Values are written exactly as rendered, in the attribute's input format: a list attribute takes a list item id and a reference attribute a record id (`{values.<reference attribute>.id}` renders the id a reference of the trigger record holds), while `{values.<list attribute>}` renders the item's label.
+            - `<target>` is `{"kind": "trigger_entity"}` (the record that fired the automation) or `{"kind": "reference", "attribute_id": "<reference attribute slug or id>"}` (the record that reference attribute of the trigger record points at). Both need a trigger with a `templateId`.
+          example:
+            target:
+              kind: trigger_entity
+            values:
+              escalation_note: "No reply to {values.title} yet"
+              escalated_at: "{timestamp}"
+          type: object
+      required:
+      - config
+      - type
+      title: Automation Action
+      type: object
     AutomationExecutionResponse:
       example:
         automation_id: 01912ecb-4654-7890-a1b2-c3d4e5f60001
@@ -12351,11 +13976,24 @@ components:
           success: true
           executed_at: 2026-08-26T12:00:01Z
           action_index: 0
+          details:
+            status_code: 200
+            written:
+            - company_size
+            - industry
+            response_excerpt: "{\"employees\": 120, \"industry\": \"Retail\"}"
         - error_message: error_message
           success: true
           executed_at: 2026-08-26T12:00:01Z
           action_index: 0
+          details:
+            status_code: 200
+            written:
+            - company_size
+            - industry
+            response_excerpt: "{\"employees\": 120, \"industry\": \"Retail\"}"
         triggered_at: 2026-08-26T12:00:00Z
+        due_at: 2026-08-26T11:59:40Z
         id: 01912ecb-4654-7890-a1b2-c3d4e5f60010
         entity_id: 01912ecb-4654-7890-a1b2-c3d4e5f60099
         status: success
@@ -12371,14 +14009,23 @@ components:
           format: uuid
           type: string
         entity_id:
-          description: UUID of the entity that triggered the execution
+          description: UUID of the entity the execution ran for; null for a run that
+            has no record (a schedule without a template)
           example: 01912ecb-4654-7890-a1b2-c3d4e5f60099
           format: uuid
+          nullable: true
           type: string
         triggered_at:
           description: Timestamp when the trigger event was evaluated
           example: 2026-08-26T12:00:00Z
           format: date-time
+          type: string
+        due_at:
+          description: When a time-based trigger was due; null for event-based triggers.
+            `triggered_at - due_at` is how late the run fired.
+          example: 2026-08-26T11:59:40Z
+          format: date-time
+          nullable: true
           type: string
         completed_at:
           description: Timestamp when all actions completed execution
@@ -12415,8 +14062,12 @@ components:
         id: 01912ecb-4654-7890-a1b2-c3d4e5f60001
         trigger:
           attributeId: 01912ecb-4654-7890-a1b2-c3d4e5f60077
+          cron: 0 9 * * 1-5
+          offsetMinutes: -42660
+          delayMinutes: 1440
+          timezone: Europe/Berlin
           actionId: 01a09900-0000-7000-8000-000000000001
-          type: on_attribute_changed
+          type: schedule
           templateId: 01912ecb-4654-7890-a1b2-c3d4e5f60088
         lastTriggeredAt: 2026-08-26T12:00:00Z
         conditions:
@@ -12429,10 +14080,21 @@ components:
           value: active
           operator: eq
         actions:
-        - type: telegram
-          config: "{}"
-        - type: telegram
-          config: "{}"
+        - type: update_entity
+          config:
+            target:
+              kind: trigger_entity
+            values:
+              escalation_note: "No reply to {values.title} yet"
+              escalated_at: "{timestamp}"
+        - type: update_entity
+          config:
+            target:
+              kind: trigger_entity
+            values:
+              escalation_note: "No reply to {values.title} yet"
+              escalated_at: "{timestamp}"
+        nextRunAt: 2026-10-05T07:00:00Z
         cooldownSeconds: 60
         updatedAt: 2026-08-26T11:00:00Z
       properties:
@@ -12456,7 +14118,7 @@ components:
           example: true
           type: boolean
         trigger:
-          $ref: "#/components/schemas/AutomationResponse_trigger"
+          $ref: "#/components/schemas/AutomationTrigger"
         conditions:
           description: Condition expressions that must all evaluate to true to execute
             actions
@@ -12466,7 +14128,7 @@ components:
         actions:
           description: Actions dispatched when conditions evaluate to true
           items:
-            $ref: "#/components/schemas/AutomationResponse_actions_inner"
+            $ref: "#/components/schemas/AutomationAction"
           type: array
         cooldownSeconds:
           description: Minimum cooldown seconds between trigger firings for the same
@@ -12477,6 +14139,13 @@ components:
         lastTriggeredAt:
           description: Timestamp when this automation last fired
           example: 2026-08-26T12:00:00Z
+          format: date-time
+          nullable: true
+          type: string
+        nextRunAt:
+          description: When a `schedule` automation runs next (UTC). Null for other
+            triggers and for a disabled schedule.
+          example: 2026-10-05T07:00:00Z
           format: date-time
           nullable: true
           type: string
@@ -12491,14 +14160,175 @@ components:
           format: date-time
           type: string
       type: object
+    AutomationTimerResponse:
+      example:
+        automation_id: 01912ecb-4654-7890-a1b2-c3d4e5f60001
+        kind: date_reached
+        due_at: 2026-11-01T09:00:00Z
+        id: 5f0c1a2b-3c4d-5e6f-8a9b-0c1d2e3f4a5b
+        entity_id: 01912ecb-4654-7890-a1b2-c3d4e5f60099
+        automation_name: Renewal reminder
+      properties:
+        id:
+          description: "Timer UUID. There is at most one pending timer per automation,\
+            \ record and kind, so re-arming keeps the id."
+          example: 5f0c1a2b-3c4d-5e6f-8a9b-0c1d2e3f4a5b
+          format: uuid
+          type: string
+        automation_id:
+          description: Automation the timer belongs to
+          example: 01912ecb-4654-7890-a1b2-c3d4e5f60001
+          format: uuid
+          type: string
+        automation_name:
+          description: Name of that automation
+          example: Renewal reminder
+          type: string
+        entity_id:
+          description: Record the timer is about; null for a timer that belongs to
+            no record (a schedule without a template)
+          example: 01912ecb-4654-7890-a1b2-c3d4e5f60099
+          format: uuid
+          nullable: true
+          type: string
+        kind:
+          description: "What the timer is for: the next slot of a schedule, a date\
+            \ attribute reaching its moment, or a \"no change within\" deadline"
+          enum:
+          - schedule
+          - date_reached
+          - no_change_within
+          example: date_reached
+          type: string
+        due_at:
+          description: "When the timer fires (UTC). It fires within about 30 seconds\
+            \ of this moment; one that came due while the service was down fires once,\
+            \ late."
+          example: 2026-11-01T09:00:00Z
+          format: date-time
+          type: string
+      required:
+      - automation_id
+      - automation_name
+      - due_at
+      - entity_id
+      - id
+      - kind
+      type: object
+    AutomationTrigger:
+      description: |-
+        When the automation fires. Conditions are then checked on the record, and the actions run if they all hold.
+
+        **Record events.** `on_entity_created`, `on_entity_updated`, `on_attribute_changed` (needs `attributeId`) and `on_action_executed` (needs `actionId`, fires whenever that entity action runs). They never fire for writes made by an automation.
+
+        **Schedule.** `{"type": "schedule", "cron": "<5-field cron>", "timezone": "<IANA timezone>", "templateId": "<optional template id>"}`.
+        - Without `templateId` each run executes the actions once, with no record: `{entity.*}` and `{values.*}` render empty, and the automation takes no conditions.
+        - With `templateId` each run executes the actions once for every record of the template the conditions hold for, each record subject to the cooldown. A run that would match more than 500 records runs nothing and is recorded as one failed execution; narrow the conditions.
+        - Conditions use `mode: "current"` only: a scheduled moment has no previous value.
+        - Slots are read in `timezone`, so `0 9 * * *` stays at 09:00 local time across daylight-saving changes. Runs must be at least 5 minutes apart. A slot missed while the service was down runs once, late; several missed slots collapse into one run. `{timestamp}` is the slot the run was due at, and the automation's `nextRunAt` shows the next slot.
+        - Example, every weekday at 09:00 Berlin time for every open ticket: `{"type": "schedule", "cron": "0 9 * * 1-5", "timezone": "Europe/Berlin", "templateId": "<ticket template id>"}` with the condition `{"attributeId": "<status id>", "operator": "eq", "value": "<Open item id>", "mode": "current"}`.
+
+        **Date reached.** `{"type": "date_reached", "templateId": "<template id>", "attributeId": "<date or datetime attribute id>", "offsetMinutes": <signed minutes>, "timezone": "<IANA timezone>"}`. Fires once per record when the record's date plus the offset is reached: deadlines, renewals, expirations, next-contact dates.
+        - A date-only value is local midnight in `timezone`; a datetime is taken as stored (without an offset, as UTC). The offset is applied on the local calendar, whole days first: `-42660` (−30 days + 9 hours) is 09:00 local time thirty days before the date, `-60` is an hour before a datetime, `0` is the moment itself.
+        - Every record with a date is scheduled when the automation is saved or enabled; afterwards each write that sets, changes or clears the date moves or cancels that record's run. A due time already in the past is never scheduled, so setting a past date does not fire. A deleted record fires nothing.
+        - When the moment comes the conditions are checked on the record as it is then (`mode: "current"` only), and the cooldown applies. `{timestamp}` is the due time.
+        - Writes made by an automation schedule other automations' runs like any other write (a contract created by one automation gets its renewal reminder from another), but never the writing automation's own: if an automation changes the date it is watching, its pending run is dropped and not rescheduled, so it cannot loop on itself.
+        - Example, renewal reminder at 09:00 Berlin time thirty days before `renewal_date`: `{"type": "date_reached", "templateId": "<contract template id>", "attributeId": "<renewal_date id>", "offsetMinutes": -42660, "timezone": "Europe/Berlin"}`. Pending runs are listed by `GET /automation/timers?automation_id=`.
+
+        **No change within.** `{"type": "no_change_within", "templateId": "<template id>", "attributeId": "<watched attribute id>", "delayMinutes": <minutes>}`. Fires once for a record when the watched attribute has not changed for `delayMinutes` while the conditions held: follow-ups, SLAs, escalations.
+        - The clock starts when a record is created and restarts whenever the watched attribute changes, but only while the conditions hold for the record. A write after which they no longer hold stops the clock. When the delay is over the conditions are checked once more on the record as it is then (`mode: "current"` only), and the cooldown applies. `{timestamp}` is the moment the delay ran out.
+        - Records that already exist when the automation is saved are not clocked; their clock starts with their next write. Changing the trigger or the conditions of the automation (or disabling it) stops every running clock; editing its name, actions or cooldown does not.
+        - Writes made by an automation start, restart and stop other automations' clocks like any other write, but never the writing automation's own, so an escalation that sets `escalated_at` can start a second automation's clock without looping on itself.
+        - Example, a ticket still New 24 hours after it was created: attribute `status`, condition `{"attributeId": "<status id>", "operator": "eq", "value": "<New item id>", "mode": "current"}`, `"delayMinutes": 1440`.
+        - Example, no reply within 2 hours: attribute `replied_at`, condition `{"attributeId": "<replied_at id>", "operator": "is_empty", "mode": "current"}`, `"delayMinutes": 120`.
+      example:
+        attributeId: 01912ecb-4654-7890-a1b2-c3d4e5f60077
+        cron: 0 9 * * 1-5
+        offsetMinutes: -42660
+        delayMinutes: 1440
+        timezone: Europe/Berlin
+        actionId: 01a09900-0000-7000-8000-000000000001
+        type: schedule
+        templateId: 01912ecb-4654-7890-a1b2-c3d4e5f60088
+      properties:
+        type:
+          description: "What fires the automation: a record event (`on_entity_created`,\
+            \ `on_entity_updated`, `on_attribute_changed`, `on_action_executed`) or\
+            \ the clock (`schedule`, `date_reached`, `no_change_within`)."
+          enum:
+          - on_entity_created
+          - on_entity_updated
+          - on_attribute_changed
+          - on_action_executed
+          - schedule
+          - date_reached
+          - no_change_within
+          example: schedule
+          type: string
+        templateId:
+          description: Template id the trigger watches. Required for `date_reached`
+            and `no_change_within`; optional for record events (none = every template)
+            and for `schedule` (none = one run without a record).
+          example: 01912ecb-4654-7890-a1b2-c3d4e5f60088
+          format: uuid
+          nullable: true
+          type: string
+        attributeId:
+          description: "Attribute id of the template; required for `on_attribute_changed`,\
+            \ `date_reached` (a date or datetime attribute) and `no_change_within`\
+            \ (the watched attribute; not a metric), absent otherwise."
+          example: 01912ecb-4654-7890-a1b2-c3d4e5f60077
+          format: uuid
+          nullable: true
+          type: string
+        actionId:
+          description: "Entity action id; required for `on_action_executed`, absent\
+            \ otherwise."
+          example: 01a09900-0000-7000-8000-000000000001
+          format: uuid
+          nullable: true
+          type: string
+        cron:
+          description: "`schedule` only: a 5-field cron expression (minute hour day-of-month\
+            \ month day-of-week), read in `timezone`. Runs at least 5 minutes apart."
+          example: 0 9 * * 1-5
+          nullable: true
+          type: string
+        timezone:
+          description: "Time-based triggers only: the IANA timezone their times are\
+            \ read in, e.g. `Europe/Berlin`."
+          example: Europe/Berlin
+          nullable: true
+          type: string
+        delayMinutes:
+          description: "`no_change_within` only: how long the watched attribute must\
+            \ stay unchanged, 5 to 129600 minutes (90 days). Also accepted as `delay_minutes`."
+          example: 1440
+          nullable: true
+          type: integer
+        offsetMinutes:
+          description: "`date_reached` only: signed whole minutes from the date, negative\
+            \ for before it; at most 527040 (366 days) either way. Also accepted as\
+            \ `offset_minutes`."
+          example: -42660
+          nullable: true
+          type: integer
+      required:
+      - type
+      title: Automation Trigger
+      type: object
     CreateAutomationRequest:
       example:
         name: Notify on status change
         description: Sends telegram alert when deal status changes to Won
         trigger:
           attributeId: 01912ecb-4654-7890-a1b2-c3d4e5f60077
+          cron: 0 9 * * 1-5
+          offsetMinutes: -42660
+          delayMinutes: 1440
+          timezone: Europe/Berlin
           actionId: 01a09900-0000-7000-8000-000000000001
-          type: on_attribute_changed
+          type: schedule
           templateId: 01912ecb-4654-7890-a1b2-c3d4e5f60088
         conditions:
         - attributeId: 01912ecb-4654-7890-a1b2-c3d4e5f60077
@@ -12510,10 +14340,20 @@ components:
           value: won
           operator: eq
         actions:
-        - type: telegram
-          config: "{}"
-        - type: telegram
-          config: "{}"
+        - type: update_entity
+          config:
+            target:
+              kind: trigger_entity
+            values:
+              escalation_note: "No reply to {values.title} yet"
+              escalated_at: "{timestamp}"
+        - type: update_entity
+          config:
+            target:
+              kind: trigger_entity
+            values:
+              escalation_note: "No reply to {values.title} yet"
+              escalated_at: "{timestamp}"
         cooldownSeconds: 60
       properties:
         name:
@@ -12527,7 +14367,7 @@ components:
           nullable: true
           type: string
         trigger:
-          $ref: "#/components/schemas/CreateAutomationRequest_trigger"
+          $ref: "#/components/schemas/AutomationTrigger"
         conditions:
           description: Condition expressions that must all evaluate to true against
             the entity for actions to run
@@ -12538,7 +14378,7 @@ components:
           description: List of dispatch actions to execute when trigger and conditions
             are met
           items:
-            $ref: "#/components/schemas/CreateAutomationRequest_actions_inner"
+            $ref: "#/components/schemas/AutomationAction"
           type: array
         cooldownSeconds:
           description: Minimum throttle cooldown window in seconds between firings
@@ -12730,11 +14570,7 @@ components:
       example:
         name: Updated automation name
         description: Updated description
-        trigger:
-          attributeId: 01912ecb-4654-7890-a1b2-c3d4e5f60077
-          actionId: 01a09900-0000-7000-8000-000000000001
-          type: on_attribute_changed
-          templateId: 01912ecb-4654-7890-a1b2-c3d4e5f60088
+        trigger: ""
         conditions:
         - attributeId: 01912ecb-4654-7890-a1b2-c3d4e5f60077
           mode: current
@@ -12745,10 +14581,20 @@ components:
           value: closed_won
           operator: eq
         actions:
-        - type: telegram
-          config: "{}"
-        - type: telegram
-          config: "{}"
+        - type: update_entity
+          config:
+            target:
+              kind: trigger_entity
+            values:
+              escalation_note: "No reply to {values.title} yet"
+              escalated_at: "{timestamp}"
+        - type: update_entity
+          config:
+            target:
+              kind: trigger_entity
+            values:
+              escalation_note: "No reply to {values.title} yet"
+              escalated_at: "{timestamp}"
         cooldownSeconds: 120
       properties:
         name:
@@ -12762,7 +14608,9 @@ components:
           nullable: true
           type: string
         trigger:
-          $ref: "#/components/schemas/UpdateAutomationRequest_trigger"
+          allOf:
+          - $ref: "#/components/schemas/AutomationTrigger"
+          nullable: true
         conditions:
           description: Updated array of condition criteria evaluated against entity
             state
@@ -12773,7 +14621,7 @@ components:
         actions:
           description: Updated list of dispatch actions
           items:
-            $ref: "#/components/schemas/UpdateAutomationRequest_actions_inner"
+            $ref: "#/components/schemas/AutomationAction"
           nullable: true
           type: array
         cooldownSeconds:
@@ -14125,6 +15973,58 @@ components:
       - operator
       title: Entity Rule Predicate Overview Response
       type: object
+    InboundEndpointOverviewResponse:
+      description: A public URL through which an outside system writes records into
+        the template. Read the full definition and the delivery log with the inbound
+        endpoint tools.
+      example:
+        mode: upsert
+        name: Stripe customers
+        id: 01a0f0e2-7c1a-7000-8000-000000000001
+        preset: stripe
+        enabled: true
+        url: https://api.omnismith.io/v1/inbound/01a0f0e2-7c1a-7000-8000-0000000000aa/01a0f0e2-7c1a-7000-8000-000000000001
+      properties:
+        id:
+          description: Inbound endpoint UUID
+          example: 01a0f0e2-7c1a-7000-8000-000000000001
+          format: uuid
+          type: string
+        name:
+          description: Endpoint name
+          example: Stripe customers
+          type: string
+        enabled:
+          description: Whether the endpoint accepts deliveries
+          example: true
+          type: boolean
+        mode:
+          description: "How records are written: `create`, `update` or `upsert` by\
+            \ external key"
+          enum:
+          - create
+          - update
+          - upsert
+          example: upsert
+          type: string
+        preset:
+          description: The sender's signature preset
+          example: stripe
+          type: string
+        url:
+          description: The receive URL configured in the sender
+          example: https://api.omnismith.io/v1/inbound/01a0f0e2-7c1a-7000-8000-0000000000aa/01a0f0e2-7c1a-7000-8000-000000000001
+          format: uri
+          type: string
+      required:
+      - enabled
+      - id
+      - mode
+      - name
+      - preset
+      - url
+      title: Inbound Endpoint Overview Response
+      type: object
     ListOptionOverviewResponse:
       description: Selectable choice option for a list attribute.
       example:
@@ -14181,7 +16081,20 @@ components:
       example:
         project_id: 018b2f1b-8c1a-75b3-8000-7f0000010000
         templates:
-        - name: Dev Ticket
+        - inbound_endpoints:
+          - mode: upsert
+            name: Stripe customers
+            id: 01a0f0e2-7c1a-7000-8000-000000000001
+            preset: stripe
+            enabled: true
+            url: https://api.omnismith.io/v1/inbound/01a0f0e2-7c1a-7000-8000-0000000000aa/01a0f0e2-7c1a-7000-8000-000000000001
+          - mode: upsert
+            name: Stripe customers
+            id: 01a0f0e2-7c1a-7000-8000-000000000001
+            preset: stripe
+            enabled: true
+            url: https://api.omnismith.io/v1/inbound/01a0f0e2-7c1a-7000-8000-0000000000aa/01a0f0e2-7c1a-7000-8000-000000000001
+          name: Dev Ticket
           description: Engineering issue or task
           attributes:
           - default_value: 019a6b2c-8c3a-7c2e-8b3f-6c8a1a2b3c4d
@@ -14298,7 +16211,20 @@ components:
               required: true
             slug: resolve_ticket
           slug: dev_ticket
-        - name: Dev Ticket
+        - inbound_endpoints:
+          - mode: upsert
+            name: Stripe customers
+            id: 01a0f0e2-7c1a-7000-8000-000000000001
+            preset: stripe
+            enabled: true
+            url: https://api.omnismith.io/v1/inbound/01a0f0e2-7c1a-7000-8000-0000000000aa/01a0f0e2-7c1a-7000-8000-000000000001
+          - mode: upsert
+            name: Stripe customers
+            id: 01a0f0e2-7c1a-7000-8000-000000000001
+            preset: stripe
+            enabled: true
+            url: https://api.omnismith.io/v1/inbound/01a0f0e2-7c1a-7000-8000-0000000000aa/01a0f0e2-7c1a-7000-8000-000000000001
+          name: Dev Ticket
           description: Engineering issue or task
           attributes:
           - default_value: 019a6b2c-8c3a-7c2e-8b3f-6c8a1a2b3c4d
@@ -14497,8 +16423,21 @@ components:
       type: object
     TemplateOverviewResponse:
       description: "Template schema definition with bound attributes, validation rules,\
-        \ and executable actions."
+        \ executable actions, and the inbound endpoints that feed it."
       example:
+        inbound_endpoints:
+        - mode: upsert
+          name: Stripe customers
+          id: 01a0f0e2-7c1a-7000-8000-000000000001
+          preset: stripe
+          enabled: true
+          url: https://api.omnismith.io/v1/inbound/01a0f0e2-7c1a-7000-8000-0000000000aa/01a0f0e2-7c1a-7000-8000-000000000001
+        - mode: upsert
+          name: Stripe customers
+          id: 01a0f0e2-7c1a-7000-8000-000000000001
+          preset: stripe
+          enabled: true
+          url: https://api.omnismith.io/v1/inbound/01a0f0e2-7c1a-7000-8000-0000000000aa/01a0f0e2-7c1a-7000-8000-000000000001
         name: Dev Ticket
         description: Engineering issue or task
         attributes:
@@ -14652,10 +16591,17 @@ components:
           items:
             $ref: "#/components/schemas/EntityActionOverviewResponse"
           type: array
+        inbound_endpoints:
+          description: Public URLs through which outside systems write records into
+            this template. Empty when the caller cannot view inbound endpoints.
+          items:
+            $ref: "#/components/schemas/InboundEndpointOverviewResponse"
+          type: array
       required:
       - actions
       - attributes
       - id
+      - inbound_endpoints
       - name
       - rules
       title: Template Overview Response
@@ -14745,6 +16691,9 @@ components:
             id: 018b2f1b-8c1a-75b3-8000-7f0000010020
           template_id: 018b2f1b-8c1a-75b3-8000-7f0000010010
           category: Engineering
+          pinned_metric_ids:
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         - groups:
           - attribute_ids:
             - 018b2f1b-8c1a-75b3-8000-7f0000010000
@@ -14764,6 +16713,9 @@ components:
             id: 018b2f1b-8c1a-75b3-8000-7f0000010020
           template_id: 018b2f1b-8c1a-75b3-8000-7f0000010010
           category: Engineering
+          pinned_metric_ids:
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         project_name: Omnismith Production
         actions:
         - action_id: 01a09900-0000-7000-8000-000000000001
@@ -14837,6 +16789,9 @@ components:
           id: 018b2f1b-8c1a-75b3-8000-7f0000010020
         template_id: 018b2f1b-8c1a-75b3-8000-7f0000010010
         category: Engineering
+        pinned_metric_ids:
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
       properties:
         template_id:
           description: Template UUID
@@ -14852,6 +16807,13 @@ components:
           description: Ordered attribute groups for organizing fields into form sections
           items:
             $ref: "#/components/schemas/TemplateGroupResponse"
+          type: array
+        pinned_metric_ids:
+          description: Ordered metric attribute UUIDs summarised on the record details
+            view; empty means the first metrics of the template
+          items:
+            format: uuid
+            type: string
           type: array
       required:
       - groups
@@ -14895,6 +16857,7 @@ components:
       description: "Which records to reduce, how to group them, and which reduces\
         \ to compute per group."
       example:
+        global_search: Wireless
         limit: 50
         group_by:
         - tier
@@ -14907,6 +16870,7 @@ components:
         - op: count
         - op: sum
           field: mrr
+        order: aggregate
       properties:
         filter_groups:
           description: "Narrows the records before grouping. Same grammar as the search\
@@ -14953,6 +16917,25 @@ components:
             whether more groups exist.
           example: 50
           type: integer
+        global_search:
+          description: "Substring query matched across the template's attributes,\
+            \ exactly as the search endpoint's global_search, so group counts agree\
+            \ with search totals."
+          example: Wireless
+          nullable: true
+          type: string
+        order:
+          default: aggregate
+          description: "`aggregate` (default) ranks groups by the first aggregation\
+            \ descending, nulls last, then by key. `key` lays groups out by their\
+            \ key: list attributes follow the list-item order, other attributes sort\
+            \ by label or value ascending, and the no-value group comes last. Use\
+            \ `key` to render records in sections, `aggregate` for top-N questions."
+          enum:
+          - aggregate
+          - key
+          example: aggregate
+          type: string
       required:
       - aggregations
       title: Aggregate Entities Request
@@ -15095,7 +17078,7 @@ components:
             - Text / Markdown: UTF-8 string
             - Number: number or numeric string (`129.99`, `"42"`)
             - Boolean: `true` / `false` (or `"true"` / `"false"`, `"1"` / `"0"`)
-            - Date: `YYYY-MM-DD`; Datetime: `YYYY-MM-DD HH:MM:SS` or ISO 8601 `YYYY-MM-DDTHH:MM:SSZ`
+            - Date: `YYYY-MM-DD`; Datetime: RFC 3339 with an offset (`2026-09-12T12:23:52Z`, `2026-09-12T14:23:52+02:00`). Other spellings (`2026-09-12 12:23:52`) are accepted and stored in that form; a datetime without an offset is UTC
             - File / Image: UUID of a previously uploaded file asset
             - List: UUID of one of the attribute's list items
             - Reference: UUID of the referenced entity
@@ -15117,11 +17100,13 @@ components:
       type: object
     BatchOperationInput:
       description: "One write in a batch. Exact field set per op — create: template,\
-        \ id?, attributes · update: id, attributes · replace: id, attributes · delete:\
-        \ id. Any other field is rejected."
+        \ id?, external_key?, attributes · update: id, attributes · replace: id, attributes\
+        \ · delete: id · upsert: template, external_key, attributes. Any other field\
+        \ is rejected."
       example:
         template: product_catalog
         op: update
+        external_key: stripe:cus_NffrFeUfNV2Hib
         attributes: ""
         id: 018b2f1b-8c1a-75b3-8000-7f0000010000
       properties:
@@ -15132,6 +17117,7 @@ components:
           - update
           - replace
           - delete
+          - upsert
           example: update
           type: string
         id:
@@ -15142,8 +17128,8 @@ components:
           nullable: true
           type: string
         template:
-          description: Template UUID or slug to instantiate on create. Forbidden on
-            other operations.
+          description: "Template UUID or slug: the template to instantiate on create,\
+            \ or to look the key up in on upsert. Forbidden on other operations."
           example: product_catalog
           nullable: true
           type: string
@@ -15151,6 +17137,14 @@ components:
           allOf:
           - $ref: "#/components/schemas/EntityAttributesInput"
           nullable: true
+        external_key:
+          description: "The key another system uses for the record. Required for upsert,\
+            \ which creates the record with it or updates the live record that holds\
+            \ it; optional on create; forbidden on other operations."
+          example: stripe:cus_NffrFeUfNV2Hib
+          maxLength: 255
+          nullable: true
+          type: string
       required:
       - op
       title: Batch Operation Input
@@ -15160,6 +17154,7 @@ components:
         \ the same body the equivalent single-entity endpoint would have returned."
       example:
         op: update
+        created: true
         index: 0
         id: 018b2f1b-8c1a-75b3-8000-7f0000010000
         error: ""
@@ -15176,6 +17171,7 @@ components:
           - update
           - replace
           - delete
+          - upsert
           example: update
           type: string
         id:
@@ -15193,6 +17189,13 @@ components:
           - failed
           example: ok
           type: string
+        created:
+          description: "For a successful upsert: true when it created the record,\
+            \ false when it updated the one holding the key. Null for other operations\
+            \ and for failures."
+          example: true
+          nullable: true
+          type: boolean
         error:
           allOf:
           - $ref: "#/components/schemas/ErrorResponse"
@@ -15212,11 +17215,13 @@ components:
         updated: 22
         results:
         - op: update
+          created: true
           index: 0
           id: 018b2f1b-8c1a-75b3-8000-7f0000010000
           error: ""
           status: ok
         - op: update
+          created: true
           index: 0
           id: 018b2f1b-8c1a-75b3-8000-7f0000010000
           error: ""
@@ -15231,11 +17236,13 @@ components:
           example: 26
           type: integer
         created:
-          description: Number of entities created.
+          description: "Number of entities created, including upserts that created\
+            \ one."
           example: 3
           type: integer
         updated:
-          description: Number of entities updated.
+          description: "Number of entities updated, including upserts that updated\
+            \ one."
           example: 22
           type: integer
         replaced:
@@ -15264,10 +17271,12 @@ components:
         operations:
         - template: product_catalog
           op: update
+          external_key: stripe:cus_NffrFeUfNV2Hib
           attributes: ""
           id: 018b2f1b-8c1a-75b3-8000-7f0000010000
         - template: product_catalog
           op: update
+          external_key: stripe:cus_NffrFeUfNV2Hib
           attributes: ""
           id: 018b2f1b-8c1a-75b3-8000-7f0000010000
         atomic: false
@@ -15294,6 +17303,7 @@ components:
       description: Payload for creating a new dynamic entity conforming to a template
         schema
       example:
+        external_key: stripe:cus_NffrFeUfNV2Hib
         attributes:
           key: EntityAttributesInput_value
         id: 018b2f1b-8c1a-75b3-8000-7f0000010000
@@ -15314,7 +17324,7 @@ components:
             - Text / Markdown: UTF-8 string
             - Number: number or numeric string (`129.99`, `"42"`)
             - Boolean: `true` / `false` (or `"true"` / `"false"`, `"1"` / `"0"`)
-            - Date: `YYYY-MM-DD`; Datetime: `YYYY-MM-DD HH:MM:SS` or ISO 8601 `YYYY-MM-DDTHH:MM:SSZ`
+            - Date: `YYYY-MM-DD`; Datetime: RFC 3339 with an offset (`2026-09-12T12:23:52Z`, `2026-09-12T14:23:52+02:00`). Other spellings (`2026-09-12 12:23:52`) are accepted and stored in that form; a datetime without an offset is UTC
             - File / Image: UUID of a previously uploaded file asset
             - List: UUID of one of the attribute's list items
             - Reference: UUID of the referenced entity
@@ -15328,6 +17338,17 @@ components:
             \ record. If omitted, a UUIDv7 is automatically generated."
           example: 018b2f1b-8c1a-75b3-8000-7f0000010000
           format: uuid
+          nullable: true
+          type: string
+        external_key:
+          description: "The identifier another system uses for this record (a Stripe\
+            \ customer id, a device serial, an order number). Unique among the live\
+            \ records of the template, case-sensitive, 1–255 characters after trimming,\
+            \ no control characters. When one template is fed from several systems,\
+            \ namespace the key yourself, e.g. `stripe:cus_123`. A deleted record\
+            \ releases its key."
+          example: stripe:cus_NffrFeUfNV2Hib
+          maxLength: 255
           nullable: true
           type: string
       required:
@@ -15391,7 +17412,7 @@ components:
         - Text / Markdown: UTF-8 string
         - Number: number or numeric string (`129.99`, `"42"`)
         - Boolean: `true` / `false` (or `"true"` / `"false"`, `"1"` / `"0"`)
-        - Date: `YYYY-MM-DD`; Datetime: `YYYY-MM-DD HH:MM:SS` or ISO 8601 `YYYY-MM-DDTHH:MM:SSZ`
+        - Date: `YYYY-MM-DD`; Datetime: RFC 3339 with an offset (`2026-09-12T12:23:52Z`, `2026-09-12T14:23:52+02:00`). Other spellings (`2026-09-12 12:23:52`) are accepted and stored in that form; a datetime without an offset is UTC
         - File / Image: UUID of a previously uploaded file asset
         - List: UUID of one of the attribute's list items
         - Reference: UUID of the referenced entity
@@ -15406,8 +17427,8 @@ components:
       properties:
         field:
           description: "Attribute slug or UUID, a standard field (`id`, `created_at`,\
-            \ `updated_at`), or a one-hop path through a reference attribute: `<reference>.<attribute\
-            \ of its target template>` (e.g. `customer.tier`)."
+            \ `updated_at`, `external_key`), or a one-hop path through a reference\
+            \ attribute: `<reference>.<attribute of its target template>` (e.g. `customer.tier`)."
           example: price
           type: string
         operator:
@@ -15440,6 +17461,7 @@ components:
       example:
         reference_entity_ids:
           supplier: 018b2f1b-8c1a-75b3-8000-7f0000010005
+        external_key: stripe:cus_NffrFeUfNV2Hib
         template_slug: product_catalog
         updated_at: 2026-08-26T12:05:00Z
         attribute_values:
@@ -15478,6 +17500,12 @@ components:
           description: Last modification timestamp in ISO 8601 format
           example: 2026-08-26T12:05:00Z
           format: date-time
+          type: string
+        external_key:
+          description: "The identifier another system uses for this record, unique\
+            \ among the live records of the template. Null when none is set."
+          example: stripe:cus_NffrFeUfNV2Hib
+          nullable: true
           type: string
         attribute_values:
           $ref: "#/components/schemas/EntityResponse_attribute_values"
@@ -15580,7 +17608,7 @@ components:
             - Text / Markdown: UTF-8 string
             - Number: number or numeric string (`129.99`, `"42"`)
             - Boolean: `true` / `false` (or `"true"` / `"false"`, `"1"` / `"0"`)
-            - Date: `YYYY-MM-DD`; Datetime: `YYYY-MM-DD HH:MM:SS` or ISO 8601 `YYYY-MM-DDTHH:MM:SSZ`
+            - Date: `YYYY-MM-DD`; Datetime: RFC 3339 with an offset (`2026-09-12T12:23:52Z`, `2026-09-12T14:23:52+02:00`). Other spellings (`2026-09-12 12:23:52`) are accepted and stored in that form; a datetime without an offset is UTC
             - File / Image: UUID of a previously uploaded file asset
             - List: UUID of one of the attribute's list items
             - Reference: UUID of the referenced entity
@@ -15898,7 +17926,7 @@ components:
             - Text / Markdown: UTF-8 string
             - Number: number or numeric string (`129.99`, `"42"`)
             - Boolean: `true` / `false` (or `"true"` / `"false"`, `"1"` / `"0"`)
-            - Date: `YYYY-MM-DD`; Datetime: `YYYY-MM-DD HH:MM:SS` or ISO 8601 `YYYY-MM-DDTHH:MM:SSZ`
+            - Date: `YYYY-MM-DD`; Datetime: RFC 3339 with an offset (`2026-09-12T12:23:52Z`, `2026-09-12T14:23:52+02:00`). Other spellings (`2026-09-12 12:23:52`) are accepted and stored in that form; a datetime without an offset is UTC
             - File / Image: UUID of a previously uploaded file asset
             - List: UUID of one of the attribute's list items
             - Reference: UUID of the referenced entity
@@ -15928,6 +17956,9 @@ components:
         - status
         - scheduled_date
         verbose: false
+        group_key:
+          field: platform
+          value: 018b2f1b-8c1a-75b3-8000-7f0000010020
       properties:
         global_search:
           description: "Full-text and substring query string, matched across all string\
@@ -15967,10 +17998,11 @@ components:
         fields:
           description: "Optional list of attribute slugs or UUIDs to project, e.g.\
             \ [\"title\", \"status\"]. Standard fields (id, template_id, template_slug,\
-            \ created_at, updated_at) are always included and do not need to be listed.\
-            \ When specified, database queries only hydrate the requested attributes,\
-            \ drastically reducing response payload size and execution latency. If\
-            \ omitted, all attributes defined on the template are returned."
+            \ created_at, updated_at, external_key) are always included and do not\
+            \ need to be listed. When specified, database queries only hydrate the\
+            \ requested attributes, drastically reducing response payload size and\
+            \ execution latency. If omitted, all attributes defined on the template\
+            \ are returned."
           example:
           - title
           - status
@@ -15979,6 +18011,8 @@ components:
             type: string
           nullable: true
           type: array
+        group_key:
+          $ref: "#/components/schemas/SearchEntitiesRequest_group_key"
       title: Search Entities Request
       type: object
     SemanticSearchEntitiesRequest:
@@ -16047,6 +18081,7 @@ components:
         entity:
           reference_entity_ids:
             supplier: 018b2f1b-8c1a-75b3-8000-7f0000010005
+          external_key: stripe:cus_NffrFeUfNV2Hib
           template_slug: product_catalog
           updated_at: 2026-08-26T12:05:00Z
           attribute_values:
@@ -16071,8 +18106,10 @@ components:
       title: Semantic Search Result Item
       type: object
     UpdateEntityRequest:
-      description: Payload containing attribute value mutations for an existing entity
+      description: "Payload containing attribute value mutations for an existing entity.\
+        \ Send `attributes`, `external_key`, or both."
       example:
+        external_key: stripe:cus_NffrFeUfNV2Hib
         attributes:
           key: EntityAttributesInput_value
       properties:
@@ -16092,7 +18129,64 @@ components:
             - Text / Markdown: UTF-8 string
             - Number: number or numeric string (`129.99`, `"42"`)
             - Boolean: `true` / `false` (or `"true"` / `"false"`, `"1"` / `"0"`)
-            - Date: `YYYY-MM-DD`; Datetime: `YYYY-MM-DD HH:MM:SS` or ISO 8601 `YYYY-MM-DDTHH:MM:SSZ`
+            - Date: `YYYY-MM-DD`; Datetime: RFC 3339 with an offset (`2026-09-12T12:23:52Z`, `2026-09-12T14:23:52+02:00`). Other spellings (`2026-09-12 12:23:52`) are accepted and stored in that form; a datetime without an offset is UTC
+            - File / Image: UUID of a previously uploaded file asset
+            - List: UUID of one of the attribute's list items
+            - Reference: UUID of the referenced entity
+            - Metric: numeric observation; appended to the time series (never overwritten)
+
+            Example: `{ "hostname": "edge-fra-01", "cpu_cores": 8, "notes": null, "operational_status": { "value": "Active", "updated_at": "2026-09-12T12:23:52Z" }, "restart_count": { "op": "increment", "value": 1 } }`
+          title: Entity Attributes Input
+          type: object
+        external_key:
+          description: "Sets or changes the record's external key; `null` clears it;\
+            \ omit it to leave the key unchanged. The identifier another system uses\
+            \ for this record (a Stripe customer id, a device serial, an order number).\
+            \ Unique among the live records of the template, case-sensitive, 1–255\
+            \ characters after trimming, no control characters. When one template\
+            \ is fed from several systems, namespace the key yourself, e.g. `stripe:cus_123`.\
+            \ A deleted record releases its key."
+          example: stripe:cus_NffrFeUfNV2Hib
+          maxLength: 255
+          nullable: true
+          type: string
+      title: Update Entity Request
+      type: object
+    UpsertEntityByKeyRequest:
+      description: "The external key that identifies the record, and the attribute\
+        \ values to write to it"
+      example:
+        external_key: stripe:cus_NffrFeUfNV2Hib
+        attributes:
+          key: EntityAttributesInput_value
+      properties:
+        external_key:
+          description: "The identifier another system uses for this record (a Stripe\
+            \ customer id, a device serial, an order number). Unique among the live\
+            \ records of the template, case-sensitive, 1–255 characters after trimming,\
+            \ no control characters. When one template is fed from several systems,\
+            \ namespace the key yourself, e.g. `stripe:cus_123`. A deleted record\
+            \ releases its key."
+          example: stripe:cus_NffrFeUfNV2Hib
+          maxLength: 255
+          type: string
+        attributes:
+          additionalProperties:
+            $ref: "#/components/schemas/EntityAttributesInput_value"
+          description: |-
+            Map of attribute slug or UUID → value. Keys may be mixed freely in one request; each attribute may appear once.
+
+            Values:
+            - Plain scalar — `"text"`, `42`, `129.99`, `true`, or `null`. Numbers and booleans are serialized for you (`42` → `"42"`, `true` → `"true"`); floats keep exactly the digits you sent.
+            - `null` — clears the attribute.
+            - Backfill object — `{ "value": <scalar|null>, "updated_at": "2026-09-12T12:23:52Z" }` records the value as observed at that moment (history import). `updated_at` must be RFC 3339 with an explicit offset (`Z` or `±HH:MM`); it defaults to now when omitted.
+            - Operation object — `{ "op": "increment", "value": 1 }` adds the number to the stored value instead of overwriting it: you never need to read the current value, and concurrent increments are serialized so none is lost. Allowed on Number attributes and Metrics only (a metric increment appends `latest + value` as a new observation); a never-set attribute counts as `0`; a negative `value` subtracts. `op` cannot be combined with `updated_at`. Not accepted on create. The change log records the resolved value, never the operand.
+
+            Value format by attribute type:
+            - Text / Markdown: UTF-8 string
+            - Number: number or numeric string (`129.99`, `"42"`)
+            - Boolean: `true` / `false` (or `"true"` / `"false"`, `"1"` / `"0"`)
+            - Date: `YYYY-MM-DD`; Datetime: RFC 3339 with an offset (`2026-09-12T12:23:52Z`, `2026-09-12T14:23:52+02:00`). Other spellings (`2026-09-12 12:23:52`) are accepted and stored in that form; a datetime without an offset is UTC
             - File / Image: UUID of a previously uploaded file asset
             - List: UUID of one of the attribute's list items
             - Reference: UUID of the referenced entity
@@ -16103,7 +18197,28 @@ components:
           type: object
       required:
       - attributes
-      title: Update Entity Request
+      - external_key
+      title: Upsert Entity By Key Request
+      type: object
+    UpsertEntityByKeyResponse:
+      example:
+        created: true
+        id: 018b2f1b-8c1a-75b3-8000-7f0000010000
+      properties:
+        id:
+          description: Identifier of the record that holds the key
+          example: 018b2f1b-8c1a-75b3-8000-7f0000010000
+          format: uuid
+          type: string
+        created:
+          description: "True when the record was created by this call, false when\
+            \ an existing record was updated"
+          example: true
+          type: boolean
+      required:
+      - created
+      - id
+      title: Upsert Entity By Key Response
       type: object
     CreateEntityActionRequest:
       example:
@@ -16689,6 +18804,508 @@ components:
           nullable: true
           type: string
       title: File Attachment Response
+      type: object
+    AddInboundEndpointSecretRequest:
+      example:
+        secret: whsec_dummy_secret_value
+      properties:
+        secret:
+          description: "The secret the sender signs with, when the sender issued it\
+            \ (Stripe and Shopify do). Omit it to have one generated, which suits\
+            \ GitHub, custom senders and `shared_secret_header` (always generated).\
+            \ The secret is returned once, in this response, and never again."
+          example: whsec_dummy_secret_value
+          type: string
+      type: object
+    CreateInboundEndpointRequest:
+      example:
+        mapping:
+          key: ""
+        signature:
+          key: ""
+        delivery_id_source: ""
+        name: Stripe customers
+        secret: whsec_dummy_secret_value
+        enabled: true
+      properties:
+        name:
+          description: Name shown in the template editor and in record history
+          example: Stripe customers
+          type: string
+        signature:
+          additionalProperties: true
+          description: |-
+            How deliveries are authenticated. Every delivery must pass; a failure is answered with 401 and a `reason` (`missing_signature`, `malformed_signature`, `mismatch`, `stale_timestamp`).
+
+            Name the sender's preset: `{"preset": "github"}`, `stripe`, `shopify`, `standard_webhooks` (symmetric `v1` only) or `lemonsqueezy`. Presets take no other members and also set `delivery_id_source` when the sender has an id.
+
+            For senders that cannot sign (Zapier, Make, n8n, scripts, devices): `{"preset": "shared_secret_header", "header": "X-Omnismith-Secret", "prefix": ""}`. The sender sends the secret in `header`, after `prefix` (for example `Authorization` with `Bearer `). Both members are optional; those are the defaults.
+
+            For any other HMAC sender: `{"preset": "custom_hmac", ...}` with `header` (required), `algorithm` (`sha1`, `sha256`, `sha512`; default `sha256`), `format` (`plain` with an optional literal `prefix`; `kv_list` of comma-separated `key=value` pairs with `signature_key` and optional `timestamp_key`; or `versioned_list` of space-separated `version,signature` entries with `version`), `encoding` (`hex` or `base64`; default `hex`), `signed_content` (a template over `{body}`, `{timestamp}` and `{id}`; default `{body}`), `timestamp_header`, `id_header`, `tolerance_seconds` (the replay window for timestamped signatures; default 300), `secret_encoding` (`raw` or `base64`; default `raw`) and `secret_prefix` (stripped before decoding a `base64` secret, for example `whsec_`).
+
+            An update may switch presets only when both store secrets the same way.
+          type: object
+        mapping:
+          additionalProperties: true
+          description: |-
+            How a delivery's JSON payload becomes records of the template. Validated against the template on every save; check it on a sample payload with `previewInboundMapping` before saving.
+
+            Members:
+            - `mode` (required): `create`, `update` (an unknown key is an item error) or `upsert`. `update` and `upsert` require `key`.
+            - `key`: `{"path": "$.data.object.id", "prefix": "stripe:"}`. The record's external key: the value at `path` (a string or number) after the literal `prefix`, which namespaces keys when several senders feed one template.
+            - `items`: a path to a list; each element becomes one record (at most 100) and `$` then means the element, `$root` the whole body. Without it the whole body is one record.
+            - `match`: conditions on the whole body that must all hold, or the delivery is acknowledged and skipped: `{"path": "$.type", "operator": "eq", "value": "customer.created"}`. Operators: `eq`, `neq`, `in` (a list `value`), `exists`, `not_exists` (no `value`). Values compare strictly: `"1"` is not `1`.
+            - `attributes` (required, 1 to 100): keyed by attribute slug or UUID of the template. Each entry has either `path` or a constant `value`, plus optionally: `default` (used when the path is absent or null), `on_null` (`skip`, the default, leaves the attribute as it is; `clear` clears it; not on metrics), `prefix` (reference attributes: the value after the prefix is an external key of the referenced template), `format` (date and datetime attributes: `iso8601`, `epoch_s` or `epoch_ms`), and `timestamp` (`{"path": "$.ts", "format": "epoch_ms"}`: the observation time of a metric reading, or the backfill time of a value; `format` defaults to `iso8601`).
+
+            Paths support `$`, `.name`, `['name']` and `[index]` only. List values resolve by option label (case-insensitive) or id; options are never created. Metric attributes take numbers and append a reading. Values are type-checked and the template's rules are enforced as on any write.
+          type: object
+        enabled:
+          default: true
+          description: Whether the endpoint accepts deliveries. A disabled endpoint
+            answers 404.
+          type: boolean
+        secret:
+          description: "The secret the sender signs with, when the sender issued it\
+            \ (Stripe and Shopify do). Omit it to have one generated, which suits\
+            \ GitHub, custom senders and `shared_secret_header` (always generated).\
+            \ The secret is returned once, in this response, and never again."
+          example: whsec_dummy_secret_value
+          type: string
+        delivery_id_source:
+          allOf:
+          - $ref: "#/components/schemas/InboundDeliveryIdSource"
+          nullable: true
+      required:
+      - mapping
+      - name
+      - signature
+      type: object
+    InboundDeliveryIdSource:
+      additionalProperties: false
+      description: "Where the sender puts its own id for a delivery. A delivery whose\
+        \ id was already processed in the last 7 days is acknowledged with 200 and\
+        \ not processed again. Without a source, a retried delivery is processed again:\
+        \ record values stay correct, but metric points can be appended twice."
+      properties:
+        from:
+          description: '`header` or `body`'
+          enum:
+          - header
+          - body
+          example: header
+          type: string
+        path:
+          description: "A header name (`X-GitHub-Delivery`) for `header`; a JSON path\
+            \ for `body`: `$`, `.name`, `['name']` and `[index]`, e.g. `$.id`."
+          example: X-GitHub-Delivery
+          type: string
+      required:
+      - from
+      - path
+      title: Inbound Delivery Id Source
+      type: object
+    InboundDeliverySummary:
+      description: "One row of an endpoint's delivery log, without the stored body."
+      example:
+        duration_ms: 42
+        replayed_by: replayed_by
+        received_at: 2000-01-23T04:56:07.000+00:00
+        delivery_id: delivery_id
+        http_status: 200
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        replay_of: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        error:
+          key: ""
+        entity_ids:
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        body_truncated: true
+        outcome: processed
+      properties:
+        id:
+          format: uuid
+          type: string
+        received_at:
+          format: date-time
+          type: string
+        delivery_id:
+          description: "The sender's id for the delivery, when the endpoint names\
+            \ a delivery id source"
+          nullable: true
+          type: string
+        outcome:
+          description: "`processed`: every record was written. `partial`: some records\
+            \ of a multi-record delivery failed. `skipped`: the match condition did\
+            \ not hold, or the delivery id was already processed. `rejected`: the\
+            \ request was wrong (400, 401, 413, 422). `failed`: it could not be written\
+            \ right now (409, 429, 5xx)."
+          enum:
+          - processed
+          - partial
+          - skipped
+          - rejected
+          - failed
+          type: string
+        http_status:
+          description: The status the sender was answered with
+          example: 200
+          type: integer
+        error:
+          additionalProperties: true
+          description: "The answer's error body for a non-2xx delivery, `{errors,\
+            \ items}` for a partial one, or `{\"reason\": ...}` for a signature failure"
+          nullable: true
+          type: object
+        entity_ids:
+          description: Records created or updated
+          items:
+            format: uuid
+            type: string
+          type: array
+        body_truncated:
+          description: The stored body was cut at 256 KB
+          type: boolean
+        duration_ms:
+          example: 42
+          type: integer
+        replay_of:
+          description: The delivery this one replayed
+          format: uuid
+          nullable: true
+          type: string
+        replayed_by:
+          description: Email of the user who asked for the replay
+          nullable: true
+          type: string
+      required:
+      - body_truncated
+      - delivery_id
+      - duration_ms
+      - entity_ids
+      - error
+      - http_status
+      - id
+      - outcome
+      - received_at
+      - replay_of
+      - replayed_by
+      title: Inbound Delivery Summary
+      type: object
+    InboundDeliveryDetail:
+      allOf:
+      - $ref: "#/components/schemas/InboundDeliverySummary"
+      - properties:
+          body:
+            description: "The raw body as received, at most 256 KB. Null for a delivery\
+              \ that failed signature verification."
+            nullable: true
+            type: string
+          headers:
+            additionalProperties:
+              type: string
+            description: "The allow-listed request headers: content type, user agent\
+              \ and the delivery id header. Signature headers are never stored."
+            type: object
+        required:
+        - body
+        - headers
+        type: object
+      description: One row of an endpoint's delivery log with the stored body and
+        headers.
+      example:
+        headers:
+          key: headers
+        replayed_by: replayed_by
+        delivery_id: delivery_id
+        replay_of: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        error:
+          key: ""
+        body: body
+        body_truncated: true
+        duration_ms: 42
+        received_at: 2000-01-23T04:56:07.000+00:00
+        http_status: 200
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        entity_ids:
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        outcome: processed
+      title: Inbound Delivery Detail
+      type: object
+    InboundEndpointResponse:
+      description: A public URL through which one outside system writes records into
+        one template. Secret values are only ever returned when a secret is issued.
+      example:
+        mapping:
+          key: ""
+        signature:
+          preset: stripe
+        delivery_id_source: ""
+        created_at: 2000-01-23T04:56:07.000+00:00
+        secrets:
+        - hint: x9Qa
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - hint: x9Qa
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        created_by: demo@omnismith.io
+        enabled: true
+        url: https://api.omnismith.io/v1/inbound/01a0f0e2-7c1a-7000-8000-0000000000aa/01a0f0e2-7c1a-7000-8000-000000000001
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        name: Stripe customers
+        template_id: 01a0f0e2-7c1a-7000-8000-000000000010
+        id: 01a0f0e2-7c1a-7000-8000-000000000001
+        last_signature_failure_at: 2000-01-23T04:56:07.000+00:00
+      properties:
+        id:
+          example: 01a0f0e2-7c1a-7000-8000-000000000001
+          format: uuid
+          type: string
+        template_id:
+          example: 01a0f0e2-7c1a-7000-8000-000000000010
+          format: uuid
+          type: string
+        name:
+          example: Stripe customers
+          type: string
+        enabled:
+          description: A disabled endpoint answers every delivery with 404.
+          example: true
+          type: boolean
+        url:
+          description: "The receive URL to configure in the sender. It is not a secret:\
+            \ the signature authenticates each delivery."
+          example: https://api.omnismith.io/v1/inbound/01a0f0e2-7c1a-7000-8000-0000000000aa/01a0f0e2-7c1a-7000-8000-000000000001
+          format: uri
+          type: string
+        signature:
+          additionalProperties: true
+          description: "How deliveries are authenticated: `preset`, plus the effective\
+            \ parameters for `custom_hmac` and `shared_secret_header`."
+          example:
+            preset: stripe
+          type: object
+        mapping:
+          additionalProperties: true
+          description: "How a payload becomes records, with every default filled in\
+            \ (`on_null`, `key.prefix`, `timestamp.format`)."
+          type: object
+        delivery_id_source:
+          allOf:
+          - $ref: "#/components/schemas/InboundDeliveryIdSource"
+          nullable: true
+        secrets:
+          description: "The secrets deliveries are verified with: one, or two while\
+            \ a rotation is under way. Only a hint of each is shown."
+          items:
+            $ref: "#/components/schemas/InboundSecret"
+          type: array
+        last_signature_failure_at:
+          description: When a delivery last failed signature verification. A time
+            newer than the last processed delivery usually means the sender uses the
+            wrong secret.
+          format: date-time
+          nullable: true
+          type: string
+        created_by:
+          description: Email of the user who created the endpoint
+          example: demo@omnismith.io
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      required:
+      - created_at
+      - created_by
+      - delivery_id_source
+      - enabled
+      - id
+      - last_signature_failure_at
+      - mapping
+      - name
+      - secrets
+      - signature
+      - template_id
+      - updated_at
+      - url
+      title: Inbound Endpoint
+      type: object
+    InboundEndpointCreatedResponse:
+      allOf:
+      - $ref: "#/components/schemas/InboundEndpointResponse"
+      - properties:
+          secret:
+            $ref: "#/components/schemas/InboundSecretRevealed"
+        required:
+        - secret
+        type: object
+      description: "The new endpoint and its secret, which is shown this once."
+      example:
+        mapping:
+          key: ""
+        signature:
+          preset: stripe
+        delivery_id_source: ""
+        created_at: 2000-01-23T04:56:07.000+00:00
+        secret:
+          hint: x9Qa
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          value: omni_in_dummy_secret_value
+        secrets:
+        - hint: x9Qa
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - hint: x9Qa
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        created_by: demo@omnismith.io
+        enabled: true
+        url: https://api.omnismith.io/v1/inbound/01a0f0e2-7c1a-7000-8000-0000000000aa/01a0f0e2-7c1a-7000-8000-000000000001
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        name: Stripe customers
+        template_id: 01a0f0e2-7c1a-7000-8000-000000000010
+        id: 01a0f0e2-7c1a-7000-8000-000000000001
+        last_signature_failure_at: 2000-01-23T04:56:07.000+00:00
+      title: Created Inbound Endpoint
+      type: object
+    InboundSecret:
+      description: A secret deliveries are verified with. Only a hint is shown.
+      example:
+        hint: x9Qa
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        id:
+          format: uuid
+          type: string
+        hint:
+          description: The last four characters of the secret
+          example: x9Qa
+          type: string
+        created_at:
+          format: date-time
+          type: string
+      required:
+      - created_at
+      - hint
+      - id
+      title: Inbound Endpoint Secret
+      type: object
+    InboundSecretRevealed:
+      allOf:
+      - $ref: "#/components/schemas/InboundSecret"
+      - properties:
+          value:
+            description: The secret to configure in the sender
+            example: omni_in_dummy_secret_value
+            type: string
+        required:
+        - value
+        type: object
+      description: "A secret as it is issued. `value` is shown this once and never\
+        \ returned again: give it to whoever configures the sender and do not store\
+        \ it anywhere else."
+      example:
+        hint: x9Qa
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        value: omni_in_dummy_secret_value
+      title: Revealed Inbound Endpoint Secret
+      type: object
+    PreviewInboundMappingRequest:
+      description: Send exactly one of `body` and `delivery_id`.
+      example:
+        mapping:
+          key: ""
+        delivery_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        body:
+          id: evt_1
+          type: customer.created
+          data:
+            object:
+              id: cus_1
+              email: demo@omnismith.io
+      properties:
+        body:
+          additionalProperties: true
+          description: "A sample payload, as the sender would post it: for example\
+            \ the sample event in the sender's webhook documentation."
+          example:
+            id: evt_1
+            type: customer.created
+            data:
+              object:
+                id: cus_1
+                email: demo@omnismith.io
+          type: object
+        delivery_id:
+          description: "A delivery from the endpoint's log to use as the sample instead:\
+            \ the `log_id` the sender was answered with."
+          format: uuid
+          type: string
+        mapping:
+          additionalProperties: true
+          description: "A mapping to try instead of the saved one, in the same shape\
+            \ as the endpoint's `mapping`. It is not saved."
+          type: object
+      type: object
+    UpdateInboundEndpointRequest:
+      description: Send at least one field. Omitted fields keep their value.
+      example:
+        mapping:
+          key: ""
+        signature:
+          key: ""
+        delivery_id_source: ""
+        name: Stripe customers
+        enabled: true
+      properties:
+        name:
+          description: Name shown in the template editor and in record history
+          example: Stripe customers
+          nullable: true
+          type: string
+        enabled:
+          description: Whether the endpoint accepts deliveries. A disabled endpoint
+            answers 404.
+          nullable: true
+          type: boolean
+        signature:
+          additionalProperties: true
+          description: |-
+            How deliveries are authenticated. Every delivery must pass; a failure is answered with 401 and a `reason` (`missing_signature`, `malformed_signature`, `mismatch`, `stale_timestamp`).
+
+            Name the sender's preset: `{"preset": "github"}`, `stripe`, `shopify`, `standard_webhooks` (symmetric `v1` only) or `lemonsqueezy`. Presets take no other members and also set `delivery_id_source` when the sender has an id.
+
+            For senders that cannot sign (Zapier, Make, n8n, scripts, devices): `{"preset": "shared_secret_header", "header": "X-Omnismith-Secret", "prefix": ""}`. The sender sends the secret in `header`, after `prefix` (for example `Authorization` with `Bearer `). Both members are optional; those are the defaults.
+
+            For any other HMAC sender: `{"preset": "custom_hmac", ...}` with `header` (required), `algorithm` (`sha1`, `sha256`, `sha512`; default `sha256`), `format` (`plain` with an optional literal `prefix`; `kv_list` of comma-separated `key=value` pairs with `signature_key` and optional `timestamp_key`; or `versioned_list` of space-separated `version,signature` entries with `version`), `encoding` (`hex` or `base64`; default `hex`), `signed_content` (a template over `{body}`, `{timestamp}` and `{id}`; default `{body}`), `timestamp_header`, `id_header`, `tolerance_seconds` (the replay window for timestamped signatures; default 300), `secret_encoding` (`raw` or `base64`; default `raw`) and `secret_prefix` (stripped before decoding a `base64` secret, for example `whsec_`).
+
+            An update may switch presets only when both store secrets the same way.
+          type: object
+        mapping:
+          additionalProperties: true
+          description: |-
+            How a delivery's JSON payload becomes records of the template. Validated against the template on every save; check it on a sample payload with `previewInboundMapping` before saving.
+
+            Members:
+            - `mode` (required): `create`, `update` (an unknown key is an item error) or `upsert`. `update` and `upsert` require `key`.
+            - `key`: `{"path": "$.data.object.id", "prefix": "stripe:"}`. The record's external key: the value at `path` (a string or number) after the literal `prefix`, which namespaces keys when several senders feed one template.
+            - `items`: a path to a list; each element becomes one record (at most 100) and `$` then means the element, `$root` the whole body. Without it the whole body is one record.
+            - `match`: conditions on the whole body that must all hold, or the delivery is acknowledged and skipped: `{"path": "$.type", "operator": "eq", "value": "customer.created"}`. Operators: `eq`, `neq`, `in` (a list `value`), `exists`, `not_exists` (no `value`). Values compare strictly: `"1"` is not `1`.
+            - `attributes` (required, 1 to 100): keyed by attribute slug or UUID of the template. Each entry has either `path` or a constant `value`, plus optionally: `default` (used when the path is absent or null), `on_null` (`skip`, the default, leaves the attribute as it is; `clear` clears it; not on metrics), `prefix` (reference attributes: the value after the prefix is an external key of the referenced template), `format` (date and datetime attributes: `iso8601`, `epoch_s` or `epoch_ms`), and `timestamp` (`{"path": "$.ts", "format": "epoch_ms"}`: the observation time of a metric reading, or the backfill time of a value; `format` defaults to `iso8601`).
+
+            Paths support `$`, `.name`, `['name']` and `[index]` only. List values resolve by option label (case-insensitive) or id; options are never created. Metric attributes take numbers and append a reading. Values are type-checked and the template's rules are enforced as on any write.
+          type: object
+        delivery_id_source:
+          allOf:
+          - $ref: "#/components/schemas/InboundDeliveryIdSource"
+          nullable: true
       type: object
     MarketplaceBlueprintDetailResponse:
       description: Full blueprint detail representation including packaged schema
@@ -17470,7 +20087,8 @@ components:
         operator: eq
       properties:
         field:
-          description: "Attribute id or a standard entity field (id, created_at, updated_at)"
+          description: "Attribute id or a standard entity field (id, created_at, updated_at,\
+            \ external_key)"
           type: string
         operator:
           enum:
@@ -17626,6 +20244,12 @@ components:
           default_value: 019a6b2c-8c3a-7c2e-8b3f-6c8a1a2b3c4d
         id: 018b2f1b-8c1a-75b3-8000-7f0000010010
         category: Catalog
+        pinned_metric_ids:
+        - cpu_usage
+        - cpu_usage
+        - cpu_usage
+        - cpu_usage
+        - cpu_usage
         slug: product_sku
       properties:
         attributes:
@@ -17639,6 +20263,16 @@ components:
             into visual UI sections (1 or 2 columns).
           items:
             $ref: "#/components/schemas/TemplateGroupInput"
+          type: array
+        pinned_metric_ids:
+          description: "Optional ordered list of metric attributes (UUIDs or slugs)\
+            \ summarised on the record details view, at most 8. Each must be a metric\
+            \ attribute of this template. When empty, the first metrics of the template\
+            \ are shown."
+          items:
+            example: cpu_usage
+            type: string
+          maxItems: 8
           type: array
         name:
           description: Human-readable name of the template.
@@ -17723,6 +20357,12 @@ components:
           attribute_slug: product_color
           default_value: 019a6b2c-8c3a-7c2e-8b3f-6c8a1a2b3c4d
         category: Catalog
+        pinned_metric_ids:
+        - cpu_usage
+        - cpu_usage
+        - cpu_usage
+        - cpu_usage
+        - cpu_usage
         slug: product_sku
       properties:
         attributes:
@@ -17737,6 +20377,17 @@ components:
             visual UI sections.
           items:
             $ref: "#/components/schemas/TemplateGroupInput"
+          nullable: true
+          type: array
+        pinned_metric_ids:
+          description: "Ordered list of metric attributes (UUIDs or slugs) summarised\
+            \ on the record details view, at most 8. Each must be a metric attribute\
+            \ of this template. Omit to keep the current pins; send an empty array\
+            \ to clear them."
+          items:
+            example: cpu_usage
+            type: string
+          maxItems: 8
           nullable: true
           type: array
         name:
@@ -17964,6 +20615,9 @@ components:
         category: Catalog
         deleted_at: 2000-01-23T04:56:07.000+00:00
         slug: product_sku
+        pinned_metric_ids:
+        - 018b2f1b-8c1a-75b3-8000-7f0000010000
+        - 018b2f1b-8c1a-75b3-8000-7f0000010000
       properties:
         id:
           description: Template UUID
@@ -18006,6 +20660,14 @@ components:
             visual UI sections.
           items:
             $ref: "#/components/schemas/TemplateGroupResponse"
+          type: array
+        pinned_metric_ids:
+          description: Ordered metric attribute UUIDs summarised on the record details
+            view. Empty means the first metrics of the template are shown.
+          items:
+            example: 018b2f1b-8c1a-75b3-8000-7f0000010000
+            format: uuid
+            type: string
           type: array
         created_at:
           description: Creation timestamp
@@ -18061,6 +20723,12 @@ components:
           attribute_slug: product_color
           default_value: 019a6b2c-8c3a-7c2e-8b3f-6c8a1a2b3c4d
         category: Catalog
+        pinned_metric_ids:
+        - cpu_usage
+        - cpu_usage
+        - cpu_usage
+        - cpu_usage
+        - cpu_usage
         slug: product_sku
       properties:
         attributes:
@@ -18074,6 +20742,17 @@ components:
             visual UI sections.
           items:
             $ref: "#/components/schemas/TemplateGroupInput"
+          type: array
+        pinned_metric_ids:
+          description: "Ordered list of metric attributes (UUIDs or slugs) summarised\
+            \ on the record details view, at most 8. Each must be a metric attribute\
+            \ of this template. Omit to keep the current pins; send an empty array\
+            \ to clear them."
+          items:
+            example: cpu_usage
+            type: string
+          maxItems: 8
+          nullable: true
           type: array
         name:
           description: Updated human-readable name of the template.
@@ -18216,6 +20895,7 @@ components:
         - platform
         - status
         - scheduled_date
+        group_by: platform
         template_id: content_item
         filters:
         - field: platform
@@ -18292,6 +20972,15 @@ components:
           example: 0
           nullable: true
           type: integer
+        group_by:
+          description: "Attribute slug or UUID to split the records into collapsible\
+            \ sections by, one per value, each with its own count and pages (e.g.\
+            \ \"platform\"). Must be a list, reference, string, number, boolean, date\
+            \ or datetime attribute of the bound template. Cannot be combined with\
+            \ search_mode \"semantic\". Null or omitted renders a flat list."
+          example: platform
+          nullable: true
+          type: string
       required:
       - name
       - template_id
@@ -18365,6 +21054,7 @@ components:
           workspace_id: 0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6b
           updated_at: 2026-08-26T12:30:00Z
           name: Active Gateways
+          group_by: platform
           template_id: 0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6a
           id: 0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6c
         - search_mode: keyword
@@ -18388,6 +21078,7 @@ components:
           workspace_id: 0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6b
           updated_at: 2026-08-26T12:30:00Z
           name: Active Gateways
+          group_by: platform
           template_id: 0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6a
           id: 0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6c
       properties:
@@ -18526,6 +21217,7 @@ components:
         workspace_id: 0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6b
         updated_at: 2026-08-26T12:30:00Z
         name: Active Gateways
+        group_by: platform
         template_id: 0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6a
         id: 0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6c
       properties:
@@ -18593,6 +21285,13 @@ components:
           description: Display sequence index of this pane within the workspace layout
           example: 0
           type: integer
+        group_by:
+          description: Attribute slug or UUID the records are grouped into sections
+            by; null when the view is a flat list. "__restricted__" when the field
+            is hidden from the caller's role.
+          example: platform
+          nullable: true
+          type: string
         created_at:
           description: ISO 8601 creation timestamp
           example: 2026-08-26T12:00:00Z
@@ -18659,6 +21358,7 @@ components:
         - platform
         - status
         - scheduled_date
+        group_by: platform
         filters:
         - field: platform
           operator: eq
@@ -18729,6 +21429,16 @@ components:
           example: 1
           nullable: true
           type: integer
+        group_by:
+          description: "Attribute slug or UUID to split the records into collapsible\
+            \ sections by, one per value, each with its own count and pages (e.g.\
+            \ \"platform\"). Must be a list, reference, string, number, boolean, date\
+            \ or datetime attribute of the bound template. Cannot be combined with\
+            \ search_mode \"semantic\". Omit to keep the current grouping; null clears\
+            \ it (flat list)."
+          example: platform
+          nullable: true
+          type: string
       title: Update Workspace View Request
       type: object
     listAccessTokens_200_response:
@@ -19088,11 +21798,24 @@ components:
             success: true
             executed_at: 2026-08-26T12:00:01Z
             action_index: 0
+            details:
+              status_code: 200
+              written:
+              - company_size
+              - industry
+              response_excerpt: "{\"employees\": 120, \"industry\": \"Retail\"}"
           - error_message: error_message
             success: true
             executed_at: 2026-08-26T12:00:01Z
             action_index: 0
+            details:
+              status_code: 200
+              written:
+              - company_size
+              - industry
+              response_excerpt: "{\"employees\": 120, \"industry\": \"Retail\"}"
           triggered_at: 2026-08-26T12:00:00Z
+          due_at: 2026-08-26T11:59:40Z
           id: 01912ecb-4654-7890-a1b2-c3d4e5f60010
           entity_id: 01912ecb-4654-7890-a1b2-c3d4e5f60099
           status: success
@@ -19104,11 +21827,24 @@ components:
             success: true
             executed_at: 2026-08-26T12:00:01Z
             action_index: 0
+            details:
+              status_code: 200
+              written:
+              - company_size
+              - industry
+              response_excerpt: "{\"employees\": 120, \"industry\": \"Retail\"}"
           - error_message: error_message
             success: true
             executed_at: 2026-08-26T12:00:01Z
             action_index: 0
+            details:
+              status_code: 200
+              written:
+              - company_size
+              - industry
+              response_excerpt: "{\"employees\": 120, \"industry\": \"Retail\"}"
           triggered_at: 2026-08-26T12:00:00Z
+          due_at: 2026-08-26T11:59:40Z
           id: 01912ecb-4654-7890-a1b2-c3d4e5f60010
           entity_id: 01912ecb-4654-7890-a1b2-c3d4e5f60099
           status: success
@@ -19122,6 +21858,27 @@ components:
           description: Total count of execution records matching filters
           example: 42
           type: integer
+      type: object
+    listAutomationTimers_200_response:
+      example:
+        data:
+        - automation_id: 01912ecb-4654-7890-a1b2-c3d4e5f60001
+          kind: date_reached
+          due_at: 2026-11-01T09:00:00Z
+          id: 5f0c1a2b-3c4d-5e6f-8a9b-0c1d2e3f4a5b
+          entity_id: 01912ecb-4654-7890-a1b2-c3d4e5f60099
+          automation_name: Renewal reminder
+        - automation_id: 01912ecb-4654-7890-a1b2-c3d4e5f60001
+          kind: date_reached
+          due_at: 2026-11-01T09:00:00Z
+          id: 5f0c1a2b-3c4d-5e6f-8a9b-0c1d2e3f4a5b
+          entity_id: 01912ecb-4654-7890-a1b2-c3d4e5f60099
+          automation_name: Renewal reminder
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/AutomationTimerResponse"
+          type: array
       type: object
     listPushDevices_200_response:
       example:
@@ -19759,6 +22516,7 @@ components:
         data:
         - reference_entity_ids:
             supplier: 018b2f1b-8c1a-75b3-8000-7f0000010005
+          external_key: stripe:cus_NffrFeUfNV2Hib
           template_slug: product_catalog
           updated_at: 2026-08-26T12:05:00Z
           attribute_values:
@@ -19774,6 +22532,7 @@ components:
             category: 018b2f1b-8c1a-75b3-8000-7f0000010020
         - reference_entity_ids:
             supplier: 018b2f1b-8c1a-75b3-8000-7f0000010005
+          external_key: stripe:cus_NffrFeUfNV2Hib
           template_slug: product_catalog
           updated_at: 2026-08-26T12:05:00Z
           attribute_values:
@@ -19968,6 +22727,268 @@ components:
           type: integer
       required:
       - file
+      type: object
+    listTemplateInboundEndpoints_200_response:
+      example:
+        data:
+        - mapping:
+            key: ""
+          signature:
+            preset: stripe
+          delivery_id_source: ""
+          created_at: 2000-01-23T04:56:07.000+00:00
+          secrets:
+          - hint: x9Qa
+            created_at: 2000-01-23T04:56:07.000+00:00
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - hint: x9Qa
+            created_at: 2000-01-23T04:56:07.000+00:00
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          created_by: demo@omnismith.io
+          enabled: true
+          url: https://api.omnismith.io/v1/inbound/01a0f0e2-7c1a-7000-8000-0000000000aa/01a0f0e2-7c1a-7000-8000-000000000001
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          name: Stripe customers
+          template_id: 01a0f0e2-7c1a-7000-8000-000000000010
+          id: 01a0f0e2-7c1a-7000-8000-000000000001
+          last_signature_failure_at: 2000-01-23T04:56:07.000+00:00
+        - mapping:
+            key: ""
+          signature:
+            preset: stripe
+          delivery_id_source: ""
+          created_at: 2000-01-23T04:56:07.000+00:00
+          secrets:
+          - hint: x9Qa
+            created_at: 2000-01-23T04:56:07.000+00:00
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - hint: x9Qa
+            created_at: 2000-01-23T04:56:07.000+00:00
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          created_by: demo@omnismith.io
+          enabled: true
+          url: https://api.omnismith.io/v1/inbound/01a0f0e2-7c1a-7000-8000-0000000000aa/01a0f0e2-7c1a-7000-8000-000000000001
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          name: Stripe customers
+          template_id: 01a0f0e2-7c1a-7000-8000-000000000010
+          id: 01a0f0e2-7c1a-7000-8000-000000000001
+          last_signature_failure_at: 2000-01-23T04:56:07.000+00:00
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/InboundEndpointResponse"
+          type: array
+      required:
+      - data
+      type: object
+    listInboundDeliveries_200_response:
+      example:
+        total: 42
+        data:
+        - duration_ms: 42
+          replayed_by: replayed_by
+          received_at: 2000-01-23T04:56:07.000+00:00
+          delivery_id: delivery_id
+          http_status: 200
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          replay_of: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          error:
+            key: ""
+          entity_ids:
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          body_truncated: true
+          outcome: processed
+        - duration_ms: 42
+          replayed_by: replayed_by
+          received_at: 2000-01-23T04:56:07.000+00:00
+          delivery_id: delivery_id
+          http_status: 200
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          replay_of: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          error:
+            key: ""
+          entity_ids:
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          body_truncated: true
+          outcome: processed
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/InboundDeliverySummary"
+          type: array
+        total:
+          description: Deliveries matching the filters
+          example: 42
+          type: integer
+      required:
+      - data
+      - total
+      type: object
+    previewInboundMapping_200_response_items_inner:
+      example:
+        external_key: stripe:cus_1
+        index: 0
+        action: create
+        attributes:
+          key: ""
+        entity_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        error:
+          key: ""
+      properties:
+        index:
+          description: Position in the payload's `items` list; 0 without one
+          type: integer
+        external_key:
+          example: stripe:cus_1
+          nullable: true
+          type: string
+        action:
+          description: What a delivery would do with this record; null when the record
+            fails before that is known
+          enum:
+          - create
+          - update
+          nullable: true
+          type: string
+        entity_id:
+          description: The record an update would change
+          format: uuid
+          nullable: true
+          type: string
+        attributes:
+          additionalProperties: true
+          description: "Values keyed as in the mapping: a string, null to clear, or\
+            \ `{value, updated_at}` for a timed value"
+          type: object
+        error:
+          additionalProperties: true
+          description: The error body a real delivery would meet for this record
+          nullable: true
+          type: object
+      required:
+      - action
+      - attributes
+      - entity_id
+      - error
+      - external_key
+      - index
+      type: object
+    previewInboundMapping_200_response:
+      example:
+        mode: create
+        matched: true
+        items:
+        - external_key: stripe:cus_1
+          index: 0
+          action: create
+          attributes:
+            key: ""
+          entity_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          error:
+            key: ""
+        - external_key: stripe:cus_1
+          index: 0
+          action: create
+          attributes:
+            key: ""
+          entity_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          error:
+            key: ""
+        errors:
+          key:
+          - errors
+          - errors
+        skipped: match
+      properties:
+        mode:
+          enum:
+          - create
+          - update
+          - upsert
+          type: string
+        matched:
+          description: "Whether the `match` conditions hold. When they do not, a real\
+            \ delivery is acknowledged and skipped."
+          type: boolean
+        skipped:
+          description: "`match` when the conditions do not hold, `no_items` when the\
+            \ `items` list is empty; null when records would be written."
+          enum:
+          - match
+          - no_items
+          nullable: true
+          type: string
+        items:
+          items:
+            $ref: "#/components/schemas/previewInboundMapping_200_response_items_inner"
+          type: array
+        errors:
+          additionalProperties:
+            items:
+              type: string
+            type: array
+          description: "Every record error by field, `items[i].attributes.<slug>`\
+            \ => messages"
+          type: object
+      required:
+      - errors
+      - items
+      - matched
+      - mode
+      - skipped
+      type: object
+    receiveInboundDelivery_200_response:
+      example:
+        log_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        reason: duplicate
+        entity_ids:
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        items:
+        - key: ""
+        - key: ""
+        errors:
+          key: ""
+        status: processed
+      properties:
+        status:
+          enum:
+          - processed
+          - partial
+          - skipped
+          type: string
+        log_id:
+          description: The delivery log row
+          format: uuid
+          type: string
+        entity_ids:
+          description: Records created or updated
+          items:
+            format: uuid
+            type: string
+          type: array
+        reason:
+          description: Why a delivery was skipped
+          example: duplicate
+          type: string
+        items:
+          description: "One result per record: `index` in the payload, `entity_id`,\
+            \ `created`, and the `error` body of a record that failed"
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+        errors:
+          additionalProperties: true
+          description: "Record errors of a partial delivery, `items[i].attributes.<slug>`\
+            \ => messages"
+          type: object
+      required:
+      - entity_ids
+      - log_id
+      - status
       type: object
     getMarketplaceBlueprint_200_response:
       example:
@@ -20621,6 +23642,9 @@ components:
           category: Catalog
           deleted_at: 2000-01-23T04:56:07.000+00:00
           slug: product_sku
+          pinned_metric_ids:
+          - 018b2f1b-8c1a-75b3-8000-7f0000010000
+          - 018b2f1b-8c1a-75b3-8000-7f0000010000
         - attribute_ids:
           - 018b2f1b-8c1a-75b3-8000-7f0000010000
           - 018b2f1b-8c1a-75b3-8000-7f0000010000
@@ -20654,6 +23678,9 @@ components:
           category: Catalog
           deleted_at: 2000-01-23T04:56:07.000+00:00
           slug: product_sku
+          pinned_metric_ids:
+          - 018b2f1b-8c1a-75b3-8000-7f0000010000
+          - 018b2f1b-8c1a-75b3-8000-7f0000010000
       properties:
         data:
           items:
@@ -20759,6 +23786,7 @@ components:
           workspace_id: 0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6b
           updated_at: 2026-08-26T12:30:00Z
           name: Active Gateways
+          group_by: platform
           template_id: 0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6a
           id: 0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6c
         - search_mode: keyword
@@ -20782,6 +23810,7 @@ components:
           workspace_id: 0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6b
           updated_at: 2026-08-26T12:30:00Z
           name: Active Gateways
+          group_by: platform
           template_id: 0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6a
           id: 0190a1b2-c3d4-7e8f-9a0b-1c2d3e4f5a6c
       properties:
@@ -20853,6 +23882,12 @@ components:
         success: true
         executed_at: 2026-08-26T12:00:01Z
         action_index: 0
+        details:
+          status_code: 200
+          written:
+          - company_size
+          - industry
+          response_excerpt: "{\"employees\": 120, \"industry\": \"Retail\"}"
       properties:
         action_index:
           description: Zero-based index of the action in the automation definition
@@ -20872,44 +23907,19 @@ components:
           example: 2026-08-26T12:00:01Z
           format: date-time
           type: string
-      type: object
-    AutomationResponse_trigger:
-      description: Event trigger configuration defining when this automation fires
-      example:
-        attributeId: 01912ecb-4654-7890-a1b2-c3d4e5f60077
-        actionId: 01a09900-0000-7000-8000-000000000001
-        type: on_attribute_changed
-        templateId: 01912ecb-4654-7890-a1b2-c3d4e5f60088
-      properties:
-        type:
-          description: "Trigger event type. `on_action_executed` fires when the named\
-            \ entity action runs on a record, whether or not the write changed anything."
-          enum:
-          - on_entity_created
-          - on_entity_updated
-          - on_attribute_changed
-          - on_action_executed
-          example: on_attribute_changed
-          type: string
-        templateId:
-          description: Target template UUID
-          example: 01912ecb-4654-7890-a1b2-c3d4e5f60088
-          format: uuid
+        details:
+          description: "What the action reported beyond success. An `http_request`\
+            \ action reports `status_code`, `written` (the attributes its response\
+            \ mapping wrote) and `response_excerpt` (the first 2 KB of the response\
+            \ body). Null for actions that report nothing."
+          example:
+            status_code: 200
+            written:
+            - company_size
+            - industry
+            response_excerpt: "{\"employees\": 120, \"industry\": \"Retail\"}"
           nullable: true
-          type: string
-        attributeId:
-          description: Target attribute UUID for attribute change triggers
-          example: 01912ecb-4654-7890-a1b2-c3d4e5f60077
-          format: uuid
-          nullable: true
-          type: string
-        actionId:
-          description: "Entity action UUID; required for `on_action_executed`, must\
-            \ be null otherwise"
-          example: 01a09900-0000-7000-8000-000000000001
-          format: uuid
-          nullable: true
-          type: string
+          type: object
       type: object
     AutomationResponse_conditions_inner:
       example:
@@ -20951,64 +23961,6 @@ components:
           - change_percent
           example: current
           type: string
-      type: object
-    AutomationResponse_actions_inner:
-      example:
-        type: telegram
-        config: "{}"
-      properties:
-        type:
-          description: Action dispatch type
-          enum:
-          - telegram
-          - webhook
-          - push
-          example: telegram
-          type: string
-        config:
-          description: Action-specific payload and routing configuration
-          type: object
-      type: object
-    CreateAutomationRequest_trigger:
-      description: Event trigger defining the lifecycle condition that fires this
-        automation
-      example:
-        attributeId: 01912ecb-4654-7890-a1b2-c3d4e5f60077
-        actionId: 01a09900-0000-7000-8000-000000000001
-        type: on_attribute_changed
-        templateId: 01912ecb-4654-7890-a1b2-c3d4e5f60088
-      properties:
-        type:
-          description: "Trigger event type. `on_action_executed` fires when the named\
-            \ entity action runs on a record, whether or not the write changed anything."
-          enum:
-          - on_entity_created
-          - on_entity_updated
-          - on_attribute_changed
-          - on_action_executed
-          example: on_attribute_changed
-          type: string
-        templateId:
-          description: Template UUID to listen for events on
-          example: 01912ecb-4654-7890-a1b2-c3d4e5f60088
-          format: uuid
-          nullable: true
-          type: string
-        attributeId:
-          description: Attribute UUID for attribute change triggers
-          example: 01912ecb-4654-7890-a1b2-c3d4e5f60077
-          format: uuid
-          nullable: true
-          type: string
-        actionId:
-          description: "Entity action UUID; required for `on_action_executed`, must\
-            \ be null otherwise"
-          example: 01a09900-0000-7000-8000-000000000001
-          format: uuid
-          nullable: true
-          type: string
-      required:
-      - type
       type: object
     CreateAutomationRequest_conditions_inner:
       example:
@@ -21054,26 +24006,6 @@ components:
       - attributeId
       - mode
       - operator
-      type: object
-    CreateAutomationRequest_actions_inner:
-      example:
-        type: telegram
-        config: "{}"
-      properties:
-        type:
-          description: Action delivery channel type
-          enum:
-          - telegram
-          - webhook
-          - push
-          example: telegram
-          type: string
-        config:
-          description: Action payload and channel routing configuration
-          type: object
-      required:
-      - config
-      - type
       type: object
     CreateNotificationChannelRequest_credentials:
       description: "Type-specific credentials payload (e.g. `bot_token` for Telegram;\
@@ -21123,45 +24055,6 @@ components:
             requests
           type: object
       type: object
-    UpdateAutomationRequest_trigger:
-      description: Updated event trigger criteria
-      example:
-        attributeId: 01912ecb-4654-7890-a1b2-c3d4e5f60077
-        actionId: 01a09900-0000-7000-8000-000000000001
-        type: on_attribute_changed
-        templateId: 01912ecb-4654-7890-a1b2-c3d4e5f60088
-      nullable: true
-      properties:
-        type:
-          description: "Trigger event type. `on_action_executed` fires when the named\
-            \ entity action runs on a record, whether or not the write changed anything."
-          enum:
-          - on_entity_created
-          - on_entity_updated
-          - on_attribute_changed
-          - on_action_executed
-          example: on_attribute_changed
-          type: string
-        templateId:
-          description: Template UUID
-          example: 01912ecb-4654-7890-a1b2-c3d4e5f60088
-          format: uuid
-          nullable: true
-          type: string
-        attributeId:
-          description: Attribute UUID for attribute change triggers
-          example: 01912ecb-4654-7890-a1b2-c3d4e5f60077
-          format: uuid
-          nullable: true
-          type: string
-        actionId:
-          description: "Entity action UUID; required for `on_action_executed`, must\
-            \ be null otherwise"
-          example: 01a09900-0000-7000-8000-000000000001
-          format: uuid
-          nullable: true
-          type: string
-      type: object
     UpdateAutomationRequest_conditions_inner:
       example:
         attributeId: 01912ecb-4654-7890-a1b2-c3d4e5f60077
@@ -21202,23 +24095,6 @@ components:
           - change_percent
           example: current
           type: string
-      type: object
-    UpdateAutomationRequest_actions_inner:
-      example:
-        type: telegram
-        config: "{}"
-      properties:
-        type:
-          description: Action delivery channel type
-          enum:
-          - telegram
-          - webhook
-          - push
-          example: telegram
-          type: string
-        config:
-          description: Action payload and channel routing configuration
-          type: object
       type: object
     UpdateNotificationChannelRequest_credentials:
       description: "Updated type-specific credentials payload (e.g. `bot_token` for\
@@ -22262,6 +25138,37 @@ components:
       required:
       - target_attribute_id
       - target_template_id
+      type: object
+    SearchEntitiesRequest_group_key_value:
+      description: "The group key value: a list item id, an entity id, a string, a\
+        \ number, a boolean, or an RFC 3339 timestamp. Null for the no-value group."
+      example: 018b2f1b-8c1a-75b3-8000-7f0000010020
+      nullable: true
+      oneOf:
+      - type: string
+      - type: number
+      - type: boolean
+    SearchEntitiesRequest_group_key:
+      description: "Narrows the result to one group reported by aggregate_entities:\
+        \ pass the `field` and `value` of a group key back unchanged. `value` null\
+        \ selects the records that have no value for the field. Omit the property\
+        \ to search all records. Combines with filter_groups, global_search and sorting;\
+        \ the total then equals the group's count. The field must be groupable (list,\
+        \ reference, string, number, boolean, date or datetime) and the value must\
+        \ have the type aggregate_entities reports for it."
+      example:
+        field: platform
+        value: 018b2f1b-8c1a-75b3-8000-7f0000010020
+      properties:
+        field:
+          description: Attribute slug or UUID
+          example: platform
+          type: string
+        value:
+          $ref: "#/components/schemas/SearchEntitiesRequest_group_key_value"
+      required:
+      - field
+      - value
       type: object
     EntityRulePredicate_value:
       description: "Comparison value serialized as a string (list item UUID for list\

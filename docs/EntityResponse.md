@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **TemplateSlug** | Pointer to **NullableString** | Human-readable slug of the template schema | [optional] 
 **CreatedAt** | Pointer to **time.Time** | Record creation timestamp in ISO 8601 format | [optional] 
 **UpdatedAt** | Pointer to **time.Time** | Last modification timestamp in ISO 8601 format | [optional] 
+**ExternalKey** | Pointer to **NullableString** | The identifier another system uses for this record, unique among the live records of the template. Null when none is set. | [optional] 
 **AttributeValues** | Pointer to [**EntityResponseAttributeValues**](EntityResponseAttributeValues.md) |  | [optional] 
 **ListItemIds** | Pointer to **map[string]string** | Compact mode only: list option ids behind the labels shown in &#x60;attribute_values&#x60;, keyed like &#x60;attribute_values&#x60;. Use these ids when writing the attribute or filtering by it — writes and filters take ids, not labels. Absent when &#x60;verbose&#x3D;true&#x60; (the items carry &#x60;value&#x60;). | [optional] 
 **ReferenceEntityIds** | Pointer to **map[string]string** | Compact mode only: referenced entity ids behind the labels shown in &#x60;attribute_values&#x60;, keyed like &#x60;attribute_values&#x60;. Pass one to &#x60;GET /entities/{id}&#x60; to load the referenced record, or use it when writing or filtering the attribute. Absent when &#x60;verbose&#x3D;true&#x60;. | [optional] 
@@ -168,6 +169,41 @@ SetUpdatedAt sets UpdatedAt field to given value.
 
 HasUpdatedAt returns a boolean if a field has been set.
 
+### GetExternalKey
+
+`func (o *EntityResponse) GetExternalKey() string`
+
+GetExternalKey returns the ExternalKey field if non-nil, zero value otherwise.
+
+### GetExternalKeyOk
+
+`func (o *EntityResponse) GetExternalKeyOk() (*string, bool)`
+
+GetExternalKeyOk returns a tuple with the ExternalKey field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetExternalKey
+
+`func (o *EntityResponse) SetExternalKey(v string)`
+
+SetExternalKey sets ExternalKey field to given value.
+
+### HasExternalKey
+
+`func (o *EntityResponse) HasExternalKey() bool`
+
+HasExternalKey returns a boolean if a field has been set.
+
+### SetExternalKeyNil
+
+`func (o *EntityResponse) SetExternalKeyNil(b bool)`
+
+ SetExternalKeyNil sets the value for ExternalKey to be an explicit nil
+
+### UnsetExternalKey
+`func (o *EntityResponse) UnsetExternalKey()`
+
+UnsetExternalKey ensures that no value is present for ExternalKey, not even an explicit nil
 ### GetAttributeValues
 
 `func (o *EntityResponse) GetAttributeValues() EntityResponseAttributeValues`

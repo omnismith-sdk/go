@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **TemplateId** | **string** | Template UUID | 
 **Category** | Pointer to **NullableString** | Template category for UI sidebar grouping | [optional] 
 **Groups** | [**[]TemplateGroupResponse**](TemplateGroupResponse.md) | Ordered attribute groups for organizing fields into form sections | 
+**PinnedMetricIds** | Pointer to **[]string** | Ordered metric attribute UUIDs summarised on the record details view; empty means the first metrics of the template | [optional] 
 
 ## Methods
 
@@ -101,6 +102,31 @@ and a boolean to check if the value has been set.
 
 SetGroups sets Groups field to given value.
 
+
+### GetPinnedMetricIds
+
+`func (o *TemplateLayoutResponse) GetPinnedMetricIds() []string`
+
+GetPinnedMetricIds returns the PinnedMetricIds field if non-nil, zero value otherwise.
+
+### GetPinnedMetricIdsOk
+
+`func (o *TemplateLayoutResponse) GetPinnedMetricIdsOk() (*[]string, bool)`
+
+GetPinnedMetricIdsOk returns a tuple with the PinnedMetricIds field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPinnedMetricIds
+
+`func (o *TemplateLayoutResponse) SetPinnedMetricIds(v []string)`
+
+SetPinnedMetricIds sets PinnedMetricIds field to given value.
+
+### HasPinnedMetricIds
+
+`func (o *TemplateLayoutResponse) HasPinnedMetricIds() bool`
+
+HasPinnedMetricIds returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

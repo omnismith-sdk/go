@@ -8,6 +8,7 @@ Method | HTTP request | Description
 [**DeleteAutomation**](AutomationAutomationsAPI.md#DeleteAutomation) | **Delete** /automation/automations/{id} | Delete an automation
 [**GetAutomation**](AutomationAutomationsAPI.md#GetAutomation) | **Get** /automation/automations/{id} | Get an automation by ID
 [**ListAutomationExecutions**](AutomationAutomationsAPI.md#ListAutomationExecutions) | **Get** /automation/automations/{id}/executions | List automation execution logs
+[**ListAutomationTimers**](AutomationAutomationsAPI.md#ListAutomationTimers) | **Get** /automation/timers | List pending automation timers
 [**ListAutomations**](AutomationAutomationsAPI.md#ListAutomations) | **Get** /automation/automations | List project automations
 [**ToggleAutomation**](AutomationAutomationsAPI.md#ToggleAutomation) | **Patch** /automation/automations/{id}/toggle | Toggle automation enabled status
 [**UpdateAutomation**](AutomationAutomationsAPI.md#UpdateAutomation) | **Put** /automation/automations/{id} | Update an automation
@@ -35,7 +36,7 @@ import (
 )
 
 func main() {
-	createAutomationRequest := *openapiclient.NewCreateAutomationRequest("Notify on status change", *openapiclient.NewCreateAutomationRequestTrigger("on_attribute_changed"), []openapiclient.CreateAutomationRequestConditionsInner{*openapiclient.NewCreateAutomationRequestConditionsInner("01912ecb-4654-7890-a1b2-c3d4e5f60077", "eq", "current")}, []openapiclient.CreateAutomationRequestActionsInner{*openapiclient.NewCreateAutomationRequestActionsInner("telegram", map[string]interface{}(123))}) // CreateAutomationRequest | 
+	createAutomationRequest := *openapiclient.NewCreateAutomationRequest("Notify on status change", *openapiclient.NewAutomationTrigger("schedule"), []openapiclient.CreateAutomationRequestConditionsInner{*openapiclient.NewCreateAutomationRequestConditionsInner("01912ecb-4654-7890-a1b2-c3d4e5f60077", "eq", "current")}, []openapiclient.AutomationAction{*openapiclient.NewAutomationAction("update_entity", map[string]interface{}({"target":{"kind":"trigger_entity"},"values":{"escalation_note":"No reply to {values.title} yet","escalated_at":"{timestamp}"}}))}) // CreateAutomationRequest | 
 	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
 
 	configuration := openapiclient.NewConfiguration()
@@ -287,6 +288,78 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**ListAutomationExecutions200Response**](ListAutomationExecutions200Response.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## ListAutomationTimers
+
+> ListAutomationTimers200Response ListAutomationTimers(ctx).XOmnismithProjectId(xOmnismithProjectId).AutomationId(automationId).EntityId(entityId).Limit(limit).Execute()
+
+List pending automation timers
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/omnismith-sdk/go"
+)
+
+func main() {
+	xOmnismithProjectId := "018b2f1b-7c3a-7d2e-8f1a-2b3c4d5e6f7d" // string | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential's `projects` claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code `stale_project_grant`; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 `no_project_selected`. Two clients holding the same credential may send different values at the same time. (optional)
+	automationId := "01912ecb-4654-7890-a1b2-c3d4e5f60001" // string | Only timers of this automation (optional)
+	entityId := "01912ecb-4654-7890-a1b2-c3d4e5f60099" // string | Only timers about this record (optional)
+	limit := int32(100) // int32 | Maximum number of timers to return (optional) (default to 100)
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.AutomationAutomationsAPI.ListAutomationTimers(context.Background()).XOmnismithProjectId(xOmnismithProjectId).AutomationId(automationId).EntityId(entityId).Limit(limit).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `AutomationAutomationsAPI.ListAutomationTimers``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `ListAutomationTimers`: ListAutomationTimers200Response
+	fmt.Fprintf(os.Stdout, "Response from `AutomationAutomationsAPI.ListAutomationTimers`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListAutomationTimersRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **xOmnismithProjectId** | **string** | The project this call acts on. A credential proves identity and grants a set of projects; it never selects one, so every tenant-scoped call names its target here. The value must be one of the projects in the credential&#39;s &#x60;projects&#x60; claim and must still be reachable — a project the caller is not a member of, or one that has been deleted, is rejected with 403 rather than silently ignored. A project the caller *is* a member of but which the credential predates is also rejected with 403, carrying the code &#x60;stale_project_grant&#x60;; that one is answered by refreshing the credential once and retrying, and is the only 403 here worth retrying. Omitting the header is not an error: the caller is simply acting with no project selected, and a tenant-scoped operation then answers 409 &#x60;no_project_selected&#x60;. Two clients holding the same credential may send different values at the same time. | 
+ **automationId** | **string** | Only timers of this automation | 
+ **entityId** | **string** | Only timers about this record | 
+ **limit** | **int32** | Maximum number of timers to return | [default to 100]
+
+### Return type
+
+[**ListAutomationTimers200Response**](ListAutomationTimers200Response.md)
 
 ### Authorization
 

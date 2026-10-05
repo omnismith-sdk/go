@@ -6,16 +6,16 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Name** | **string** | Descriptive display name of the automation rule | 
 **Description** | Pointer to **NullableString** | Optional summary describing the purpose and behavior of the automation | [optional] 
-**Trigger** | [**CreateAutomationRequestTrigger**](CreateAutomationRequestTrigger.md) |  | 
+**Trigger** | [**AutomationTrigger**](AutomationTrigger.md) |  | 
 **Conditions** | [**[]CreateAutomationRequestConditionsInner**](CreateAutomationRequestConditionsInner.md) | Condition expressions that must all evaluate to true against the entity for actions to run | 
-**Actions** | [**[]CreateAutomationRequestActionsInner**](CreateAutomationRequestActionsInner.md) | List of dispatch actions to execute when trigger and conditions are met | 
+**Actions** | [**[]AutomationAction**](AutomationAction.md) | List of dispatch actions to execute when trigger and conditions are met | 
 **CooldownSeconds** | Pointer to **NullableInt32** | Minimum throttle cooldown window in seconds between firings for the same entity | [optional] 
 
 ## Methods
 
 ### NewCreateAutomationRequest
 
-`func NewCreateAutomationRequest(name string, trigger CreateAutomationRequestTrigger, conditions []CreateAutomationRequestConditionsInner, actions []CreateAutomationRequestActionsInner, ) *CreateAutomationRequest`
+`func NewCreateAutomationRequest(name string, trigger AutomationTrigger, conditions []CreateAutomationRequestConditionsInner, actions []AutomationAction, ) *CreateAutomationRequest`
 
 NewCreateAutomationRequest instantiates a new CreateAutomationRequest object
 This constructor will assign default values to properties that have it defined,
@@ -87,20 +87,20 @@ HasDescription returns a boolean if a field has been set.
 UnsetDescription ensures that no value is present for Description, not even an explicit nil
 ### GetTrigger
 
-`func (o *CreateAutomationRequest) GetTrigger() CreateAutomationRequestTrigger`
+`func (o *CreateAutomationRequest) GetTrigger() AutomationTrigger`
 
 GetTrigger returns the Trigger field if non-nil, zero value otherwise.
 
 ### GetTriggerOk
 
-`func (o *CreateAutomationRequest) GetTriggerOk() (*CreateAutomationRequestTrigger, bool)`
+`func (o *CreateAutomationRequest) GetTriggerOk() (*AutomationTrigger, bool)`
 
 GetTriggerOk returns a tuple with the Trigger field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetTrigger
 
-`func (o *CreateAutomationRequest) SetTrigger(v CreateAutomationRequestTrigger)`
+`func (o *CreateAutomationRequest) SetTrigger(v AutomationTrigger)`
 
 SetTrigger sets Trigger field to given value.
 
@@ -127,20 +127,20 @@ SetConditions sets Conditions field to given value.
 
 ### GetActions
 
-`func (o *CreateAutomationRequest) GetActions() []CreateAutomationRequestActionsInner`
+`func (o *CreateAutomationRequest) GetActions() []AutomationAction`
 
 GetActions returns the Actions field if non-nil, zero value otherwise.
 
 ### GetActionsOk
 
-`func (o *CreateAutomationRequest) GetActionsOk() (*[]CreateAutomationRequestActionsInner, bool)`
+`func (o *CreateAutomationRequest) GetActionsOk() (*[]AutomationAction, bool)`
 
 GetActionsOk returns a tuple with the Actions field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetActions
 
-`func (o *CreateAutomationRequest) SetActions(v []CreateAutomationRequestActionsInner)`
+`func (o *CreateAutomationRequest) SetActions(v []AutomationAction)`
 
 SetActions sets Actions field to given value.
 

@@ -4,8 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Attributes** | [**map[string]EntityAttributesInputValue**](EntityAttributesInputValue.md) | Map of attribute slug or UUID → value. Keys may be mixed freely in one request; each attribute may appear once.  Values: - Plain scalar — &#x60;\&quot;text\&quot;&#x60;, &#x60;42&#x60;, &#x60;129.99&#x60;, &#x60;true&#x60;, or &#x60;null&#x60;. Numbers and booleans are serialized for you (&#x60;42&#x60; → &#x60;\&quot;42\&quot;&#x60;, &#x60;true&#x60; → &#x60;\&quot;true\&quot;&#x60;); floats keep exactly the digits you sent. - &#x60;null&#x60; — clears the attribute. - Backfill object — &#x60;{ \&quot;value\&quot;: &lt;scalar|null&gt;, \&quot;updated_at\&quot;: \&quot;2026-09-12T12:23:52Z\&quot; }&#x60; records the value as observed at that moment (history import). &#x60;updated_at&#x60; must be RFC 3339 with an explicit offset (&#x60;Z&#x60; or &#x60;±HH:MM&#x60;); it defaults to now when omitted. - Operation object — &#x60;{ \&quot;op\&quot;: \&quot;increment\&quot;, \&quot;value\&quot;: 1 }&#x60; adds the number to the stored value instead of overwriting it: you never need to read the current value, and concurrent increments are serialized so none is lost. Allowed on Number attributes and Metrics only (a metric increment appends &#x60;latest + value&#x60; as a new observation); a never-set attribute counts as &#x60;0&#x60;; a negative &#x60;value&#x60; subtracts. &#x60;op&#x60; cannot be combined with &#x60;updated_at&#x60;. Not accepted on create. The change log records the resolved value, never the operand.  Value format by attribute type: - Text / Markdown: UTF-8 string - Number: number or numeric string (&#x60;129.99&#x60;, &#x60;\&quot;42\&quot;&#x60;) - Boolean: &#x60;true&#x60; / &#x60;false&#x60; (or &#x60;\&quot;true\&quot;&#x60; / &#x60;\&quot;false\&quot;&#x60;, &#x60;\&quot;1\&quot;&#x60; / &#x60;\&quot;0\&quot;&#x60;) - Date: &#x60;YYYY-MM-DD&#x60;; Datetime: &#x60;YYYY-MM-DD HH:MM:SS&#x60; or ISO 8601 &#x60;YYYY-MM-DDTHH:MM:SSZ&#x60; - File / Image: UUID of a previously uploaded file asset - List: UUID of one of the attribute&#39;s list items - Reference: UUID of the referenced entity - Metric: numeric observation; appended to the time series (never overwritten)  Example: &#x60;{ \&quot;hostname\&quot;: \&quot;edge-fra-01\&quot;, \&quot;cpu_cores\&quot;: 8, \&quot;notes\&quot;: null, \&quot;operational_status\&quot;: { \&quot;value\&quot;: \&quot;Active\&quot;, \&quot;updated_at\&quot;: \&quot;2026-09-12T12:23:52Z\&quot; }, \&quot;restart_count\&quot;: { \&quot;op\&quot;: \&quot;increment\&quot;, \&quot;value\&quot;: 1 } }&#x60; | 
+**Attributes** | [**map[string]EntityAttributesInputValue**](EntityAttributesInputValue.md) | Map of attribute slug or UUID → value. Keys may be mixed freely in one request; each attribute may appear once.  Values: - Plain scalar — &#x60;\&quot;text\&quot;&#x60;, &#x60;42&#x60;, &#x60;129.99&#x60;, &#x60;true&#x60;, or &#x60;null&#x60;. Numbers and booleans are serialized for you (&#x60;42&#x60; → &#x60;\&quot;42\&quot;&#x60;, &#x60;true&#x60; → &#x60;\&quot;true\&quot;&#x60;); floats keep exactly the digits you sent. - &#x60;null&#x60; — clears the attribute. - Backfill object — &#x60;{ \&quot;value\&quot;: &lt;scalar|null&gt;, \&quot;updated_at\&quot;: \&quot;2026-09-12T12:23:52Z\&quot; }&#x60; records the value as observed at that moment (history import). &#x60;updated_at&#x60; must be RFC 3339 with an explicit offset (&#x60;Z&#x60; or &#x60;±HH:MM&#x60;); it defaults to now when omitted. - Operation object — &#x60;{ \&quot;op\&quot;: \&quot;increment\&quot;, \&quot;value\&quot;: 1 }&#x60; adds the number to the stored value instead of overwriting it: you never need to read the current value, and concurrent increments are serialized so none is lost. Allowed on Number attributes and Metrics only (a metric increment appends &#x60;latest + value&#x60; as a new observation); a never-set attribute counts as &#x60;0&#x60;; a negative &#x60;value&#x60; subtracts. &#x60;op&#x60; cannot be combined with &#x60;updated_at&#x60;. Not accepted on create. The change log records the resolved value, never the operand.  Value format by attribute type: - Text / Markdown: UTF-8 string - Number: number or numeric string (&#x60;129.99&#x60;, &#x60;\&quot;42\&quot;&#x60;) - Boolean: &#x60;true&#x60; / &#x60;false&#x60; (or &#x60;\&quot;true\&quot;&#x60; / &#x60;\&quot;false\&quot;&#x60;, &#x60;\&quot;1\&quot;&#x60; / &#x60;\&quot;0\&quot;&#x60;) - Date: &#x60;YYYY-MM-DD&#x60;; Datetime: RFC 3339 with an offset (&#x60;2026-09-12T12:23:52Z&#x60;, &#x60;2026-09-12T14:23:52+02:00&#x60;). Other spellings (&#x60;2026-09-12 12:23:52&#x60;) are accepted and stored in that form; a datetime without an offset is UTC - File / Image: UUID of a previously uploaded file asset - List: UUID of one of the attribute&#39;s list items - Reference: UUID of the referenced entity - Metric: numeric observation; appended to the time series (never overwritten)  Example: &#x60;{ \&quot;hostname\&quot;: \&quot;edge-fra-01\&quot;, \&quot;cpu_cores\&quot;: 8, \&quot;notes\&quot;: null, \&quot;operational_status\&quot;: { \&quot;value\&quot;: \&quot;Active\&quot;, \&quot;updated_at\&quot;: \&quot;2026-09-12T12:23:52Z\&quot; }, \&quot;restart_count\&quot;: { \&quot;op\&quot;: \&quot;increment\&quot;, \&quot;value\&quot;: 1 } }&#x60; | 
 **Id** | Pointer to **NullableString** | Optional client-assigned UUIDv7 identifier for the entity record. If omitted, a UUIDv7 is automatically generated. | [optional] 
+**ExternalKey** | Pointer to **NullableString** | The identifier another system uses for this record (a Stripe customer id, a device serial, an order number). Unique among the live records of the template, case-sensitive, 1–255 characters after trimming, no control characters. When one template is fed from several systems, namespace the key yourself, e.g. &#x60;stripe:cus_123&#x60;. A deleted record releases its key. | [optional] 
 
 ## Methods
 
@@ -81,6 +82,41 @@ HasId returns a boolean if a field has been set.
 `func (o *CreateEntityRequest) UnsetId()`
 
 UnsetId ensures that no value is present for Id, not even an explicit nil
+### GetExternalKey
+
+`func (o *CreateEntityRequest) GetExternalKey() string`
+
+GetExternalKey returns the ExternalKey field if non-nil, zero value otherwise.
+
+### GetExternalKeyOk
+
+`func (o *CreateEntityRequest) GetExternalKeyOk() (*string, bool)`
+
+GetExternalKeyOk returns a tuple with the ExternalKey field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetExternalKey
+
+`func (o *CreateEntityRequest) SetExternalKey(v string)`
+
+SetExternalKey sets ExternalKey field to given value.
+
+### HasExternalKey
+
+`func (o *CreateEntityRequest) HasExternalKey() bool`
+
+HasExternalKey returns a boolean if a field has been set.
+
+### SetExternalKeyNil
+
+`func (o *CreateEntityRequest) SetExternalKeyNil(b bool)`
+
+ SetExternalKeyNil sets the value for ExternalKey to be an explicit nil
+
+### UnsetExternalKey
+`func (o *CreateEntityRequest) UnsetExternalKey()`
+
+UnsetExternalKey ensures that no value is present for ExternalKey, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

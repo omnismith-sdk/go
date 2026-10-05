@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **DisplayMode** | Pointer to **NullableString** | Updated presentation layout mode (table or grid) | [optional] 
 **DisplayedColumns** | Pointer to **[]string** | Updated list of attribute UUIDs or slugs to display as columns in table mode (e.g. [\&quot;title\&quot;, \&quot;platform\&quot;, \&quot;status\&quot;, \&quot;scheduled_date\&quot;]) | [optional] 
 **PaneOrder** | Pointer to **NullableInt32** | Updated display sequence index within the workspace layout | [optional] 
+**GroupBy** | Pointer to **NullableString** | Attribute slug or UUID to split the records into collapsible sections by, one per value, each with its own count and pages (e.g. \&quot;platform\&quot;). Must be a list, reference, string, number, boolean, date or datetime attribute of the bound template. Cannot be combined with search_mode \&quot;semantic\&quot;. Omit to keep the current grouping; null clears it (flat list). | [optional] 
 
 ## Methods
 
@@ -312,6 +313,41 @@ HasPaneOrder returns a boolean if a field has been set.
 `func (o *UpdateWorkspaceViewRequest) UnsetPaneOrder()`
 
 UnsetPaneOrder ensures that no value is present for PaneOrder, not even an explicit nil
+### GetGroupBy
+
+`func (o *UpdateWorkspaceViewRequest) GetGroupBy() string`
+
+GetGroupBy returns the GroupBy field if non-nil, zero value otherwise.
+
+### GetGroupByOk
+
+`func (o *UpdateWorkspaceViewRequest) GetGroupByOk() (*string, bool)`
+
+GetGroupByOk returns a tuple with the GroupBy field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetGroupBy
+
+`func (o *UpdateWorkspaceViewRequest) SetGroupBy(v string)`
+
+SetGroupBy sets GroupBy field to given value.
+
+### HasGroupBy
+
+`func (o *UpdateWorkspaceViewRequest) HasGroupBy() bool`
+
+HasGroupBy returns a boolean if a field has been set.
+
+### SetGroupByNil
+
+`func (o *UpdateWorkspaceViewRequest) SetGroupByNil(b bool)`
+
+ SetGroupByNil sets the value for GroupBy to be an explicit nil
+
+### UnsetGroupBy
+`func (o *UpdateWorkspaceViewRequest) UnsetGroupBy()`
+
+UnsetGroupBy ensures that no value is present for GroupBy, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

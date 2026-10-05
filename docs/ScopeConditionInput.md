@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Field** | **string** | Attribute id or a standard entity field (id, created_at, updated_at) | 
+**Field** | **string** | Attribute id or a standard entity field (id, created_at, updated_at, external_key) | 
 **Operator** | **string** |  | 
 **Value** | Pointer to **NullableString** |  | [optional] 
 

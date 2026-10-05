@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **Success** | Pointer to **bool** | Whether this specific action executed successfully | [optional] 
 **ErrorMessage** | Pointer to **NullableString** | Error message if action execution failed | [optional] 
 **ExecutedAt** | Pointer to **time.Time** | Timestamp of action dispatch | [optional] 
+**Details** | Pointer to **map[string]interface{}** | What the action reported beyond success. An &#x60;http_request&#x60; action reports &#x60;status_code&#x60;, &#x60;written&#x60; (the attributes its response mapping wrote) and &#x60;response_excerpt&#x60; (the first 2 KB of the response body). Null for actions that report nothing. | [optional] 
 
 ## Methods
 
@@ -138,6 +139,41 @@ SetExecutedAt sets ExecutedAt field to given value.
 
 HasExecutedAt returns a boolean if a field has been set.
 
+### GetDetails
+
+`func (o *AutomationExecutionResponseActionResultsInner) GetDetails() map[string]interface{}`
+
+GetDetails returns the Details field if non-nil, zero value otherwise.
+
+### GetDetailsOk
+
+`func (o *AutomationExecutionResponseActionResultsInner) GetDetailsOk() (*map[string]interface{}, bool)`
+
+GetDetailsOk returns a tuple with the Details field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDetails
+
+`func (o *AutomationExecutionResponseActionResultsInner) SetDetails(v map[string]interface{})`
+
+SetDetails sets Details field to given value.
+
+### HasDetails
+
+`func (o *AutomationExecutionResponseActionResultsInner) HasDetails() bool`
+
+HasDetails returns a boolean if a field has been set.
+
+### SetDetailsNil
+
+`func (o *AutomationExecutionResponseActionResultsInner) SetDetailsNil(b bool)`
+
+ SetDetailsNil sets the value for Details to be an explicit nil
+
+### UnsetDetails
+`func (o *AutomationExecutionResponseActionResultsInner) UnsetDetails()`
+
+UnsetDetails ensures that no value is present for Details, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

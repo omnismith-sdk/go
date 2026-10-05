@@ -8,6 +8,8 @@ Name | Type | Description | Notes
 **GroupBy** | Pointer to **[]string** | Attribute slugs or UUIDs to group by, at most 3. Lists, references, strings, numbers, booleans and dates can be keys; metrics, markdown, files and images cannot. Empty groups the whole filtered set into one row. | [optional] 
 **Aggregations** | [**[]AggregateEntitiesRequestAggregationsInner**](AggregateEntitiesRequestAggregationsInner.md) | Reduces computed for every group, reported back in this order. &#x60;count&#x60; takes no field; &#x60;sum&#x60; and &#x60;avg&#x60; need a number attribute; &#x60;min&#x60; and &#x60;max&#x60; accept number, date and datetime attributes. | 
 **Limit** | Pointer to **int32** | Maximum number of groups returned (1-100). The response says whether more groups exist. | [optional] [default to 50]
+**GlobalSearch** | Pointer to **NullableString** | Substring query matched across the template&#39;s attributes, exactly as the search endpoint&#39;s global_search, so group counts agree with search totals. | [optional] 
+**Order** | Pointer to **string** | &#x60;aggregate&#x60; (default) ranks groups by the first aggregation descending, nulls last, then by key. &#x60;key&#x60; lays groups out by their key: list attributes follow the list-item order, other attributes sort by label or value ascending, and the no-value group comes last. Use &#x60;key&#x60; to render records in sections, &#x60;aggregate&#x60; for top-N questions. | [optional] [default to "aggregate"]
 
 ## Methods
 
@@ -122,6 +124,66 @@ SetLimit sets Limit field to given value.
 `func (o *AggregateEntitiesRequest) HasLimit() bool`
 
 HasLimit returns a boolean if a field has been set.
+
+### GetGlobalSearch
+
+`func (o *AggregateEntitiesRequest) GetGlobalSearch() string`
+
+GetGlobalSearch returns the GlobalSearch field if non-nil, zero value otherwise.
+
+### GetGlobalSearchOk
+
+`func (o *AggregateEntitiesRequest) GetGlobalSearchOk() (*string, bool)`
+
+GetGlobalSearchOk returns a tuple with the GlobalSearch field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetGlobalSearch
+
+`func (o *AggregateEntitiesRequest) SetGlobalSearch(v string)`
+
+SetGlobalSearch sets GlobalSearch field to given value.
+
+### HasGlobalSearch
+
+`func (o *AggregateEntitiesRequest) HasGlobalSearch() bool`
+
+HasGlobalSearch returns a boolean if a field has been set.
+
+### SetGlobalSearchNil
+
+`func (o *AggregateEntitiesRequest) SetGlobalSearchNil(b bool)`
+
+ SetGlobalSearchNil sets the value for GlobalSearch to be an explicit nil
+
+### UnsetGlobalSearch
+`func (o *AggregateEntitiesRequest) UnsetGlobalSearch()`
+
+UnsetGlobalSearch ensures that no value is present for GlobalSearch, not even an explicit nil
+### GetOrder
+
+`func (o *AggregateEntitiesRequest) GetOrder() string`
+
+GetOrder returns the Order field if non-nil, zero value otherwise.
+
+### GetOrderOk
+
+`func (o *AggregateEntitiesRequest) GetOrderOk() (*string, bool)`
+
+GetOrderOk returns a tuple with the Order field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetOrder
+
+`func (o *AggregateEntitiesRequest) SetOrder(v string)`
+
+SetOrder sets Order field to given value.
+
+### HasOrder
+
+`func (o *AggregateEntitiesRequest) HasOrder() bool`
+
+HasOrder returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

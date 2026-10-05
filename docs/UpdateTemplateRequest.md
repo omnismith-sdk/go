@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Attributes** | Pointer to [**[]TemplateAttributeInput**](TemplateAttributeInput.md) | Structured template attributes with optional per-template default values. Preferred over flat attribute_ids. | [optional] 
 **Groups** | Pointer to [**[]TemplateGroupInput**](TemplateGroupInput.md) | Ordered attribute groups for organizing template fields into visual UI sections. | [optional] 
+**PinnedMetricIds** | Pointer to **[]string** | Ordered list of metric attributes (UUIDs or slugs) summarised on the record details view, at most 8. Each must be a metric attribute of this template. Omit to keep the current pins; send an empty array to clear them. | [optional] 
 **Name** | **string** | Updated human-readable name of the template. | 
 **Description** | Pointer to **NullableString** | Updated description of the template. | [optional] 
 **Category** | Pointer to **NullableString** | Updated category tag for grouping in navigation. | [optional] 
@@ -82,6 +83,41 @@ SetGroups sets Groups field to given value.
 
 HasGroups returns a boolean if a field has been set.
 
+### GetPinnedMetricIds
+
+`func (o *UpdateTemplateRequest) GetPinnedMetricIds() []string`
+
+GetPinnedMetricIds returns the PinnedMetricIds field if non-nil, zero value otherwise.
+
+### GetPinnedMetricIdsOk
+
+`func (o *UpdateTemplateRequest) GetPinnedMetricIdsOk() (*[]string, bool)`
+
+GetPinnedMetricIdsOk returns a tuple with the PinnedMetricIds field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPinnedMetricIds
+
+`func (o *UpdateTemplateRequest) SetPinnedMetricIds(v []string)`
+
+SetPinnedMetricIds sets PinnedMetricIds field to given value.
+
+### HasPinnedMetricIds
+
+`func (o *UpdateTemplateRequest) HasPinnedMetricIds() bool`
+
+HasPinnedMetricIds returns a boolean if a field has been set.
+
+### SetPinnedMetricIdsNil
+
+`func (o *UpdateTemplateRequest) SetPinnedMetricIdsNil(b bool)`
+
+ SetPinnedMetricIdsNil sets the value for PinnedMetricIds to be an explicit nil
+
+### UnsetPinnedMetricIds
+`func (o *UpdateTemplateRequest) UnsetPinnedMetricIds()`
+
+UnsetPinnedMetricIds ensures that no value is present for PinnedMetricIds, not even an explicit nil
 ### GetName
 
 `func (o *UpdateTemplateRequest) GetName() string`

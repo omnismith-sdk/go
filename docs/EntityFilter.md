@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Field** | **string** | Attribute slug or UUID, a standard field (&#x60;id&#x60;, &#x60;created_at&#x60;, &#x60;updated_at&#x60;), or a one-hop path through a reference attribute: &#x60;&lt;reference&gt;.&lt;attribute of its target template&gt;&#x60; (e.g. &#x60;customer.tier&#x60;). | 
+**Field** | **string** | Attribute slug or UUID, a standard field (&#x60;id&#x60;, &#x60;created_at&#x60;, &#x60;updated_at&#x60;, &#x60;external_key&#x60;), or a one-hop path through a reference attribute: &#x60;&lt;reference&gt;.&lt;attribute of its target template&gt;&#x60; (e.g. &#x60;customer.tier&#x60;). | 
 **Operator** | **string** | eq, neq, gt, lt, like (case-insensitive substring), not-like, empty, not-empty, in, not-in, between | 
 **Value** | Pointer to [**NullableEntityFilterValue**](EntityFilterValue.md) |  | [optional] 
 

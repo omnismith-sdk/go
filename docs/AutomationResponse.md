@@ -8,11 +8,12 @@ Name | Type | Description | Notes
 **Name** | Pointer to **string** | Name of the automation rule | [optional] 
 **Description** | Pointer to **NullableString** | Optional description of the automation rule | [optional] 
 **IsEnabled** | Pointer to **bool** | Whether the automation is currently active and listening for events | [optional] 
-**Trigger** | Pointer to [**AutomationResponseTrigger**](AutomationResponseTrigger.md) |  | [optional] 
+**Trigger** | Pointer to [**AutomationTrigger**](AutomationTrigger.md) |  | [optional] 
 **Conditions** | Pointer to [**[]AutomationResponseConditionsInner**](AutomationResponseConditionsInner.md) | Condition expressions that must all evaluate to true to execute actions | [optional] 
-**Actions** | Pointer to [**[]AutomationResponseActionsInner**](AutomationResponseActionsInner.md) | Actions dispatched when conditions evaluate to true | [optional] 
+**Actions** | Pointer to [**[]AutomationAction**](AutomationAction.md) | Actions dispatched when conditions evaluate to true | [optional] 
 **CooldownSeconds** | Pointer to **NullableInt32** | Minimum cooldown seconds between trigger firings for the same entity | [optional] 
 **LastTriggeredAt** | Pointer to **NullableTime** | Timestamp when this automation last fired | [optional] 
+**NextRunAt** | Pointer to **NullableTime** | When a &#x60;schedule&#x60; automation runs next (UTC). Null for other triggers and for a disabled schedule. | [optional] 
 **CreatedAt** | Pointer to **time.Time** | Creation timestamp | [optional] 
 **UpdatedAt** | Pointer to **time.Time** | Last update timestamp | [optional] 
 
@@ -147,20 +148,20 @@ HasIsEnabled returns a boolean if a field has been set.
 
 ### GetTrigger
 
-`func (o *AutomationResponse) GetTrigger() AutomationResponseTrigger`
+`func (o *AutomationResponse) GetTrigger() AutomationTrigger`
 
 GetTrigger returns the Trigger field if non-nil, zero value otherwise.
 
 ### GetTriggerOk
 
-`func (o *AutomationResponse) GetTriggerOk() (*AutomationResponseTrigger, bool)`
+`func (o *AutomationResponse) GetTriggerOk() (*AutomationTrigger, bool)`
 
 GetTriggerOk returns a tuple with the Trigger field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetTrigger
 
-`func (o *AutomationResponse) SetTrigger(v AutomationResponseTrigger)`
+`func (o *AutomationResponse) SetTrigger(v AutomationTrigger)`
 
 SetTrigger sets Trigger field to given value.
 
@@ -197,20 +198,20 @@ HasConditions returns a boolean if a field has been set.
 
 ### GetActions
 
-`func (o *AutomationResponse) GetActions() []AutomationResponseActionsInner`
+`func (o *AutomationResponse) GetActions() []AutomationAction`
 
 GetActions returns the Actions field if non-nil, zero value otherwise.
 
 ### GetActionsOk
 
-`func (o *AutomationResponse) GetActionsOk() (*[]AutomationResponseActionsInner, bool)`
+`func (o *AutomationResponse) GetActionsOk() (*[]AutomationAction, bool)`
 
 GetActionsOk returns a tuple with the Actions field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetActions
 
-`func (o *AutomationResponse) SetActions(v []AutomationResponseActionsInner)`
+`func (o *AutomationResponse) SetActions(v []AutomationAction)`
 
 SetActions sets Actions field to given value.
 
@@ -290,6 +291,41 @@ HasLastTriggeredAt returns a boolean if a field has been set.
 `func (o *AutomationResponse) UnsetLastTriggeredAt()`
 
 UnsetLastTriggeredAt ensures that no value is present for LastTriggeredAt, not even an explicit nil
+### GetNextRunAt
+
+`func (o *AutomationResponse) GetNextRunAt() time.Time`
+
+GetNextRunAt returns the NextRunAt field if non-nil, zero value otherwise.
+
+### GetNextRunAtOk
+
+`func (o *AutomationResponse) GetNextRunAtOk() (*time.Time, bool)`
+
+GetNextRunAtOk returns a tuple with the NextRunAt field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetNextRunAt
+
+`func (o *AutomationResponse) SetNextRunAt(v time.Time)`
+
+SetNextRunAt sets NextRunAt field to given value.
+
+### HasNextRunAt
+
+`func (o *AutomationResponse) HasNextRunAt() bool`
+
+HasNextRunAt returns a boolean if a field has been set.
+
+### SetNextRunAtNil
+
+`func (o *AutomationResponse) SetNextRunAtNil(b bool)`
+
+ SetNextRunAtNil sets the value for NextRunAt to be an explicit nil
+
+### UnsetNextRunAt
+`func (o *AutomationResponse) UnsetNextRunAt()`
+
+UnsetNextRunAt ensures that no value is present for NextRunAt, not even an explicit nil
 ### GetCreatedAt
 
 `func (o *AutomationResponse) GetCreatedAt() time.Time`

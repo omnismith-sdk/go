@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **Op** | Pointer to **string** | The operation that was attempted. | [optional] 
 **Id** | Pointer to **NullableString** | Entity the operation acted on. For a successful create this is the newly generated identifier. Null when a create failed before an identifier existed. | [optional] 
 **Status** | Pointer to **string** | Outcome of this operation. | [optional] 
+**Created** | Pointer to **NullableBool** | For a successful upsert: true when it created the record, false when it updated the one holding the key. Null for other operations and for failures. | [optional] 
 **Error** | Pointer to [**NullableErrorResponse**](ErrorResponse.md) |  | [optional] 
 
 ## Methods
@@ -139,6 +140,41 @@ SetStatus sets Status field to given value.
 
 HasStatus returns a boolean if a field has been set.
 
+### GetCreated
+
+`func (o *BatchOperationResult) GetCreated() bool`
+
+GetCreated returns the Created field if non-nil, zero value otherwise.
+
+### GetCreatedOk
+
+`func (o *BatchOperationResult) GetCreatedOk() (*bool, bool)`
+
+GetCreatedOk returns a tuple with the Created field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCreated
+
+`func (o *BatchOperationResult) SetCreated(v bool)`
+
+SetCreated sets Created field to given value.
+
+### HasCreated
+
+`func (o *BatchOperationResult) HasCreated() bool`
+
+HasCreated returns a boolean if a field has been set.
+
+### SetCreatedNil
+
+`func (o *BatchOperationResult) SetCreatedNil(b bool)`
+
+ SetCreatedNil sets the value for Created to be an explicit nil
+
+### UnsetCreated
+`func (o *BatchOperationResult) UnsetCreated()`
+
+UnsetCreated ensures that no value is present for Created, not even an explicit nil
 ### GetError
 
 `func (o *BatchOperationResult) GetError() ErrorResponse`
