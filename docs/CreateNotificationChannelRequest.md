@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **Type** | **string** | Channel delivery type (telegram, webhook, push) | 
 **Name** | **string** | Display name of the notification channel | 
 **Credentials** | [**CreateNotificationChannelRequestCredentials**](CreateNotificationChannelRequestCredentials.md) |  | 
+**RateLimitPerMinute** | Pointer to **int32** | Maximum messages the channel sends per clock minute, across all automations and records; sends over it fail the action (recorded in the execution history) instead of reaching the destination. Defaults to 20, Telegram&#39;s limit for one group. | [optional] [default to 20]
 
 ## Methods
 
@@ -86,6 +87,31 @@ and a boolean to check if the value has been set.
 
 SetCredentials sets Credentials field to given value.
 
+
+### GetRateLimitPerMinute
+
+`func (o *CreateNotificationChannelRequest) GetRateLimitPerMinute() int32`
+
+GetRateLimitPerMinute returns the RateLimitPerMinute field if non-nil, zero value otherwise.
+
+### GetRateLimitPerMinuteOk
+
+`func (o *CreateNotificationChannelRequest) GetRateLimitPerMinuteOk() (*int32, bool)`
+
+GetRateLimitPerMinuteOk returns a tuple with the RateLimitPerMinute field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRateLimitPerMinute
+
+`func (o *CreateNotificationChannelRequest) SetRateLimitPerMinute(v int32)`
+
+SetRateLimitPerMinute sets RateLimitPerMinute field to given value.
+
+### HasRateLimitPerMinute
+
+`func (o *CreateNotificationChannelRequest) HasRateLimitPerMinute() bool`
+
+HasRateLimitPerMinute returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

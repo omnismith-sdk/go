@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   description: API Documentation for Omnismith
   title: Omnismith API
-  version: 1.0.16
+  version: 1.0.18
   x-logo:
     url: https://omnismith.io/logo.png
     backgroundColor: transparent
@@ -2092,7 +2092,9 @@ paths:
         \ bot token), `webhook` (configured with endpoint URL, custom HTTP headers,\
         \ and authentication methods such as bearer token or basic auth), or `push`\
         \ (FCM mobile push notifications). Configured channels can then be linked\
-        \ as target actions in automation rules."
+        \ as target actions in automation rules. Every send through a channel counts\
+        \ against its `rate_limit_per_minute` (default 20), shared by all automations\
+        \ and records, so a misconfigured automation cannot flood the destination."
       operationId: createNotificationChannel
       parameters:
       - description: "The project this call acts on. A credential proves identity\
@@ -2488,8 +2490,9 @@ paths:
       - Automation - Notification Channels
     put:
       description: "Updates an existing notification channel configuration by UUID.\
-        \ Allows updating the channel display name or updating integration credentials\
-        \ (such as new bot tokens, webhook endpoints, or authentication credentials)."
+        \ Allows updating the channel display name, its per-minute send rate limit,\
+        \ or its integration credentials (such as new bot tokens, webhook endpoints,\
+        \ or authentication credentials). Omitted fields keep their current values."
       operationId: updateNotificationChannel
       parameters:
       - description: "The project this call acts on. A credential proves identity\
@@ -14236,11 +14239,13 @@ components:
         - Example, renewal reminder at 09:00 Berlin time thirty days before `renewal_date`: `{"type": "date_reached", "templateId": "<contract template id>", "attributeId": "<renewal_date id>", "offsetMinutes": -42660, "timezone": "Europe/Berlin"}`. Pending runs are listed by `GET /automation/timers?automation_id=`.
 
         **No change within.** `{"type": "no_change_within", "templateId": "<template id>", "attributeId": "<watched attribute id>", "delayMinutes": <minutes>}`. Fires once for a record when the watched attribute has not changed for `delayMinutes` while the conditions held: follow-ups, SLAs, escalations.
+        - Omit `attributeId` to watch the record itself, i.e. its `updated_at`: then every write to the record restarts the clock, even one that leaves its values as they were. This is the heartbeat monitor: a device or job that reports by writing its record every few minutes, and an automation that fires when the writes stop. Metric points sent through `POST /entities/{id}/metrics` do not write the record.
         - The clock starts when a record is created and restarts whenever the watched attribute changes, but only while the conditions hold for the record. A write after which they no longer hold stops the clock. When the delay is over the conditions are checked once more on the record as it is then (`mode: "current"` only), and the cooldown applies. `{timestamp}` is the moment the delay ran out.
         - Records that already exist when the automation is saved are not clocked; their clock starts with their next write. Changing the trigger or the conditions of the automation (or disabling it) stops every running clock; editing its name, actions or cooldown does not.
         - Writes made by an automation start, restart and stop other automations' clocks like any other write, but never the writing automation's own, so an escalation that sets `escalated_at` can start a second automation's clock without looping on itself.
         - Example, a ticket still New 24 hours after it was created: attribute `status`, condition `{"attributeId": "<status id>", "operator": "eq", "value": "<New item id>", "mode": "current"}`, `"delayMinutes": 1440`.
         - Example, no reply within 2 hours: attribute `replied_at`, condition `{"attributeId": "<replied_at id>", "operator": "is_empty", "mode": "current"}`, `"delayMinutes": 120`.
+        - Example, a server silent for 15 minutes: `{"type": "no_change_within", "templateId": "<server template id>", "delayMinutes": 15}` with no `attributeId`, and the server's agent updating its record (e.g. its `status`) on every check.
       example:
         attributeId: 01912ecb-4654-7890-a1b2-c3d4e5f60077
         cron: 0 9 * * 1-5
@@ -14274,9 +14279,10 @@ components:
           nullable: true
           type: string
         attributeId:
-          description: "Attribute id of the template; required for `on_attribute_changed`,\
-            \ `date_reached` (a date or datetime attribute) and `no_change_within`\
-            \ (the watched attribute; not a metric), absent otherwise."
+          description: "Attribute id of the template; required for `on_attribute_changed`\
+            \ and `date_reached` (a date or datetime attribute); optional for `no_change_within`\
+            \ (the watched attribute, not a metric; omit it to watch every write to\
+            \ the record, i.e. its `updated_at`); absent otherwise."
           example: 01912ecb-4654-7890-a1b2-c3d4e5f60077
           format: uuid
           nullable: true
@@ -14301,8 +14307,9 @@ components:
           nullable: true
           type: string
         delayMinutes:
-          description: "`no_change_within` only: how long the watched attribute must\
-            \ stay unchanged, 5 to 129600 minutes (90 days). Also accepted as `delay_minutes`."
+          description: "`no_change_within` only: how long the watched attribute (or,\
+            \ without one, the record) must stay unchanged, 5 to 129600 minutes (90\
+            \ days). Also accepted as `delay_minutes`."
           example: 1440
           nullable: true
           type: integer
@@ -14404,6 +14411,7 @@ components:
           token: omni_live_secret_key_sample
           username: webhook_user
         name: Alerts Bot
+        rate_limit_per_minute: 20
         type: telegram
       properties:
         type:
@@ -14420,6 +14428,16 @@ components:
           type: string
         credentials:
           $ref: "#/components/schemas/CreateNotificationChannelRequest_credentials"
+        rate_limit_per_minute:
+          default: 20
+          description: "Maximum messages the channel sends per clock minute, across\
+            \ all automations and records; sends over it fail the action (recorded\
+            \ in the execution history) instead of reaching the destination. Defaults\
+            \ to 20, Telegram's limit for one group."
+          example: 20
+          maximum: 1000
+          minimum: 1
+          type: integer
       required:
       - credentials
       - name
@@ -14432,6 +14450,7 @@ components:
         credentials:
           key: credentials
         name: Alerts Bot
+        rate_limit_per_minute: 20
         created_at: 2026-08-26T12:00:00Z
         id: 01912ecb-4654-7890-a1b2-c3d4e5f60002
         type: telegram
@@ -14453,6 +14472,11 @@ components:
           description: User-friendly display name of the notification channel
           example: Alerts Bot
           type: string
+        rate_limit_per_minute:
+          description: "Maximum messages the channel sends per clock minute, across\
+            \ all automations and records"
+          example: 20
+          type: integer
         credentials:
           additionalProperties:
             type: string
@@ -14642,6 +14666,7 @@ components:
           token: omni_live_secret_key_updated
           username: new_user
         name: Updated Alerts Bot
+        rate_limit_per_minute: 20
       properties:
         name:
           description: Updated display name of the notification channel
@@ -14650,6 +14675,16 @@ components:
           type: string
         credentials:
           $ref: "#/components/schemas/UpdateNotificationChannelRequest_credentials"
+        rate_limit_per_minute:
+          description: "Maximum messages the channel sends per clock minute, across\
+            \ all automations and records; sends over it fail the action (recorded\
+            \ in the execution history) instead of reaching the destination. Omit\
+            \ to keep the current limit."
+          example: 20
+          maximum: 1000
+          minimum: 1
+          nullable: true
+          type: integer
       type: object
     BiSchemaField:
       description: Connector-friendly field definition for BI datasets
@@ -21759,6 +21794,7 @@ components:
           credentials:
             key: credentials
           name: Alerts Bot
+          rate_limit_per_minute: 20
           created_at: 2026-08-26T12:00:00Z
           id: 01912ecb-4654-7890-a1b2-c3d4e5f60002
           type: telegram
@@ -21766,6 +21802,7 @@ components:
           credentials:
             key: credentials
           name: Alerts Bot
+          rate_limit_per_minute: 20
           created_at: 2026-08-26T12:00:00Z
           id: 01912ecb-4654-7890-a1b2-c3d4e5f60002
           type: telegram

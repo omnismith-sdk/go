@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Name** | Pointer to **NullableString** | Updated display name of the notification channel | [optional] 
 **Credentials** | Pointer to [**NullableUpdateNotificationChannelRequestCredentials**](UpdateNotificationChannelRequestCredentials.md) |  | [optional] 
+**RateLimitPerMinute** | Pointer to **NullableInt32** | Maximum messages the channel sends per clock minute, across all automations and records; sends over it fail the action (recorded in the execution history) instead of reaching the destination. Omit to keep the current limit. | [optional] 
 
 ## Methods
 
@@ -96,6 +97,41 @@ HasCredentials returns a boolean if a field has been set.
 `func (o *UpdateNotificationChannelRequest) UnsetCredentials()`
 
 UnsetCredentials ensures that no value is present for Credentials, not even an explicit nil
+### GetRateLimitPerMinute
+
+`func (o *UpdateNotificationChannelRequest) GetRateLimitPerMinute() int32`
+
+GetRateLimitPerMinute returns the RateLimitPerMinute field if non-nil, zero value otherwise.
+
+### GetRateLimitPerMinuteOk
+
+`func (o *UpdateNotificationChannelRequest) GetRateLimitPerMinuteOk() (*int32, bool)`
+
+GetRateLimitPerMinuteOk returns a tuple with the RateLimitPerMinute field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRateLimitPerMinute
+
+`func (o *UpdateNotificationChannelRequest) SetRateLimitPerMinute(v int32)`
+
+SetRateLimitPerMinute sets RateLimitPerMinute field to given value.
+
+### HasRateLimitPerMinute
+
+`func (o *UpdateNotificationChannelRequest) HasRateLimitPerMinute() bool`
+
+HasRateLimitPerMinute returns a boolean if a field has been set.
+
+### SetRateLimitPerMinuteNil
+
+`func (o *UpdateNotificationChannelRequest) SetRateLimitPerMinuteNil(b bool)`
+
+ SetRateLimitPerMinuteNil sets the value for RateLimitPerMinute to be an explicit nil
+
+### UnsetRateLimitPerMinute
+`func (o *UpdateNotificationChannelRequest) UnsetRateLimitPerMinute()`
+
+UnsetRateLimitPerMinute ensures that no value is present for RateLimitPerMinute, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

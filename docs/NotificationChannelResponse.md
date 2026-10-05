@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **Id** | Pointer to **string** | Unique notification channel UUID | [optional] 
 **Type** | Pointer to **string** | Channel delivery type (telegram, webhook, push) | [optional] 
 **Name** | Pointer to **string** | User-friendly display name of the notification channel | [optional] 
+**RateLimitPerMinute** | Pointer to **int32** | Maximum messages the channel sends per clock minute, across all automations and records | [optional] 
 **Credentials** | Pointer to **map[string]string** | Sanitized or configured integration credentials for the channel | [optional] 
 **CreatedAt** | Pointer to **time.Time** | Creation timestamp | [optional] 
 **UpdatedAt** | Pointer to **time.Time** | Last update timestamp | [optional] 
@@ -104,6 +105,31 @@ SetName sets Name field to given value.
 `func (o *NotificationChannelResponse) HasName() bool`
 
 HasName returns a boolean if a field has been set.
+
+### GetRateLimitPerMinute
+
+`func (o *NotificationChannelResponse) GetRateLimitPerMinute() int32`
+
+GetRateLimitPerMinute returns the RateLimitPerMinute field if non-nil, zero value otherwise.
+
+### GetRateLimitPerMinuteOk
+
+`func (o *NotificationChannelResponse) GetRateLimitPerMinuteOk() (*int32, bool)`
+
+GetRateLimitPerMinuteOk returns a tuple with the RateLimitPerMinute field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRateLimitPerMinute
+
+`func (o *NotificationChannelResponse) SetRateLimitPerMinute(v int32)`
+
+SetRateLimitPerMinute sets RateLimitPerMinute field to given value.
+
+### HasRateLimitPerMinute
+
+`func (o *NotificationChannelResponse) HasRateLimitPerMinute() bool`
+
+HasRateLimitPerMinute returns a boolean if a field has been set.
 
 ### GetCredentials
 
